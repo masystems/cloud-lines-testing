@@ -11,7 +11,8 @@ class CloudLinesTestV2():
         config.read('config.cfg')
         self.username = config['settings']['username']
         self.password = config['settings']['password']
-        self.browser = config['settings']['driverpath']
+        self.browser = webdriver.Chrome(config['settings']['driverpath'])
+        self.browser.get(config['settings']['serverurl'])
         self.timeout = 0
         self.pedigree = None
         self.breeder = None
@@ -221,6 +222,7 @@ class CloudLinesTestV2():
 
 if __name__ == '__main__':
     obj = CloudLinesTestV2()
+    obj.test("login")
     # print ("1. Test Login")
     # print ("2. Add Pedigree")
     # print ("3. Delete All Pedigrees")
