@@ -2,15 +2,16 @@ from selenium import webdriver
 from time import sleep
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotInteractableException
+from configparser import ConfigParser
 import csv
 
 class CloudLinesTestV2():
     def __init__(self):
-        f = open(".gitignore")
-        self.username = f.readline().rstrip("\n")
-        self.password = f.readline().rstrip("\n")
-        self.browser = webdriver.Chrome(f.readline().rstrip("\n"))
-        self.browser.get(f.readline().rstrip("\n"))
+        config = ConfigParser()
+        config.read('config.cfg')
+        self.username = config['settings']['username']
+        self.password = config['settings']['password']
+        self.browser = config['settings']['driverpath']
         self.timeout = 0
         self.pedigree = None
         self.breeder = None
@@ -220,18 +221,18 @@ class CloudLinesTestV2():
 
 if __name__ == '__main__':
     obj = CloudLinesTestV2()
-    print ("1. Test Login")
-    print ("2. Add Pedigree")
-    print ("3. Delete All Pedigrees")
-    print ("_. Exit")
-    ch = input("Enter Choice")
-    while ch != '_':
-        if ch == "1":
-            obj.test('login')
-        elif ch == "2":
-            obj.test('add_pedigree')
-        elif ch == "3":
-            obj.delete_all_pedigrees()
-        ch = input("Enter Choice")
+    # print ("1. Test Login")
+    # print ("2. Add Pedigree")
+    # print ("3. Delete All Pedigrees")
+    # print ("_. Exit")
+    # ch = input("Enter Choice")
+    # while ch != '_':
+    #     if ch == "1":
+    #         obj.test('login')
+    #     elif ch == "2":
+    #         obj.test('add_pedigree')
+    #     elif ch == "3":
+    #         obj.delete_all_pedigrees()
+    #     ch = input("Enter Choice")
 
 
