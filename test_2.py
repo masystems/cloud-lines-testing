@@ -5,6 +5,7 @@ from selenium.common.exceptions import ElementNotInteractableException
 from configparser import ConfigParser
 import csv
 
+
 class CloudLinesTestV2():
     def __init__(self):
         config = ConfigParser()
@@ -12,7 +13,7 @@ class CloudLinesTestV2():
         self.username = config['settings']['username']
         self.password = config['settings']['password']
         self.browser = webdriver.Chrome(config['settings']['driverpath'])
-        self.browser.get(config['settings']['serverurl'])
+        self.browser.get(config['settings']['domain'])
         self.timeout = 0
         self.pedigree = None
         self.breeder = None
@@ -220,21 +221,21 @@ class CloudLinesTestV2():
         if type == 'delete_all_pedigree':
             self.delete_all_pedigrees()
 
+
 if __name__ == '__main__':
     obj = CloudLinesTestV2()
-    obj.test("login")
-    # print ("1. Test Login")
-    # print ("2. Add Pedigree")
-    # print ("3. Delete All Pedigrees")
-    # print ("_. Exit")
-    # ch = input("Enter Choice")
-    # while ch != '_':
-    #     if ch == "1":
-    #         obj.test('login')
-    #     elif ch == "2":
-    #         obj.test('add_pedigree')
-    #     elif ch == "3":
-    #         obj.delete_all_pedigrees()
-    #     ch = input("Enter Choice")
+    print ("1. Test Login")
+    print ("2. Add Pedigree")
+    print ("3. Delete All Pedigrees")
+    print ("_. Exit")
+    ch = input("Enter Choice")
+    while ch != '_':
+        if ch == "1":
+            obj.test('login')
+        elif ch == "2":
+            obj.test('add_pedigree')
+        elif ch == "3":
+            obj.delete_all_pedigrees()
+        ch = input("Enter Choice")
 
 
