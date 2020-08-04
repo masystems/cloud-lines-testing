@@ -204,15 +204,22 @@ class CloudLinesTestV2():
 
     def delete_all_pedigrees(self):
         # go to pedigree search page
+        self.login()
         pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
         self.browser.execute_script("arguments[0].click();", pedigree_link)
-
-        while self.browser.find_elements_by_class_name('sorting_1'):
-            pedigree_links = self.browser.find_elements_by_class_name('sorting_1')
-            self.browser.execute_script("arguments[0].click();", pedigree_links[0])
-            self.delete_pedigree()
-            pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
-            self.browser.execute_script("arguments[0].click();", pedigree_link)
+        sleep(2)
+        while self.browser.find_element_by_class_name('odd'):
+            while True:
+                try:
+                    pedigree_links = self.browser.find_element_by_class_name('odd')
+                    self.browser.execute_script("arguments[0].click();", pedigree_links)
+                    self.delete_pedigree()
+                    pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
+                    self.browser.execute_script("arguments[0].click();", pedigree_link)
+                    sleep(2)
+                except Exception as e:
+                    print("All Pedigree Deleted ")
+                    return
 
     def delete_pedigree(self):
         # ensure you're on the right page before calling this method
@@ -387,7 +394,7 @@ if __name__ == '__main__':
     #     elif ch == "3":
     #         obj.test('delete_all_pedigrees')
     #     elif ch == "4":
-    #         obj.test('delete_all_breeders',input("Enter Breeder Prefix"))
+    #         obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
     #     elif ch == "5":
     #         obj.test('add_users')
     #     elif ch == "6":
