@@ -147,6 +147,7 @@ class CloudLinesTestV2():
                     # Save!
                     save_pedigree = self.browser.find_element_by_id('submitPedigree')
                     self.browser.execute_script("arguments[0].click();", save_pedigree)
+                    sleep(2)
                     confirm_save_pedigree = self.browser.find_element_by_name('confirmSaveBtn')
                     self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
                     sleep(2)
@@ -369,7 +370,7 @@ class CloudLinesTestV2():
 
 if __name__ == '__main__':
     obj = CloudLinesTestV2()
-    obj.test('update_parent_titles')
+    obj.add_pedigree()
     # print ("1. Test Login")
     # print ("2. Add Pedigree")
     # print ("3. Delete All Pedigrees")
