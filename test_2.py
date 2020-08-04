@@ -352,9 +352,6 @@ class CloudLinesTestV2():
             self.delete_users(int(input("Enter ythe index from which you want to start deleting")))
 
 
-
-
-
 if __name__ == '__main__':
     obj = CloudLinesTestV2()
     # print ("1. Test Login")
