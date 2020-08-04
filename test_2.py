@@ -147,7 +147,7 @@ class CloudLinesTestV2():
                     # Save!
                     save_pedigree = self.browser.find_element_by_id('submitPedigree')
                     self.browser.execute_script("arguments[0].click();", save_pedigree)
-                    confirm_save_pedigree = self.browser.find_element_by_name('confirmSaveBtn')
+                    confirm_save_pedigree = self.browser.find_element_by_id('confirmSaveBtn')
                     self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
                     sleep(2)
                     self.timeout = 0
@@ -204,15 +204,22 @@ class CloudLinesTestV2():
 
     def delete_all_pedigrees(self):
         # go to pedigree search page
+        self.login()
         pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
         self.browser.execute_script("arguments[0].click();", pedigree_link)
-
-        while self.browser.find_elements_by_class_name('sorting_1'):
-            pedigree_links = self.browser.find_elements_by_class_name('sorting_1')
-            self.browser.execute_script("arguments[0].click();", pedigree_links[0])
-            self.delete_pedigree()
-            pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
-            self.browser.execute_script("arguments[0].click();", pedigree_link)
+        sleep(2)
+        while self.browser.find_element_by_class_name('odd'):
+            while True:
+                try:
+                    pedigree_links = self.browser.find_element_by_class_name('odd')
+                    self.browser.execute_script("arguments[0].click();", pedigree_links)
+                    self.delete_pedigree()
+                    pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
+                    self.browser.execute_script("arguments[0].click();", pedigree_link)
+                    sleep(2)
+                except Exception as e:
+                    print("All Pedigree Deleted ")
+                    return
 
     def delete_pedigree(self):
         # ensure you're on the right page before calling this method
@@ -333,7 +340,20 @@ class CloudLinesTestV2():
             except:
                 break
 
-
+    def edit_parent_titles(self,mother="Mother",father="Father"):
+        self.login()
+        self.browser.get(self.config['settings']['domain'] + "/account/settings")
+        sleep(2)
+        customisation_link = self.browser.find_element_by_xpath('//a[@href="' + '#customisation' + '"]')
+        self.browser.execute_script("arguments[0].click();", customisation_link)
+        mom = self.browser.find_element_by_id('mother')
+        mom.clear()
+        mom.send_keys(mother)
+        dad = self.browser.find_element_by_id('father')
+        dad.clear()
+        dad.send_keys(father)
+        confirm_update = self.browser.find_element_by_id('selectTitleSettings')
+        self.browser.execute_script("arguments[0].click();", confirm_update)
 
     def test(self,type,option=""):
         if type == 'login':
@@ -350,16 +370,20 @@ class CloudLinesTestV2():
             self.add_user('user.csv')
         elif type == 'delete_users':
             self.delete_users(int(input("Enter the index from which you want to start deleting")))
+        elif type == 'update_parent_titles':
+            self.edit_parent_titles(input("Enter Mother Title "),input("Enter Father Title "))
 
 
 if __name__ == '__main__':
     obj = CloudLinesTestV2()
+    obj.test('add_pedigree')
     # print ("1. Test Login")
     # print ("2. Add Pedigree")
     # print ("3. Delete All Pedigrees")
     # print ("4. Delete All Breeders")
     # print ("5. Add Users")
     # print ("6. Delete Users")
+    # print ("7. Edit Parent Titles")
     # print ("_. Exit")
     # ch = input("Enter Choice")
     # while ch != '_':
@@ -370,9 +394,11 @@ if __name__ == '__main__':
     #     elif ch == "3":
     #         obj.test('delete_all_pedigrees')
     #     elif ch == "4":
-    #         obj.test('delete_all_breeders',input("Enter Breeder Prefix"))
+    #         obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
     #     elif ch == "5":
     #         obj.test('add_users')
     #     elif ch == "6":
     #         obj.test('delete_users')
+    #     elif ch == "7":
+    #         obj.test('update_parent_titles')
     #     ch = input("Enter Choice")
