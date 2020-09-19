@@ -29,12 +29,12 @@ class CloudLinesTestV2():
         sleep(2)
 
     def add_pedigree(self,pedigree_file,breed_file,breeder_file):
-        self.login()
+        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
         pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
         breeder_reader = csv.DictReader(open(breeder_file,newline=''))
         breed_reader = csv.DictReader(open(breed_file,newline=''))
 
-        for counter in range(12):
+        for counter in range(1):
             self.pedigree = dict(pedgree_reader.__next__())
             self.breeder = dict(breeder_reader.__next__())
             self.breed = dict(breed_reader.__next__())
@@ -204,7 +204,6 @@ class CloudLinesTestV2():
 
     def delete_all_pedigrees(self):
         # go to pedigree search page
-        self.login()
         pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
         self.browser.execute_script("arguments[0].click();", pedigree_link)
         sleep(2)
@@ -234,7 +233,6 @@ class CloudLinesTestV2():
 
     def delete_all_breeders(self,prefix=""):
         # go to breed page
-        self.login()
         breeders_link = self.browser.find_element_by_xpath('//a[@href="' + '/breeders/' + '"]')
         self.browser.execute_script("arguments[0].click();", breeders_link)
         while True:
@@ -265,7 +263,6 @@ class CloudLinesTestV2():
                 return
     def delete_all_breeds(self):
         # go to breed page
-        self.login()
         breed_link = self.browser.find_element_by_xpath('//a[@href="' + '/breeds/' + '"]')
         self.browser.execute_script("arguments[0].click();", breed_link)
         try:
@@ -292,7 +289,6 @@ class CloudLinesTestV2():
 
 
     def add_user(self,user_file):
-        self.login()
         self.browser.get(self.config['settings']['domain']+"/account/settings")
         sleep(2)
         user_reader = csv.DictReader(open(user_file, newline=''))
@@ -324,7 +320,6 @@ class CloudLinesTestV2():
                         print("Server Issue in adding new user try later",e)
                         exit(0)
     def delete_users(self,idx = 1):
-        self.login()
         self.browser.get(self.config['settings']['domain'] + "/account/settings")
         sleep(2)
         while True:
@@ -341,7 +336,6 @@ class CloudLinesTestV2():
                 break
 
     def edit_parent_titles(self,mother="Mother",father="Father"):
-        self.login()
         self.browser.get(self.config['settings']['domain'] + "/account/settings")
         sleep(2)
         customisation_link = self.browser.find_element_by_xpath('//a[@href="' + '#customisation' + '"]')
@@ -376,29 +370,35 @@ class CloudLinesTestV2():
 
 if __name__ == '__main__':
     obj = CloudLinesTestV2()
-    obj.test('add_pedigree')
-    # print ("1. Test Login")
-    # print ("2. Add Pedigree")
-    # print ("3. Delete All Pedigrees")
-    # print ("4. Delete All Breeders")
-    # print ("5. Add Users")
-    # print ("6. Delete Users")
-    # print ("7. Edit Parent Titles")
-    # print ("_. Exit")
-    # ch = input("Enter Choice")
-    # while ch != '_':
-    #     if ch == "1":
-    #         obj.test('login')
-    #     elif ch == "2":
-    #         obj.test('add_pedigree')
-    #     elif ch == "3":
-    #         obj.test('delete_all_pedigrees')
-    #     elif ch == "4":
-    #         obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
-    #     elif ch == "5":
-    #         obj.test('add_users')
-    #     elif ch == "6":
-    #         obj.test('delete_users')
-    #     elif ch == "7":
-    #         obj.test('update_parent_titles')
-    #     ch = input("Enter Choice")
+    obj.login()
+    print ("1. Test Login")
+    print ("2. Add Pedigree")
+    print ("3. Delete All Pedigrees")
+    print ("4. Delete All Breeders")
+    print ("5. Add Users")
+    print ("6. Delete Users")
+    print ("7. Edit Parent Titles")
+    print ("8. Add and Delete All Pedrigrees,Breeders,Breeds")
+    print ("_. Exit")
+    ch = input("Enter Choice")
+    while ch != '_':
+         if ch == "1":
+             obj.test('login')
+         elif ch == "2":
+             obj.test('add_pedigree')
+         elif ch == "3":
+             obj.test('delete_all_pedigrees')
+         elif ch == "4":
+             obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
+         elif ch == "5":
+             obj.test('add_users')
+         elif ch == "6":
+             obj.test('delete_users')
+         elif ch == "7":
+             obj.test('update_parent_titles')
+         elif ch == "8":
+             obj.test('add_pedigree')
+             obj.delete_all_breeds()
+             obj.test('delete_all_breeders', input("Enter Breeder Prefix "))
+             obj.test('delete_all_pedigrees')
+         ch = input("Enter Choice")
