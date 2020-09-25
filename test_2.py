@@ -121,6 +121,8 @@ class CloudLinesTestV2():
                     self.browser.execute_script("arguments[0].click();", status)
                     sex = self.browser.find_element_by_id(self.pedigree['sex'])
                     self.browser.execute_script("arguments[0].click();", sex)
+                    born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
+                    self.browser.execute_script("arguments[0].click();", born_as)
                     dod = self.browser.find_element_by_id('id_date_of_death')
                     dod.send_keys(self.pedigree['dod'])
                     desc = self.browser.find_element_by_id('id_description')
@@ -349,6 +351,20 @@ class CloudLinesTestV2():
         confirm_update = self.browser.find_element_by_id('selectTitleSettings')
         self.browser.execute_script("arguments[0].click();", confirm_update)
 
+    def edit_column_load(self):
+        self.browser.get(self.config['settings']['domain'] + "/account/settings")
+        sleep(2)
+        customisation_link = self.browser.find_element_by_xpath('//a[@href="' + '#customisation' + '"]')
+        self.browser.execute_script("arguments[0].click();", customisation_link)
+        checks = ['checkbox6', 'checkbox16', 'checkbox23', 'checkbox24']
+        for ids in checks:
+            ele = self.browser.find_element_by_id(ids)
+            self.browser.execute_script("arguments[0].click();", ele)
+        saveBtn = self.browser.find_element_by_id('selectPedigreeColumnsBtn')
+        self.browser.execute_script("arguments[0].click();", saveBtn)
+
+
+
     def test(self,type,option=""):
         if type == 'login':
             self.login()
@@ -366,6 +382,8 @@ class CloudLinesTestV2():
             self.delete_users(int(input("Enter the index from which you want to start deleting")))
         elif type == 'update_parent_titles':
             self.edit_parent_titles(input("Enter Mother Title "),input("Enter Father Title "))
+        elif type == 'edit_column_load':
+            self.edit_column_load()
 
 
 if __name__ == '__main__':
@@ -379,26 +397,32 @@ if __name__ == '__main__':
     print ("6. Delete Users")
     print ("7. Edit Parent Titles")
     print ("8. Add and Delete All Pedrigrees,Breeders,Breeds")
+    print ("9. Edit Pedigree Columns Load")
     print ("_. Exit")
-    ch = input("Enter Choice")
+    ch = input("Enter Choice ")
     while ch != '_':
-         if ch == "1":
-             obj.test('login')
-         elif ch == "2":
-             obj.test('add_pedigree')
-         elif ch == "3":
-             obj.test('delete_all_pedigrees')
-         elif ch == "4":
-             obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
-         elif ch == "5":
-             obj.test('add_users')
-         elif ch == "6":
-             obj.test('delete_users')
-         elif ch == "7":
-             obj.test('update_parent_titles')
-         elif ch == "8":
-             obj.test('add_pedigree')
-             obj.delete_all_breeds()
-             obj.test('delete_all_breeders', input("Enter Breeder Prefix "))
-             obj.test('delete_all_pedigrees')
-         ch = input("Enter Choice")
+        try:
+            if ch == "1":
+                obj.test('login')
+            elif ch == "2":
+                obj.test('add_pedigree')
+            elif ch == "3":
+                obj.test('delete_all_pedigrees')
+            elif ch == "4":
+                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
+            elif ch == "5":
+                obj.test('add_users')
+            elif ch == "6":
+                obj.test('delete_users')
+            elif ch == "7":
+                obj.test('update_parent_titles')
+            elif ch == "8":
+                obj.test('add_pedigree')
+                obj.delete_all_breeds()
+                obj.test('delete_all_breeders', input("Enter Breeder Prefix "))
+                obj.test('delete_all_pedigrees')
+            elif ch == "9":
+                obj.test('edit_column_load')
+            ch = input("Enter Choice ")
+        except:
+            pass
