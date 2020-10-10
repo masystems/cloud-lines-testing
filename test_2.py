@@ -34,7 +34,7 @@ class CloudLinesTestV2():
         breeder_reader = csv.DictReader(open(breeder_file,newline=''))
         breed_reader = csv.DictReader(open(breed_file,newline=''))
 
-        for counter in range(1):
+        for counter in range(12):
             self.pedigree = dict(pedgree_reader.__next__())
             self.breeder = dict(breeder_reader.__next__())
             self.breed = dict(breed_reader.__next__())
@@ -364,6 +364,25 @@ class CloudLinesTestV2():
         self.browser.execute_script("arguments[0].click();", saveBtn)
 
 
+    def run_coi(self):
+        self.browser.get(self.config['settings']['domain'] + "/metrics")
+        sleep(2)
+        run_coi_btn = self.browser.find_element_by_id('coiBtn')
+        self.browser.execute_script("arguments[0].click();", run_coi_btn)
+
+    def run_mean_kinship(self):
+        self.browser.get(self.config['settings']['domain'] + "/metrics")
+        sleep(2)
+        run_mk_btn = self.browser.find_element_by_id('meanKinshipBtn')
+        self.browser.execute_script("arguments[0].click();", run_mk_btn)
+    def run_stud_selector(self,val_mom):
+        self.browser.get(self.config['settings']['domain'] + "/metrics")
+        sleep(2)
+        mom_sa = self.browser.find_element_by_id('sa_mother')
+        mom_sa.send_keys(val_mom)
+        run_stud_btn = self.browser.find_element_by_id('saBtn')
+        self.browser.execute_script("arguments[0].click();", run_stud_btn)
+
 
     def test(self,type,option=""):
         if type == 'login':
@@ -384,6 +403,14 @@ class CloudLinesTestV2():
             self.edit_parent_titles(input("Enter Mother Title "),input("Enter Father Title "))
         elif type == 'edit_column_load':
             self.edit_column_load()
+        elif type == 'run_coi':
+            self.run_coi()
+        elif type == 'run_mean_kinship':
+            self.run_mean_kinship()
+        elif type == 'run_stud_selector':
+            mom = input('Enter Mom name ')
+            self.run_stud_selector(mom)
+
 
 
 if __name__ == '__main__':
@@ -423,6 +450,12 @@ if __name__ == '__main__':
                 obj.test('delete_all_pedigrees')
             elif ch == "9":
                 obj.test('edit_column_load')
+            elif ch == "10":
+                obj.test('run_coi')
+            elif ch == "11":
+                obj.test('run_mean_kinship')
+            elif ch == "12":
+                obj.test('run_stud_selector')
             ch = input("Enter Choice ")
         except:
             pass
