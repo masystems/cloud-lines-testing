@@ -258,8 +258,8 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in adding breed info try later", e)
-                            exit(0)
+                            print("All Breeders Deleted")
+                            return
             except:
                 print("All Breeders Deleted ")
                 return
@@ -293,6 +293,7 @@ class CloudLinesTestV2():
     def add_user(self,user_file):
         self.browser.get(self.config['settings']['domain']+"/account/settings")
         sleep(2)
+        self.timeout = 0
         user_reader = csv.DictReader(open(user_file, newline=''))
         for counter in range(2):
             while self.timeout < 20:
@@ -320,7 +321,7 @@ class CloudLinesTestV2():
                     self.timeout += 1
                     if self.timeout == 20:
                         print("Server Issue in adding new user try later",e)
-                        exit(0)
+                        return
     def delete_users(self,idx = 1):
         self.browser.get(self.config['settings']['domain'] + "/account/settings")
         sleep(2)
@@ -383,13 +384,12 @@ class CloudLinesTestV2():
         run_stud_btn = self.browser.find_element_by_id('saBtn')
         self.browser.execute_script("arguments[0].click();", run_stud_btn)
 
-
     def test(self,type,option=""):
         if type == 'login':
             self.login()
         elif type == 'add_pedigree':
             self.add_pedigree('pedigree.csv','breed.csv','breeder.csv')
-        elif type == 'delete_all_pedigree':
+        elif type == 'delete_all_pedigrees':
             self.delete_all_pedigrees()
         elif type == 'delete_all_breeders':
             self.delete_all_breeders(option)
@@ -398,7 +398,7 @@ class CloudLinesTestV2():
         elif type == "add_users":
             self.add_user('user.csv')
         elif type == 'delete_users':
-            self.delete_users(int(input("Enter the index from which you want to start deleting")))
+            self.delete_users(int(input("Enter the index from which you want to start deleting ")))
         elif type == 'update_parent_titles':
             self.edit_parent_titles(input("Enter Mother Title "),input("Enter Father Title "))
         elif type == 'edit_column_load':
@@ -425,6 +425,9 @@ if __name__ == '__main__':
     print ("7. Edit Parent Titles")
     print ("8. Add and Delete All Pedrigrees,Breeders,Breeds")
     print ("9. Edit Pedigree Columns Load")
+    print("10. Run COI")
+    print("11. Run Mean Kinship")
+    print("12. Run Stud Selector")
     print ("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
@@ -458,4 +461,4 @@ if __name__ == '__main__':
                 obj.test('run_stud_selector')
             ch = input("Enter Choice ")
         except:
-            pass
+            break
