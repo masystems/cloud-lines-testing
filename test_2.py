@@ -384,7 +384,6 @@ class CloudLinesTestV2():
         run_stud_btn = self.browser.find_element_by_id('saBtn')
         self.browser.execute_script("arguments[0].click();", run_stud_btn)
 
-
     def test(self,type,option=""):
         if type == 'login':
             self.login()
