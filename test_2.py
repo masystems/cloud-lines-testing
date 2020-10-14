@@ -458,4 +458,4 @@ if __name__ == '__main__':
                 obj.test('run_stud_selector')
             ch = input("Enter Choice ")
         except:
-            pass
+            break
