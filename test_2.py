@@ -293,35 +293,30 @@ class CloudLinesTestV2():
     def add_user(self,user_file):
         self.browser.get(self.config['settings']['domain']+"/account/settings")
         sleep(2)
-        self.timeout = 0
+        users_link = self.browser.find_element_by_xpath('//a[@href="' + '#users' + '"]')
+        self.browser.execute_script("arguments[0].click();", users_link)
         user_reader = csv.DictReader(open(user_file, newline=''))
-        for counter in range(2):
-            while self.timeout < 20:
-                try:
-                    self.user = dict(user_reader.__next__())
-                    users_link = self.browser.find_element_by_xpath('//a[@href="' + '#users' + '"]')
-                    self.browser.execute_script("arguments[0].click();", users_link)
-                    create_new = self.browser.find_element_by_id('createNew')
-                    self.browser.execute_script("arguments[0].click();", create_new)
-                    sleep(2)
-                    fname = self.browser.find_element_by_id('firstName')
-                    fname.send_keys(self.user['first_name'])
-                    lname = self.browser.find_element_by_id('lastName')
-                    lname.send_keys(self.user['second_name'])
-                    uname = self.browser.find_element_by_id('register-form-username')
-                    uname.send_keys(self.user['username'])
-                    email = self.browser.find_element_by_id('register-form-email')
-                    email.send_keys(self.user['email'])
-                    modal_save = self.browser.find_elements_by_id('userFormBtn')
-                    self.browser.execute_script("arguments[0].click();", modal_save[0])
-                    sleep(5)
-                    self.timeout = 0
-                    break
-                except NoSuchElementException as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue in adding new user try later",e)
-                        return
+
+        for user in user_reader:
+            create_new = self.browser.find_element_by_id('createNew')
+            self.browser.execute_script("arguments[0].click();", create_new)
+            sleep(1)
+            fname = self.browser.find_element_by_id('firstName')
+            fname.send_keys(user['first_name'])
+            lname = self.browser.find_element_by_id('lastName')
+            lname.send_keys(user['second_name'])
+            uname = self.browser.find_element_by_id('register-form-username')
+            uname.send_keys(user['username'])
+            email = self.browser.find_element_by_id('register-form-email')
+            email.send_keys(user['email'])
+            status = self.browser.find_element_by_id('status')
+            status.send_keys(user['status'])
+            modal_save = self.browser.find_elements_by_id('userFormBtn')
+            self.browser.execute_script("arguments[0].click();", modal_save[0])
+            sleep(5)
+        return
+
+
     def delete_users(self,idx = 1):
         self.browser.get(self.config['settings']['domain'] + "/account/settings")
         sleep(2)

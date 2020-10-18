@@ -1,3 +1,7 @@
-first_name,second_name,username,email
-Mark,B,markb0301,markb0301@mail.com
-Rutherford,R,ruther0401,rutherford001@mail.co.uk
+first_name,second_name,username,email,status
+Test,User,testuser0,user0@test.com,Read Only
+Test,User,testuser1,user1@test.com,Contributor
+Test,User,testuser2,user2@test.com,Editor
+Test,User,testuser3,user3@test.com,Read Only
+Test,User,testuser4,user4@test.com,Contributor
+Test,User,testuser5,user5@test.com,Editor
