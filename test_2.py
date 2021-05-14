@@ -9,8 +9,16 @@ class CloudLinesTestV2():
     def __init__(self):
         self.config = ConfigParser()
         self.config.read('config.cfg')
-        self.username = self.config['settings']['username']
-        self.password = self.config['settings']['password']
+
+        self.username_user = self.config['settings']['username_user']
+        self.password_user = self.config['settings']['password_user']
+        self.username_admin = self.config['settings']['username_admin']
+        self.password_admin = self.config['settings']['password_admin']
+        self.username_contrib = self.config['settings']['username_contrib']
+        self.password_contrib = self.config['settings']['password_contrib']
+        self.username_read = self.config['settings']['username_read']
+        self.password_read = self.config['settings']['password_read']
+
         self.browser = webdriver.Chrome(self.config['settings']['driverpath'])
         self.browser.get(self.config['settings']['domain'])
         self.timeout = 0
@@ -19,11 +27,38 @@ class CloudLinesTestV2():
         self.breed = None
         self.user = None
 
-    def login(self):
+    def login_user(self):
         username_field = self.browser.find_element_by_name('username')
-        username_field.send_keys(self.username)
+        username_field.send_keys(self.username_user)
         password_field = self.browser.find_element_by_name('password')
-        password_field.send_keys(self.password)
+        password_field.send_keys(self.password_user)
+        login = self.browser.find_element_by_id('loginBtn')
+        self.browser.execute_script("arguments[0].click();", login)
+        sleep(2)
+
+    def login_admin(self):
+        username_field = self.browser.find_element_by_name('username')
+        username_field.send_keys(self.username_admin)
+        password_field = self.browser.find_element_by_name('password')
+        password_field.send_keys(self.password_admin)
+        login = self.browser.find_element_by_id('loginBtn')
+        self.browser.execute_script("arguments[0].click();", login)
+        sleep(2)
+
+    def login_contrib(self):
+        username_field = self.browser.find_element_by_name('username')
+        username_field.send_keys(self.username_contrib)
+        password_field = self.browser.find_element_by_name('password')
+        password_field.send_keys(self.password_contrib)
+        login = self.browser.find_element_by_id('loginBtn')
+        self.browser.execute_script("arguments[0].click();", login)
+        sleep(2)
+
+    def login_read(self):
+        username_field = self.browser.find_element_by_name('username')
+        username_field.send_keys(self.username_read)
+        password_field = self.browser.find_element_by_name('password')
+        password_field.send_keys(self.password_read)
         login = self.browser.find_element_by_id('loginBtn')
         self.browser.execute_script("arguments[0].click();", login)
         sleep(2)
@@ -380,8 +415,14 @@ class CloudLinesTestV2():
         self.browser.execute_script("arguments[0].click();", run_stud_btn)
 
     def test(self,type,option=""):
-        if type == 'login':
-            self.login()
+        if type == 'login_user':
+            self.login_user()
+        if type == 'login_admin':
+            self.login_admin()
+        if type == 'login_contrib':
+            self.login_contrib()
+        if type == 'login_read':
+            self.login_read()
         elif type == 'add_pedigree':
             self.add_pedigree('pedigree.csv','breed.csv','breeder.csv')
         elif type == 'delete_all_pedigrees':
@@ -410,49 +451,58 @@ class CloudLinesTestV2():
 
 if __name__ == '__main__':
     obj = CloudLinesTestV2()
-    obj.login()
-    print ("1. Test Login")
-    print ("2. Add Pedigree")
-    print ("3. Delete All Pedigrees")
-    print ("4. Delete All Breeders")
-    print ("5. Add Users")
-    print ("6. Delete Users")
-    print ("7. Edit Parent Titles")
-    print ("8. Add and Delete All Pedrigrees,Breeders,Breeds")
-    print ("9. Edit Pedigree Columns Load")
-    print("10. Run COI")
-    print("11. Run Mean Kinship")
-    print("12. Run Stud Selector")
+    #obj.login()
+    print ("1. Login as User/Owner")
+    print ("2. Login as Admin")
+    print ("3. Login as Contributor")
+    print ("4. Login as Read-Only")
+    print ("5. Add Pedigree")
+    print ("6. Delete All Pedigrees")
+    print ("7. Delete All Breeders")
+    print ("8. Add Users")
+    print ("9. Delete Users")
+    print ("10. Edit Parent Titles")
+    print ("11. Add and Delete All Pedrigrees,Breeders,Breeds")
+    print ("12. Edit Pedigree Columns Load")
+    print("13. Run COI")
+    print("14. Run Mean Kinship")
+    print("15. Run Stud Selector")
     print ("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
         try:
             if ch == "1":
-                obj.test('login')
-            elif ch == "2":
-                obj.test('add_pedigree')
-            elif ch == "3":
-                obj.test('delete_all_pedigrees')
-            elif ch == "4":
-                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
+                obj.test('login_user')
+            if ch == "2":
+                obj.test('login_admin')
+            if ch == "3":
+                obj.test('login_contrib')
+            if ch == "4":
+                obj.test('login_read')
             elif ch == "5":
-                obj.test('add_users')
+                obj.test('add_pedigree')
             elif ch == "6":
-                obj.test('delete_users')
+                obj.test('delete_all_pedigrees')
             elif ch == "7":
-                obj.test('update_parent_titles')
+                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
             elif ch == "8":
+                obj.test('add_users')
+            elif ch == "9":
+                obj.test('delete_users')
+            elif ch == "10":
+                obj.test('update_parent_titles')
+            elif ch == "11":
                 obj.test('add_pedigree')
                 obj.delete_all_breeds()
                 obj.test('delete_all_breeders', input("Enter Breeder Prefix "))
                 obj.test('delete_all_pedigrees')
-            elif ch == "9":
-                obj.test('edit_column_load')
-            elif ch == "10":
-                obj.test('run_coi')
-            elif ch == "11":
-                obj.test('run_mean_kinship')
             elif ch == "12":
+                obj.test('edit_column_load')
+            elif ch == "13":
+                obj.test('run_coi')
+            elif ch == "14":
+                obj.test('run_mean_kinship')
+            elif ch == "15":
                 obj.test('run_stud_selector')
             ch = input("Enter Choice ")
         except:
