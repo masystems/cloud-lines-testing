@@ -199,6 +199,85 @@ class CloudLinesTestV2():
                         print("Server Issue in entering pedigree information try later",e,"at",counter,"insertion")
                         exit(0)
 
+    def add_single_pedigree(self, pedigree_file):
+        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
+        pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
+        
+        self.pedigree = dict(pedgree_reader.__next__())
+
+        # go to pedigree search page
+        while self.timeout<20:
+            try:
+                pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
+                self.browser.execute_script("arguments[0].click();", pedigree_link)
+                sleep(2)
+                self.timeout = 0
+                break
+            except Exception as e:
+                self.timeout += 1
+                if self.timeout == 20:
+                    print("Server Issue In opening pedigree search try later ",e)
+                    exit(0)
+
+        # go to add new pedigree
+        while self.timeout<20:
+            try:
+                new_pedigree = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/new_pedigree/' + '"]')
+                self.browser.execute_script("arguments[0].click();", new_pedigree)
+                sleep(2)
+                self.timeout = 0
+                break
+            except Exception as e:
+                self.timeout += 1
+                if self.timeout == 20:
+                    print("Server Issue in adding new pedigree try later",e)
+                    exit(0)
+
+        # Enter pedigree information
+        while self.timeout<20:
+            try:
+                breeder = self.browser.find_element_by_id('id_breeder')
+                breeder.send_keys(self.pedigree['breeder'])
+                current_owner = self.browser.find_element_by_id('id_current_owner')
+                current_owner.send_keys(self.pedigree['breeder'])
+                self.browser.find_element_by_name('reg_no').clear()
+                reg_no = self.browser.find_element_by_name('reg_no')
+                reg_no.send_keys(self.pedigree['reg_no'])
+                tag_no = self.browser.find_element_by_id('id_tag_no')
+                tag_no.send_keys(self.pedigree['tag_no'])
+                name = self.browser.find_element_by_id('id_name')
+                name.send_keys(self.pedigree['name'])
+                dor = self.browser.find_element_by_id('id_date_of_registration')
+                dor.send_keys(self.pedigree['dor'])
+                dob = self.browser.find_element_by_id('id_date_of_birth')
+                dob.send_keys(self.pedigree['dob'])
+                status = self.browser.find_element_by_id(self.pedigree['status'])
+                self.browser.execute_script("arguments[0].click();", status)
+                sex = self.browser.find_element_by_id(self.pedigree['sex'])
+                self.browser.execute_script("arguments[0].click();", sex)
+                born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
+                self.browser.execute_script("arguments[0].click();", born_as)
+                dod = self.browser.find_element_by_id('id_date_of_death')
+                dod.send_keys(self.pedigree['dod'])
+                desc = self.browser.find_element_by_id('id_description')
+                desc.send_keys(self.pedigree['desc'])
+                desc = self.browser.find_element_by_id('id_breed')
+                desc.send_keys(self.pedigree['breed'])
+
+                # Save!
+                save_pedigree = self.browser.find_element_by_id('submitPedigree')
+                self.browser.execute_script("arguments[0].click();", save_pedigree)
+                confirm_save_pedigree = self.browser.find_element_by_id('confirmSaveBtn')
+                self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
+                sleep(2)
+                self.timeout = 0
+                break
+            except Exception as e:
+                self.timeout += 1
+                if self.timeout == 20:
+                    print("Server Issue in entering pedigree information try later",e)
+                    exit(0)
+
     def add_breeder_info(self,breeder):
         # Enter breeder information
         while self.timeout < 20:
@@ -431,6 +510,8 @@ class CloudLinesTestV2():
             self.logout()
         elif type == 'add_pedigree':
             self.add_pedigree('pedigree.csv','breed.csv','breeder.csv')
+        elif type == 'add_single_pedigree':
+            self.add_single_pedigree('pedigree.csv')
         elif type == 'delete_all_pedigrees':
             self.delete_all_pedigrees()
         elif type == 'delete_all_breeders':
@@ -458,23 +539,24 @@ class CloudLinesTestV2():
 if __name__ == '__main__':
     obj = CloudLinesTestV2()
     #obj.login()
-    print ("1. Login as User/Owner")
-    print ("2. Login as Admin")
-    print ("3. Login as Contributor")
-    print ("4. Login as Read-Only")
-    print ("5. Logout")
-    print ("6. Add Pedigree")
-    print ("7. Delete All Pedigrees")
-    print ("8. Delete All Breeders")
-    print ("9. Add Users")
-    print ("10. Delete Users")
-    print ("11. Edit Parent Titles")
-    print ("12. Add and Delete All Pedrigrees,Breeders,Breeds")
-    print ("13. Edit Pedigree Columns Load")
-    print("14. Run COI")
-    print("15. Run Mean Kinship")
-    print("16. Run Stud Selector")
-    print ("_. Exit")
+    print("1. Login as User/Owner")
+    print("2. Login as Admin")
+    print("3. Login as Contributor")
+    print("4. Login as Read-Only")
+    print("5. Logout")
+    print("6. Add Pedigree")
+    print("7. Add Single Pedigree")
+    print("8. Delete All Pedigrees")
+    print("9. Delete All Breeders")
+    print("10. Add Users")
+    print("11. Delete Users")
+    print("12. Edit Parent Titles")
+    print("13. Add and Delete All Pedrigrees,Breeders,Breeds")
+    print("14. Edit Pedigree Columns Load")
+    print("15. Run COI")
+    print("16. Run Mean Kinship")
+    print("17. Run Stud Selector")
+    print("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
         try:
@@ -491,27 +573,29 @@ if __name__ == '__main__':
             elif ch == "6":
                 obj.test('add_pedigree')
             elif ch == "7":
-                obj.test('delete_all_pedigrees')
+                obj.test('add_single_pedigree')
             elif ch == "8":
-                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
+                obj.test('delete_all_pedigrees')
             elif ch == "9":
-                obj.test('add_users')
+                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
             elif ch == "10":
-                obj.test('delete_users')
+                obj.test('add_users')
             elif ch == "11":
-                obj.test('update_parent_titles')
+                obj.test('delete_users')
             elif ch == "12":
+                obj.test('update_parent_titles')
+            elif ch == "13":
                 obj.test('add_pedigree')
                 obj.delete_all_breeds()
                 obj.test('delete_all_breeders', input("Enter Breeder Prefix "))
                 obj.test('delete_all_pedigrees')
-            elif ch == "13":
-                obj.test('edit_column_load')
             elif ch == "14":
-                obj.test('run_coi')
+                obj.test('edit_column_load')
             elif ch == "15":
-                obj.test('run_mean_kinship')
+                obj.test('run_coi')
             elif ch == "16":
+                obj.test('run_mean_kinship')
+            elif ch == "17":
                 obj.test('run_stud_selector')
             ch = input("Enter Choice ")
         except:
