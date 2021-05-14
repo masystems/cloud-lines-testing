@@ -63,6 +63,10 @@ class CloudLinesTestV2():
         self.browser.execute_script("arguments[0].click();", login)
         sleep(2)
 
+    def logout(self):
+        self.browser.get(self.config['settings']['domain'] + "/account/logout")
+        sleep(2)
+
     def add_pedigree(self,pedigree_file,breed_file,breeder_file):
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
         pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
@@ -423,6 +427,8 @@ class CloudLinesTestV2():
             self.login_contrib()
         if type == 'login_read':
             self.login_read()
+        if type == 'logout':
+            self.logout()
         elif type == 'add_pedigree':
             self.add_pedigree('pedigree.csv','breed.csv','breeder.csv')
         elif type == 'delete_all_pedigrees':
@@ -456,17 +462,18 @@ if __name__ == '__main__':
     print ("2. Login as Admin")
     print ("3. Login as Contributor")
     print ("4. Login as Read-Only")
-    print ("5. Add Pedigree")
-    print ("6. Delete All Pedigrees")
-    print ("7. Delete All Breeders")
-    print ("8. Add Users")
-    print ("9. Delete Users")
-    print ("10. Edit Parent Titles")
-    print ("11. Add and Delete All Pedrigrees,Breeders,Breeds")
-    print ("12. Edit Pedigree Columns Load")
-    print("13. Run COI")
-    print("14. Run Mean Kinship")
-    print("15. Run Stud Selector")
+    print ("5. Logout")
+    print ("6. Add Pedigree")
+    print ("7. Delete All Pedigrees")
+    print ("8. Delete All Breeders")
+    print ("9. Add Users")
+    print ("10. Delete Users")
+    print ("11. Edit Parent Titles")
+    print ("12. Add and Delete All Pedrigrees,Breeders,Breeds")
+    print ("13. Edit Pedigree Columns Load")
+    print("14. Run COI")
+    print("15. Run Mean Kinship")
+    print("16. Run Stud Selector")
     print ("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
@@ -479,30 +486,32 @@ if __name__ == '__main__':
                 obj.test('login_contrib')
             if ch == "4":
                 obj.test('login_read')
-            elif ch == "5":
-                obj.test('add_pedigree')
+            if ch == "5":
+                obj.test('logout')
             elif ch == "6":
-                obj.test('delete_all_pedigrees')
+                obj.test('add_pedigree')
             elif ch == "7":
-                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
+                obj.test('delete_all_pedigrees')
             elif ch == "8":
-                obj.test('add_users')
+                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
             elif ch == "9":
-                obj.test('delete_users')
+                obj.test('add_users')
             elif ch == "10":
-                obj.test('update_parent_titles')
+                obj.test('delete_users')
             elif ch == "11":
+                obj.test('update_parent_titles')
+            elif ch == "12":
                 obj.test('add_pedigree')
                 obj.delete_all_breeds()
                 obj.test('delete_all_breeders', input("Enter Breeder Prefix "))
                 obj.test('delete_all_pedigrees')
-            elif ch == "12":
-                obj.test('edit_column_load')
             elif ch == "13":
-                obj.test('run_coi')
+                obj.test('edit_column_load')
             elif ch == "14":
-                obj.test('run_mean_kinship')
+                obj.test('run_coi')
             elif ch == "15":
+                obj.test('run_mean_kinship')
+            elif ch == "16":
                 obj.test('run_stud_selector')
             ch = input("Enter Choice ")
         except:
