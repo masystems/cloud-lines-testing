@@ -198,254 +198,13 @@ class CloudLinesTestV2():
                     if self.timeout == 20:
                         print("Server Issue in entering pedigree information try later",e,"at",counter,"insertion")
                         exit(0)
+ 
+    def add_each_single_pedigree(self, pedigree_file):
+        self.add_single_pedigree(pedigree_file, '_user')
+        self.add_single_pedigree(pedigree_file, '_admin')
+        self.add_single_pedigree(pedigree_file, '_contrib')
 
-    def add_single_pedigree(self, pedigree_file):
-        self.logout()
-        self.login_user()
-        
-        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
-        pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
-        
-        self.pedigree = dict(pedgree_reader.__next__())
-
-        # go to pedigree search page
-        while self.timeout<20:
-            try:
-                pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
-                self.browser.execute_script("arguments[0].click();", pedigree_link)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue In opening pedigree search try later ",e)
-                    exit(0)
-
-        # go to add new pedigree
-        while self.timeout<20:
-            try:
-                new_pedigree = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/new_pedigree/' + '"]')
-                self.browser.execute_script("arguments[0].click();", new_pedigree)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue in adding new pedigree try later",e)
-                    exit(0)
-
-        # Enter pedigree information
-        while self.timeout<20:
-            try:
-                breeder = self.browser.find_element_by_id('id_breeder')
-                breeder.send_keys(self.pedigree['breeder'])
-                current_owner = self.browser.find_element_by_id('id_current_owner')
-                current_owner.send_keys(self.pedigree['breeder'])
-                self.browser.find_element_by_name('reg_no').clear()
-                reg_no = self.browser.find_element_by_name('reg_no')
-                reg_no.send_keys(f"{self.pedigree['reg_no']}_user")
-                tag_no = self.browser.find_element_by_id('id_tag_no')
-                tag_no.send_keys(self.pedigree['tag_no'])
-                name = self.browser.find_element_by_id('id_name')
-                name.send_keys(f"{self.pedigree['name']}_user")
-                dor = self.browser.find_element_by_id('id_date_of_registration')
-                dor.send_keys(self.pedigree['dor'])
-                dob = self.browser.find_element_by_id('id_date_of_birth')
-                dob.send_keys(self.pedigree['dob'])
-                status = self.browser.find_element_by_id(self.pedigree['status'])
-                self.browser.execute_script("arguments[0].click();", status)
-                sex = self.browser.find_element_by_id(self.pedigree['sex'])
-                self.browser.execute_script("arguments[0].click();", sex)
-                born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
-                self.browser.execute_script("arguments[0].click();", born_as)
-                dod = self.browser.find_element_by_id('id_date_of_death')
-                dod.send_keys(self.pedigree['dod'])
-                desc = self.browser.find_element_by_id('id_description')
-                desc.send_keys(self.pedigree['desc'])
-                desc = self.browser.find_element_by_id('id_breed')
-                desc.send_keys(self.pedigree['breed'])
-
-                # Save!
-                save_pedigree = self.browser.find_element_by_id('submitPedigree')
-                self.browser.execute_script("arguments[0].click();", save_pedigree)
-                confirm_save_pedigree = self.browser.find_element_by_id('confirmSaveBtn')
-                self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue in entering pedigree information try later",e)
-                    exit(0)
-
-        ################################################ ADMIN
-        self.logout()
-        self.login_admin()
-
-        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
-        pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
-        
-        self.pedigree = dict(pedgree_reader.__next__())
-
-        # go to pedigree search page
-        while self.timeout<20:
-            try:
-                pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
-                self.browser.execute_script("arguments[0].click();", pedigree_link)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue In opening pedigree search try later ",e)
-                    exit(0)
-
-        # go to add new pedigree
-        while self.timeout<20:
-            try:
-                new_pedigree = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/new_pedigree/' + '"]')
-                self.browser.execute_script("arguments[0].click();", new_pedigree)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue in adding new pedigree try later",e)
-                    exit(0)
-
-        # Enter pedigree information
-        while self.timeout<20:
-            try:
-                breeder = self.browser.find_element_by_id('id_breeder')
-                breeder.send_keys(self.pedigree['breeder'])
-                current_owner = self.browser.find_element_by_id('id_current_owner')
-                current_owner.send_keys(self.pedigree['breeder'])
-                self.browser.find_element_by_name('reg_no').clear()
-                reg_no = self.browser.find_element_by_name('reg_no')
-                reg_no.send_keys(f"{self.pedigree['reg_no']}_admin")
-                tag_no = self.browser.find_element_by_id('id_tag_no')
-                tag_no.send_keys(self.pedigree['tag_no'])
-                name = self.browser.find_element_by_id('id_name')
-                name.send_keys(f"{self.pedigree['name']}_admin")
-                dor = self.browser.find_element_by_id('id_date_of_registration')
-                dor.send_keys(self.pedigree['dor'])
-                dob = self.browser.find_element_by_id('id_date_of_birth')
-                dob.send_keys(self.pedigree['dob'])
-                status = self.browser.find_element_by_id(self.pedigree['status'])
-                self.browser.execute_script("arguments[0].click();", status)
-                sex = self.browser.find_element_by_id(self.pedigree['sex'])
-                self.browser.execute_script("arguments[0].click();", sex)
-                born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
-                self.browser.execute_script("arguments[0].click();", born_as)
-                dod = self.browser.find_element_by_id('id_date_of_death')
-                dod.send_keys(self.pedigree['dod'])
-                desc = self.browser.find_element_by_id('id_description')
-                desc.send_keys(self.pedigree['desc'])
-                desc = self.browser.find_element_by_id('id_breed')
-                desc.send_keys(self.pedigree['breed'])
-
-                # Save!
-                save_pedigree = self.browser.find_element_by_id('submitPedigree')
-                self.browser.execute_script("arguments[0].click();", save_pedigree)
-                confirm_save_pedigree = self.browser.find_element_by_id('confirmSaveBtn')
-                self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue in entering pedigree information try later",e)
-                    exit(0)
-
-        ################################################ CONTRIBUTOR
-        self.logout()
-        self.login_contrib()
-
-        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
-        pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
-        
-        self.pedigree = dict(pedgree_reader.__next__())
-
-        # go to pedigree search page
-        while self.timeout<20:
-            try:
-                pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
-                self.browser.execute_script("arguments[0].click();", pedigree_link)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue In opening pedigree search try later ",e)
-                    exit(0)
-
-        # go to add new pedigree
-        while self.timeout<20:
-            try:
-                new_pedigree = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/new_pedigree/' + '"]')
-                self.browser.execute_script("arguments[0].click();", new_pedigree)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue in adding new pedigree try later",e)
-                    exit(0)
-
-        # Enter pedigree information
-        while self.timeout<20:
-            try:
-                breeder = self.browser.find_element_by_id('id_breeder')
-                breeder.send_keys(self.pedigree['breeder'])
-                current_owner = self.browser.find_element_by_id('id_current_owner')
-                current_owner.send_keys(self.pedigree['breeder'])
-                self.browser.find_element_by_name('reg_no').clear()
-                reg_no = self.browser.find_element_by_name('reg_no')
-                reg_no.send_keys(f"{self.pedigree['reg_no']}_contrib")
-                tag_no = self.browser.find_element_by_id('id_tag_no')
-                tag_no.send_keys(self.pedigree['tag_no'])
-                name = self.browser.find_element_by_id('id_name')
-                name.send_keys(f"{self.pedigree['name']}_contrib")
-                dor = self.browser.find_element_by_id('id_date_of_registration')
-                dor.send_keys(self.pedigree['dor'])
-                dob = self.browser.find_element_by_id('id_date_of_birth')
-                dob.send_keys(self.pedigree['dob'])
-                status = self.browser.find_element_by_id(self.pedigree['status'])
-                self.browser.execute_script("arguments[0].click();", status)
-                sex = self.browser.find_element_by_id(self.pedigree['sex'])
-                self.browser.execute_script("arguments[0].click();", sex)
-                born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
-                self.browser.execute_script("arguments[0].click();", born_as)
-                dod = self.browser.find_element_by_id('id_date_of_death')
-                dod.send_keys(self.pedigree['dod'])
-                desc = self.browser.find_element_by_id('id_description')
-                desc.send_keys(self.pedigree['desc'])
-                desc = self.browser.find_element_by_id('id_breed')
-                desc.send_keys(self.pedigree['breed'])
-
-                # Save!
-                save_pedigree = self.browser.find_element_by_id('submitPedigree')
-                self.browser.execute_script("arguments[0].click();", save_pedigree)
-                confirm_save_pedigree = self.browser.find_element_by_id('confirmSaveBtn')
-                self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue in entering pedigree information try later",e)
-                    exit(0)
-
-        ################################################ READ-ONLY
+        # READ-ONLY
         self.logout()
         self.login_read()
 
@@ -468,7 +227,7 @@ class CloudLinesTestV2():
                     print("Server Issue In opening pedigree search try later ",e)
                     exit(0)
 
-        # go to add new pedigree
+        # check you can't go to add new pedigree
         while self.timeout<20:
             try:
                 if len(self.browser.find_elements_by_xpath('//a[@href="' + '/pedigree/new_pedigree' + '"]')) > 0:
@@ -480,6 +239,94 @@ class CloudLinesTestV2():
                 self.timeout += 1
                 if self.timeout == 20:
                     print("Server Issue in adding new pedigree try later",e)
+                    exit(0)
+
+    def add_single_pedigree(self, pedigree_file, user_type):
+        self.logout()
+        
+        if user_type == '_user':
+            self.login_user()
+        elif user_type == '_admin':
+            self.login_admin()
+        elif user_type == '_contrib':
+            self.login_contrib()
+        
+        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
+        pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
+        
+        self.pedigree = dict(pedgree_reader.__next__())
+
+        # go to pedigree search page
+        while self.timeout<20:
+            try:
+                pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
+                self.browser.execute_script("arguments[0].click();", pedigree_link)
+                sleep(2)
+                self.timeout = 0
+                break
+            except Exception as e:
+                self.timeout += 1
+                if self.timeout == 20:
+                    print("Server Issue In opening pedigree search try later ",e)
+                    exit(0)
+
+        # go to add new pedigree
+        while self.timeout<20:
+            try:
+                new_pedigree = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/new_pedigree/' + '"]')
+                self.browser.execute_script("arguments[0].click();", new_pedigree)
+                sleep(2)
+                self.timeout = 0
+                break
+            except Exception as e:
+                self.timeout += 1
+                if self.timeout == 20:
+                    print("Server Issue in adding new pedigree try later",e)
+                    exit(0)
+
+        # Enter pedigree information
+        while self.timeout<20:
+            try:
+                breeder = self.browser.find_element_by_id('id_breeder')
+                breeder.send_keys(self.pedigree['breeder'])
+                current_owner = self.browser.find_element_by_id('id_current_owner')
+                current_owner.send_keys(self.pedigree['breeder'])
+                self.browser.find_element_by_name('reg_no').clear()
+                reg_no = self.browser.find_element_by_name('reg_no')
+                reg_no.send_keys(f"{self.pedigree['reg_no']}{user_type}")
+                tag_no = self.browser.find_element_by_id('id_tag_no')
+                tag_no.send_keys(self.pedigree['tag_no'])
+                name = self.browser.find_element_by_id('id_name')
+                name.send_keys(f"{self.pedigree['name']}{user_type}")
+                dor = self.browser.find_element_by_id('id_date_of_registration')
+                dor.send_keys(self.pedigree['dor'])
+                dob = self.browser.find_element_by_id('id_date_of_birth')
+                dob.send_keys(self.pedigree['dob'])
+                status = self.browser.find_element_by_id(self.pedigree['status'])
+                self.browser.execute_script("arguments[0].click();", status)
+                sex = self.browser.find_element_by_id(self.pedigree['sex'])
+                self.browser.execute_script("arguments[0].click();", sex)
+                born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
+                self.browser.execute_script("arguments[0].click();", born_as)
+                dod = self.browser.find_element_by_id('id_date_of_death')
+                dod.send_keys(self.pedigree['dod'])
+                desc = self.browser.find_element_by_id('id_description')
+                desc.send_keys(self.pedigree['desc'])
+                desc = self.browser.find_element_by_id('id_breed')
+                desc.send_keys(self.pedigree['breed'])
+
+                # Save!
+                save_pedigree = self.browser.find_element_by_id('submitPedigree')
+                self.browser.execute_script("arguments[0].click();", save_pedigree)
+                confirm_save_pedigree = self.browser.find_element_by_id('confirmSaveBtn')
+                self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
+                sleep(2)
+                self.timeout = 0
+                break
+            except Exception as e:
+                self.timeout += 1
+                if self.timeout == 20:
+                    print("Server Issue in entering pedigree information try later",e)
                     exit(0)
 
     def add_breeder_info(self,breeder):
@@ -714,8 +561,8 @@ class CloudLinesTestV2():
             self.logout()
         elif type == 'add_pedigree':
             self.add_pedigree('pedigree.csv','breed.csv','breeder.csv')
-        elif type == 'add_single_pedigree':
-            self.add_single_pedigree('pedigree.csv')
+        elif type == 'add_each_single_pedigree':
+            self.add_each_single_pedigree('pedigree.csv')
         elif type == 'delete_all_pedigrees':
             self.delete_all_pedigrees()
         elif type == 'delete_all_breeders':
@@ -777,7 +624,7 @@ if __name__ == '__main__':
             elif ch == "6":
                 obj.test('add_pedigree')
             elif ch == "7":
-                obj.test('add_single_pedigree')
+                obj.test('add_each_single_pedigree')
             elif ch == "8":
                 obj.test('delete_all_pedigrees')
             elif ch == "9":
