@@ -79,9 +79,9 @@ class CloudLinesTestV2():
             self.breed = dict(breed_reader.__next__())
 
             # go to pedigree search page
-            while self.timeout<20:
+            while self.timeout < 20:
                 try:
-                    pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
+                    pedigree_link = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
                     self.browser.execute_script("arguments[0].click();", pedigree_link)
                     sleep(2)
                     self.timeout = 0
@@ -89,15 +89,15 @@ class CloudLinesTestV2():
                 except Exception as e:
                     self.timeout += 1
                     if self.timeout == 20:
-                        print("Server Issue In opening pedigree search try later ",e,"at",counter,"insertion")
+                        print("Server Issue In opening pedigree search try later ", e,"at",counter,"insertion")
                         exit(0)
 
 
 
             # go to add new pedigree
-            while self.timeout<20:
+            while self.timeout < 20:
                 try:
-                    new_pedigree = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/new_pedigree/' + '"]')
+                    new_pedigree = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
                     self.browser.execute_script("arguments[0].click();", new_pedigree)
                     sleep(2)
                     self.timeout = 0
@@ -105,11 +105,11 @@ class CloudLinesTestV2():
                 except Exception as e:
                     self.timeout += 1
                     if self.timeout == 20:
-                        print("Server Issue in adding new pedigree try later",e,"at",counter,"insertion")
+                        print("Server Issue in adding new pedigree try later", e,"at",counter,"insertion")
                         exit(0)
 
             # open add new breeder modal
-            while self.timeout<20:
+            while self.timeout < 20:
                 try:
                     new_breeder_modal = self.browser.find_element_by_id('showNewBreederModal')
                     self.browser.execute_script("arguments[0].click();", new_breeder_modal)
@@ -119,12 +119,12 @@ class CloudLinesTestV2():
                 except Exception as e:
                     self.timeout += 1
                     if self.timeout == 20:
-                        print("Server Issue in adding new breeder model try later",e,"at",counter,"insertion")
+                        print("Server Issue in adding new breeder model try later", e,"at",counter,"insertion")
                         exit(0)
 
 
             # Enter breeder information
-            while self.timeout<20:
+            while self.timeout < 20:
                 try:
                     self.add_breeder_info(self.breeder)
                     submit_breeder = self.browser.find_element_by_id('saveBreeder')
@@ -135,11 +135,11 @@ class CloudLinesTestV2():
                 except Exception as e:
                     self.timeout += 1
                     if self.timeout == 20:
-                        print("Server Issue in saving breeder info try later",e,"at",counter,"insertion")
+                        print("Server Issue in saving breeder info try later", e,"at",counter,"insertion")
                         exit(0)
 
             # Enter pedigree information
-            while self.timeout<20:
+            while self.timeout < 20:
                 try:
                     breeder = self.browser.find_element_by_id('id_breeder')
                     breeder.send_keys(self.pedigree['breeder'])
@@ -196,13 +196,23 @@ class CloudLinesTestV2():
                 except Exception as e:
                     self.timeout += 1
                     if self.timeout == 20:
-                        print("Server Issue in entering pedigree information try later",e,"at",counter,"insertion")
+                        print("Server Issue in entering pedigree information try later", e,"at",counter,"insertion")
                         exit(0)
  
     def add_each_single_pedigree(self, pedigree_file):
-        self.add_single_pedigree(pedigree_file, '_user')
-        self.add_single_pedigree(pedigree_file, '_admin')
-        self.add_single_pedigree(pedigree_file, '_contrib')
+        # add pedigree in all the different ways as each possible user
+        self.add_single_pedigree(pedigree_file, '_user', '_pedigree_search')
+        self.add_single_pedigree(pedigree_file, '_user', '_pedigree_view')
+        self.add_single_pedigree(pedigree_file, '_user', '_offspring')
+        self.add_single_pedigree(pedigree_file, '_user', '_certificate')
+        self.add_single_pedigree(pedigree_file, '_admin', '_pedigree_search')
+        self.add_single_pedigree(pedigree_file, '_admin', '_pedigree_view')
+        self.add_single_pedigree(pedigree_file, '_admin', '_offspring')
+        self.add_single_pedigree(pedigree_file, '_admin', '_certificate')
+        self.add_single_pedigree(pedigree_file, '_contrib', '_pedigree_search')
+        self.add_single_pedigree(pedigree_file, '_contrib', '_pedigree_view')
+        self.add_single_pedigree(pedigree_file, '_contrib', '_offspring')
+        self.add_single_pedigree(pedigree_file, '_contrib', '_certificate')
 
         # READ-ONLY
         self.logout()
@@ -214,9 +224,9 @@ class CloudLinesTestV2():
         self.pedigree = dict(pedgree_reader.__next__())
 
         # go to pedigree search page
-        while self.timeout<20:
+        while self.timeout < 20:
             try:
-                pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
+                pedigree_link = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
                 self.browser.execute_script("arguments[0].click();", pedigree_link)
                 sleep(2)
                 self.timeout = 0
@@ -224,24 +234,24 @@ class CloudLinesTestV2():
             except Exception as e:
                 self.timeout += 1
                 if self.timeout == 20:
-                    print("Server Issue In opening pedigree search try later ",e)
+                    print("Server Issue In opening pedigree search try later ", e)
                     exit(0)
 
         # check you can't go to add new pedigree
-        while self.timeout<20:
+        while self.timeout < 20:
             try:
-                if len(self.browser.find_elements_by_xpath('//a[@href="' + '/pedigree/new_pedigree' + '"]')) > 0:
-                    raise Exception(self.browser.find_elements_by_xpath('//a[@href="' + '/pedigree/search' + '"]'))
+                if len(self.browser.find_elements_by_xpath('//a[@href="/pedigree/new_pedigree"]')) > 0:
+                    raise Exception(self.browser.find_elements_by_xpath('//a[@href="/pedigree/search"]'))
                 sleep(2)
                 self.timeout = 0
                 break
             except Exception as e:
                 self.timeout += 1
                 if self.timeout == 20:
-                    print("Server Issue in adding new pedigree try later",e)
+                    print("Server Issue in adding new pedigree try later", e)
                     exit(0)
 
-    def add_single_pedigree(self, pedigree_file, user_type):
+    def add_single_pedigree(self, pedigree_file, user_type, addition_method):
         self.logout()
         
         if user_type == '_user':
@@ -250,42 +260,192 @@ class CloudLinesTestV2():
             self.login_admin()
         elif user_type == '_contrib':
             self.login_contrib()
-        
+
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
+
         pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
-        
         self.pedigree = dict(pedgree_reader.__next__())
 
-        # go to pedigree search page
-        while self.timeout<20:
-            try:
-                pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
-                self.browser.execute_script("arguments[0].click();", pedigree_link)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue In opening pedigree search try later ",e)
-                    exit(0)
-
-        # go to add new pedigree
-        while self.timeout<20:
-            try:
-                new_pedigree = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/new_pedigree/' + '"]')
-                self.browser.execute_script("arguments[0].click();", new_pedigree)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue in adding new pedigree try later",e)
-                    exit(0)
+        # access new pedigree form via pedigree search
+        if addition_method == '_pedigree_search':
+            # go to pedigree search page
+            while self.timeout < 20:
+                try:
+                    ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                    self.browser.execute_script("arguments[0].click();", ped_search)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue In opening pedigree search try later ", e)
+                        exit(0)
+            # go to add new pedigree
+            while self.timeout < 20:
+                try:
+                    add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                    self.browser.execute_script("arguments[0].click();", add_ped)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue in adding new pedigree try later", e)
+                        exit(0)
+        # access new pedigree form via view pedigree
+        elif addition_method == '_pedigree_view':
+            # go to pedigree search page
+            while self.timeout < 20:
+                try:
+                    ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                    self.browser.execute_script("arguments[0].click();", ped_search)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue In opening pedigree search try later ", e)
+                        exit(0)
+            # go to view pedigree
+            while self.timeout < 20:
+                try:
+                    ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
+                    self.browser.execute_script("arguments[0].click();", ped_view)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue In opening pedigree view try later ", e)
+                        exit(0)
+            # go to add new pedigree
+            while self.timeout < 20:
+                try:
+                    add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                    self.browser.execute_script("arguments[0].click();", add_ped)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue in adding new pedigree try later", e)
+                        exit(0)
+        # access new pedigree form via pedigree offspring
+        elif addition_method == '_offspring':
+            # go to pedigree search page
+            while self.timeout < 20:
+                try:
+                    ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                    self.browser.execute_script("arguments[0].click();", ped_search)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue In opening pedigree search try later ", e)
+                        exit(0)
+            # go to view pedigree
+            while self.timeout < 20:
+                try:
+                    ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
+                    self.browser.execute_script("arguments[0].click();", ped_view)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue In opening pedigree view try later ", e)
+                        exit(0)
+            # go to offspring tab
+            while self.timeout < 20:
+                try:
+                    offspring = self.browser.find_element_by_xpath('//a[@href="#children"]')
+                    self.browser.execute_script("arguments[0].click();", offspring)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue In opening offspring tab try later ", e)
+                        exit(0)
+            # go to add new pedigree
+            while self.timeout < 20:
+                try:
+                    add_ped = self.browser.find_element_by_xpath('//div[@id="children"]/a[@href="/pedigree/new_pedigree/"]')
+                    self.browser.execute_script("arguments[0].click();", add_ped)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue in adding new pedigree try later", e)
+                        exit(0)
+        # access new pedigree form via pedigree certificate
+        elif addition_method == '_certificate':
+            # go to pedigree search page
+            while self.timeout < 20:
+                try:
+                    ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                    self.browser.execute_script("arguments[0].click();", ped_search)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue In opening pedigree search try later ", e)
+                        exit(0)
+            # go to view pedigree
+            while self.timeout < 20:
+                try:
+                    ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
+                    self.browser.execute_script("arguments[0].click();", ped_view)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue In opening pedigree view try later ", e)
+                        exit(0)
+            # go to certificate tab
+            while self.timeout < 20:
+                try:
+                    certificate = self.browser.find_element_by_xpath('//a[@href="#cert"]')
+                    self.browser.execute_script("arguments[0].click();", certificate)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue In opening certificate tab try later ", e)
+                        exit(0)
+            # go to add new pedigree
+            while self.timeout < 20:
+                try:
+                    add_ped = self.browser.find_element_by_xpath('//div[@id="certificate"]/table/tbody/tr/td/a[@href="/pedigree/new_pedigree/"]')
+                    self.browser.execute_script("arguments[0].click();", add_ped)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue in adding new pedigree try later", e)
+                        exit(0)
 
         # Enter pedigree information
-        while self.timeout<20:
+        while self.timeout < 20:
             try:
                 breeder = self.browser.find_element_by_id('id_breeder')
                 breeder.send_keys(self.pedigree['breeder'])
@@ -293,11 +453,11 @@ class CloudLinesTestV2():
                 current_owner.send_keys(self.pedigree['breeder'])
                 self.browser.find_element_by_name('reg_no').clear()
                 reg_no = self.browser.find_element_by_name('reg_no')
-                reg_no.send_keys(f"{self.pedigree['reg_no']}{user_type}")
+                reg_no.send_keys(f"{self.pedigree['reg_no']}{user_type}{addition_method}")
                 tag_no = self.browser.find_element_by_id('id_tag_no')
                 tag_no.send_keys(self.pedigree['tag_no'])
                 name = self.browser.find_element_by_id('id_name')
-                name.send_keys(f"{self.pedigree['name']}{user_type}")
+                name.send_keys(f"{self.pedigree['name']}{user_type}{addition_method}")
                 dor = self.browser.find_element_by_id('id_date_of_registration')
                 dor.send_keys(self.pedigree['dor'])
                 dob = self.browser.find_element_by_id('id_date_of_birth')
@@ -326,7 +486,7 @@ class CloudLinesTestV2():
             except Exception as e:
                 self.timeout += 1
                 if self.timeout == 20:
-                    print("Server Issue in entering pedigree information try later",e)
+                    print("Server Issue in entering pedigree information try later", e)
                     exit(0)
 
     def add_breeder_info(self,breeder):
@@ -353,7 +513,7 @@ class CloudLinesTestV2():
             except Exception as e:
                 self.timeout += 1
                 if self.timeout == 20:
-                    print("Server Issue in adding breeder info try later",e,"at breeder prefix",breeder['breeding_prefix'])
+                    print("Server Issue in adding breeder info try later", e,"at breeder prefix",breeder['breeding_prefix'])
                     exit(0)
 
     def add_breed_info(self, breed):
@@ -370,12 +530,12 @@ class CloudLinesTestV2():
             except Exception as e:
                 self.timeout += 1
                 if self.timeout == 20:
-                    print("Server Issue in adding breed info try later",e," at breed name",breed['breed_name'])
+                    print("Server Issue in adding breed info try later", e," at breed name",breed['breed_name'])
                     exit(0)
 
     def delete_all_pedigrees(self):
         # go to pedigree search page
-        pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
+        pedigree_link = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
         self.browser.execute_script("arguments[0].click();", pedigree_link)
         sleep(2)
         while self.browser.find_element_by_class_name('odd'):
@@ -384,7 +544,7 @@ class CloudLinesTestV2():
                     pedigree_links = self.browser.find_element_by_class_name('odd')
                     self.browser.execute_script("arguments[0].click();", pedigree_links)
                     self.delete_pedigree()
-                    pedigree_link = self.browser.find_element_by_xpath('//a[@href="' + '/pedigree/search' + '"]')
+                    pedigree_link = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
                     self.browser.execute_script("arguments[0].click();", pedigree_link)
                     sleep(2)
                 except Exception as e:
@@ -404,7 +564,7 @@ class CloudLinesTestV2():
 
     def delete_all_breeders(self,prefix=""):
         # go to breed page
-        breeders_link = self.browser.find_element_by_xpath('//a[@href="' + '/breeders/' + '"]')
+        breeders_link = self.browser.find_element_by_xpath('//a[@href="/breeders/"]')
         self.browser.execute_script("arguments[0].click();", breeders_link)
         while True:
             breeders_filter = self.browser.find_element_by_xpath('//div[@id="table_filter"]/label/input[1]')
@@ -415,7 +575,7 @@ class CloudLinesTestV2():
                 while self.timeout < 20:
                     try:
                         edit_breeders = self.browser.find_element_by_id('editBreeder')
-                        self.browser.execute_script("arguments[0].click();",edit_breeders)
+                        self.browser.execute_script("arguments[0].click();", edit_breeders)
                         sleep(2)
                         delete_breeders_but = self.browser.find_element_by_id('deleteBreeder')
                         self.browser.execute_script("arguments[0].click();", delete_breeders_but)
@@ -434,14 +594,14 @@ class CloudLinesTestV2():
                 return
     def delete_all_breeds(self):
         # go to breed page
-        breed_link = self.browser.find_element_by_xpath('//a[@href="' + '/breeds/' + '"]')
+        breed_link = self.browser.find_element_by_xpath('//a[@href="/breeds/"]')
         self.browser.execute_script("arguments[0].click();", breed_link)
         try:
             while self.browser.find_element_by_class_name('btn-outline-info'):
                 edit_breed_links = self.browser.find_elements_by_class_name('btn-outline-info')
                 self.browser.execute_script("arguments[0].click();", edit_breed_links[0])
                 self.delete_breed()
-                breed_link = self.browser.find_element_by_xpath('//a[@href="' + '/breeds/' + '"]')
+                breed_link = self.browser.find_element_by_xpath('//a[@href="/breeds/"]')
                 self.browser.execute_script("arguments[0].click();", breed_link)
         except NoSuchElementException:
             # all breeds deleted
@@ -462,7 +622,7 @@ class CloudLinesTestV2():
     def add_user(self,user_file):
         self.browser.get(self.config['settings']['domain']+"/account/settings")
         sleep(2)
-        users_link = self.browser.find_element_by_xpath('//a[@href="' + '#users' + '"]')
+        users_link = self.browser.find_element_by_xpath('//a[@href="#users"]')
         self.browser.execute_script("arguments[0].click();", users_link)
         user_reader = csv.DictReader(open(user_file, newline=''))
 
@@ -491,7 +651,7 @@ class CloudLinesTestV2():
         sleep(2)
         while True:
             try:
-                users_link = self.browser.find_element_by_xpath('//a[@href="' + '#users' + '"]')
+                users_link = self.browser.find_element_by_xpath('//a[@href="#users"]')
                 self.browser.execute_script("arguments[0].click();", users_link)
                 delete_btns = self.browser.find_elements_by_xpath('//*[@id="'+'userDeleteBtn'+'"]')
                 self.browser.execute_script("arguments[0].click();", delete_btns[idx])
@@ -505,7 +665,7 @@ class CloudLinesTestV2():
     def edit_parent_titles(self,mother="Mother",father="Father"):
         self.browser.get(self.config['settings']['domain'] + "/account/settings")
         sleep(2)
-        customisation_link = self.browser.find_element_by_xpath('//a[@href="' + '#customisation' + '"]')
+        customisation_link = self.browser.find_element_by_xpath('//a[@href="#customisation"]')
         self.browser.execute_script("arguments[0].click();", customisation_link)
         mom = self.browser.find_element_by_id('mother')
         mom.clear()
@@ -519,7 +679,7 @@ class CloudLinesTestV2():
     def edit_column_load(self):
         self.browser.get(self.config['settings']['domain'] + "/account/settings")
         sleep(2)
-        customisation_link = self.browser.find_element_by_xpath('//a[@href="' + '#customisation' + '"]')
+        customisation_link = self.browser.find_element_by_xpath('//a[@href="#customisation"]')
         self.browser.execute_script("arguments[0].click();", customisation_link)
         checks = ['checkbox6', 'checkbox16', 'checkbox23', 'checkbox24']
         for ids in checks:
@@ -602,7 +762,7 @@ if __name__ == '__main__':
     print("10. Add Users")
     print("11. Delete Users")
     print("12. Edit Parent Titles")
-    print("13. Add and Delete All Pedrigrees,Breeders,Breeds")
+    print("13. Add and Delete All Pedrigrees, Breeders, Breeds")
     print("14. Edit Pedigree Columns Load")
     print("15. Run COI")
     print("16. Run Mean Kinship")
