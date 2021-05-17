@@ -213,330 +213,529 @@ class CloudLinesTestV2():
         self.add_single_pedigree(pedigree_file, '_contrib', '_pedigree_view')
         self.add_single_pedigree(pedigree_file, '_contrib', '_offspring')
         self.add_single_pedigree(pedigree_file, '_contrib', '_certificate')
-
-        # READ-ONLY
-        self.logout()
-        self.login_read()
-
-        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
-        pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
-        
-        self.pedigree = dict(pedgree_reader.__next__())
-
-        # go to pedigree search page
-        while self.timeout < 20:
-            try:
-                pedigree_link = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
-                self.browser.execute_script("arguments[0].click();", pedigree_link)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue In opening pedigree search try later ", e)
-                    exit(0)
-
-        # check you can't go to add new pedigree
-        while self.timeout < 20:
-            try:
-                if len(self.browser.find_elements_by_xpath('//a[@href="/pedigree/new_pedigree"]')) > 0:
-                    raise Exception(self.browser.find_elements_by_xpath('//a[@href="/pedigree/search"]'))
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue in adding new pedigree try later", e)
-                    exit(0)
+        self.add_single_pedigree(pedigree_file, '_read', '_pedigree_search')
+        self.add_single_pedigree(pedigree_file, '_read', '_pedigree_view')
+        self.add_single_pedigree(pedigree_file, '_read', '_offspring')
+        self.add_single_pedigree(pedigree_file, '_read', '_certificate')
 
     def add_single_pedigree(self, pedigree_file, user_type, addition_method):
         self.logout()
-        
+        # login as the correct user
         if user_type == '_user':
             self.login_user()
         elif user_type == '_admin':
             self.login_admin()
         elif user_type == '_contrib':
             self.login_contrib()
+        elif user_type == '_read':
+            self.login_read()
 
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
-        pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
-        self.pedigree = dict(pedgree_reader.__next__())
+        # if user is not read-only, test adding a pedigree
+        if user_type != '_read':
+            pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
+            self.pedigree = dict(pedgree_reader.__next__())
 
-        # access new pedigree form via pedigree search
-        if addition_method == '_pedigree_search':
-            # go to pedigree search page
-            while self.timeout < 20:
-                try:
-                    ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
-                    self.browser.execute_script("arguments[0].click();", ped_search)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue In opening pedigree search try later ", e)
-                        exit(0)
-            # go to add new pedigree
-            while self.timeout < 20:
-                try:
-                    add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
-                    self.browser.execute_script("arguments[0].click();", add_ped)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue in adding new pedigree try later", e)
-                        exit(0)
-        # access new pedigree form via view pedigree
-        elif addition_method == '_pedigree_view':
-            # go to pedigree search page
-            while self.timeout < 20:
-                try:
-                    ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
-                    self.browser.execute_script("arguments[0].click();", ped_search)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue In opening pedigree search try later ", e)
-                        exit(0)
-            # go to view pedigree
-            while self.timeout < 20:
-                try:
-                    ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
-                    self.browser.execute_script("arguments[0].click();", ped_view)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue In opening pedigree view try later ", e)
-                        exit(0)
-            # go to add new pedigree
-            while self.timeout < 20:
-                try:
-                    add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
-                    self.browser.execute_script("arguments[0].click();", add_ped)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue in adding new pedigree try later", e)
-                        exit(0)
-        # access new pedigree form via pedigree offspring
-        elif addition_method == '_offspring':
-            # go to pedigree search page
-            while self.timeout < 20:
-                try:
-                    ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
-                    self.browser.execute_script("arguments[0].click();", ped_search)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue In opening pedigree search try later ", e)
-                        exit(0)
-            # go to view pedigree
-            while self.timeout < 20:
-                try:
-                    ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
-                    self.browser.execute_script("arguments[0].click();", ped_view)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue In opening pedigree view try later ", e)
-                        exit(0)
-            # go to offspring tab
-            while self.timeout < 20:
-                try:
-                    offspring = self.browser.find_element_by_xpath('//a[@href="#children"]')
-                    self.browser.execute_script("arguments[0].click();", offspring)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue In opening offspring tab try later ", e)
-                        exit(0)
-            # go to add new pedigree
-            while self.timeout < 20:
-                try:
-                    add_ped = self.browser.find_element_by_xpath('//div[@id="children"]/a[@href="/pedigree/new_pedigree/"]')
-                    self.browser.execute_script("arguments[0].click();", add_ped)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue in adding new pedigree try later", e)
-                        exit(0)
-        # access new pedigree form via pedigree certificate
-        elif addition_method == '_certificate':
-            # go to pedigree search page
-            while self.timeout < 20:
-                try:
-                    ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
-                    self.browser.execute_script("arguments[0].click();", ped_search)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue In opening pedigree search try later ", e)
-                        exit(0)
-            # go to view pedigree
-            while self.timeout < 20:
-                try:
-                    ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
-                    self.browser.execute_script("arguments[0].click();", ped_view)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue In opening pedigree view try later ", e)
-                        exit(0)
-            # go to certificate tab
-            while self.timeout < 20:
-                try:
-                    certificate = self.browser.find_element_by_xpath('//a[@href="#cert"]')
-                    self.browser.execute_script("arguments[0].click();", certificate)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue In opening certificate tab try later ", e)
-                        exit(0)
-            # go to add new pedigree
-            while self.timeout < 20:
-                try:
-                    add_ped = self.browser.find_element_by_xpath('//div[@id="certificate"]/table/tbody/tr/td/a[@href="/pedigree/new_pedigree/"]')
-                    self.browser.execute_script("arguments[0].click();", add_ped)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue in adding new pedigree try later", e)
-                        exit(0)
-        # accessing new pedigree form via results page
-        elif addition_method == '_results_from_peds':
-            # go to pedigree search page
-            while self.timeout < 20:
-                try:
-                    ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
-                    self.browser.execute_script("arguments[0].click();", ped_search)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue In opening pedigree search try later ", e)
-                        exit(0)
-            # enter text in search field and submit search
-            search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
-            search_field.send_keys('animal_111\n')
-            # go to add new pedigree
-            while self.timeout < 20:
-                try:
-                    add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
-                    self.browser.execute_script("arguments[0].click();", add_ped)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue in adding new pedigree try later", e)
-                        exit(0)
-        # accessing new pedigree form via results page
-        elif addition_method == '_results_from_tool':
-            # enter text in search field and submit search
-            search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control"]')
-            search_field.send_keys('animal_111\n')
-            # go to add new pedigree
-            while self.timeout < 20:
-                try:
-                    add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
-                    self.browser.execute_script("arguments[0].click();", add_ped)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        print("Server Issue in adding new pedigree try later", e)
-                        exit(0)
+            # access new pedigree form via pedigree search
+            if addition_method == '_pedigree_search':
+                # go to pedigree search page
+                while self.timeout < 20:
+                    try:
+                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                        self.browser.execute_script("arguments[0].click();", ped_search)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree search try later ", e)
+                            exit(0)
+                # go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                        self.browser.execute_script("arguments[0].click();", add_ped)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in adding new pedigree try later", e)
+                            exit(0)
+            # access new pedigree form via view pedigree
+            elif addition_method == '_pedigree_view':
+                # go to pedigree search page
+                while self.timeout < 20:
+                    try:
+                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                        self.browser.execute_script("arguments[0].click();", ped_search)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree search try later ", e)
+                            exit(0)
+                # go to view pedigree
+                while self.timeout < 20:
+                    try:
+                        ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
+                        self.browser.execute_script("arguments[0].click();", ped_view)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree view try later ", e)
+                            exit(0)
+                # go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                        self.browser.execute_script("arguments[0].click();", add_ped)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in adding new pedigree try later", e)
+                            exit(0)
+            # access new pedigree form via pedigree offspring
+            elif addition_method == '_offspring':
+                # go to pedigree search page
+                while self.timeout < 20:
+                    try:
+                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                        self.browser.execute_script("arguments[0].click();", ped_search)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree search try later ", e)
+                            exit(0)
+                # go to view pedigree
+                while self.timeout < 20:
+                    try:
+                        ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
+                        self.browser.execute_script("arguments[0].click();", ped_view)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree view try later ", e)
+                            exit(0)
+                # go to offspring tab
+                while self.timeout < 20:
+                    try:
+                        offspring = self.browser.find_element_by_xpath('//a[@href="#children"]')
+                        self.browser.execute_script("arguments[0].click();", offspring)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening offspring tab try later ", e)
+                            exit(0)
+                # go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        add_ped = self.browser.find_element_by_xpath('//div[@id="children"]/a[@href="/pedigree/new_pedigree/"]')
+                        self.browser.execute_script("arguments[0].click();", add_ped)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in adding new pedigree try later", e)
+                            exit(0)
+            # access new pedigree form via pedigree certificate
+            elif addition_method == '_certificate':
+                # go to pedigree search page
+                while self.timeout < 20:
+                    try:
+                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                        self.browser.execute_script("arguments[0].click();", ped_search)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree search try later ", e)
+                            exit(0)
+                # go to view pedigree
+                while self.timeout < 20:
+                    try:
+                        ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
+                        self.browser.execute_script("arguments[0].click();", ped_view)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree view try later ", e)
+                            exit(0)
+                # go to certificate tab
+                while self.timeout < 20:
+                    try:
+                        certificate = self.browser.find_element_by_xpath('//a[@href="#cert"]')
+                        self.browser.execute_script("arguments[0].click();", certificate)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening certificate tab try later ", e)
+                            exit(0)
+                # go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        add_ped = self.browser.find_element_by_xpath('//div[@id="certificate"]/table/tbody/tr/td/a[@href="/pedigree/new_pedigree/"]')
+                        self.browser.execute_script("arguments[0].click();", add_ped)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in adding new pedigree try later", e)
+                            exit(0)
+            # accessing new pedigree form via results page
+            elif addition_method == '_results_from_peds':
+                # go to pedigree search page
+                while self.timeout < 20:
+                    try:
+                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                        self.browser.execute_script("arguments[0].click();", ped_search)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree search try later ", e)
+                            exit(0)
+                # enter text in search field and submit search
+                search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
+                search_field.send_keys('animal_111\n')
+                # go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                        self.browser.execute_script("arguments[0].click();", add_ped)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in adding new pedigree try later", e)
+                            exit(0)
+            # accessing new pedigree form via results page
+            elif addition_method == '_results_from_tool':
+                # enter text in search field and submit search
+                search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control"]')
+                search_field.send_keys('animal_111\n')
+                # go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                        self.browser.execute_script("arguments[0].click();", add_ped)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in adding new pedigree try later", e)
+                            exit(0)
 
-        # Enter pedigree information
-        while self.timeout < 20:
-            try:
-                breeder = self.browser.find_element_by_id('id_breeder')
-                breeder.send_keys(self.pedigree['breeder'])
-                current_owner = self.browser.find_element_by_id('id_current_owner')
-                current_owner.send_keys(self.pedigree['breeder'])
-                self.browser.find_element_by_name('reg_no').clear()
-                reg_no = self.browser.find_element_by_name('reg_no')
-                reg_no.send_keys(f"{self.pedigree['reg_no']}{user_type}{addition_method}")
-                tag_no = self.browser.find_element_by_id('id_tag_no')
-                tag_no.send_keys(self.pedigree['tag_no'])
-                name = self.browser.find_element_by_id('id_name')
-                name.send_keys(f"{self.pedigree['name']}{user_type}{addition_method}")
-                dor = self.browser.find_element_by_id('id_date_of_registration')
-                dor.send_keys(self.pedigree['dor'])
-                dob = self.browser.find_element_by_id('id_date_of_birth')
-                dob.send_keys(self.pedigree['dob'])
-                status = self.browser.find_element_by_id(self.pedigree['status'])
-                self.browser.execute_script("arguments[0].click();", status)
-                sex = self.browser.find_element_by_id(self.pedigree['sex'])
-                self.browser.execute_script("arguments[0].click();", sex)
-                born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
-                self.browser.execute_script("arguments[0].click();", born_as)
-                dod = self.browser.find_element_by_id('id_date_of_death')
-                dod.send_keys(self.pedigree['dod'])
-                desc = self.browser.find_element_by_id('id_description')
-                desc.send_keys(self.pedigree['desc'])
-                desc = self.browser.find_element_by_id('id_breed')
-                desc.send_keys(self.pedigree['breed'])
+            # Enter pedigree information
+            while self.timeout < 20:
+                try:
+                    breeder = self.browser.find_element_by_id('id_breeder')
+                    breeder.send_keys(self.pedigree['breeder'])
+                    current_owner = self.browser.find_element_by_id('id_current_owner')
+                    current_owner.send_keys(self.pedigree['breeder'])
+                    self.browser.find_element_by_name('reg_no').clear()
+                    reg_no = self.browser.find_element_by_name('reg_no')
+                    reg_no.send_keys(f"{self.pedigree['reg_no']}{user_type}{addition_method}")
+                    tag_no = self.browser.find_element_by_id('id_tag_no')
+                    tag_no.send_keys(self.pedigree['tag_no'])
+                    name = self.browser.find_element_by_id('id_name')
+                    name.send_keys(f"{self.pedigree['name']}{user_type}{addition_method}")
+                    dor = self.browser.find_element_by_id('id_date_of_registration')
+                    dor.send_keys(self.pedigree['dor'])
+                    dob = self.browser.find_element_by_id('id_date_of_birth')
+                    dob.send_keys(self.pedigree['dob'])
+                    status = self.browser.find_element_by_id(self.pedigree['status'])
+                    self.browser.execute_script("arguments[0].click();", status)
+                    sex = self.browser.find_element_by_id(self.pedigree['sex'])
+                    self.browser.execute_script("arguments[0].click();", sex)
+                    born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
+                    self.browser.execute_script("arguments[0].click();", born_as)
+                    dod = self.browser.find_element_by_id('id_date_of_death')
+                    dod.send_keys(self.pedigree['dod'])
+                    desc = self.browser.find_element_by_id('id_description')
+                    desc.send_keys(self.pedigree['desc'])
+                    desc = self.browser.find_element_by_id('id_breed')
+                    desc.send_keys(self.pedigree['breed'])
 
-                # Save!
-                save_pedigree = self.browser.find_element_by_id('submitPedigree')
-                self.browser.execute_script("arguments[0].click();", save_pedigree)
-                confirm_save_pedigree = self.browser.find_element_by_id('confirmSaveBtn')
-                self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
-                sleep(2)
-                self.timeout = 0
-                break
-            except Exception as e:
-                self.timeout += 1
-                if self.timeout == 20:
-                    print("Server Issue in entering pedigree information try later", e)
-                    exit(0)
+                    # Save!
+                    save_pedigree = self.browser.find_element_by_id('submitPedigree')
+                    self.browser.execute_script("arguments[0].click();", save_pedigree)
+                    confirm_save_pedigree = self.browser.find_element_by_id('confirmSaveBtn')
+                    self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue in entering pedigree information try later", e)
+                        exit(0)
+        # if user is read-only, test that they cannot add a pedigree
+        else:
+            # try to access new pedigree form via pedigree search
+            if addition_method == '_pedigree_search':
+                # go to pedigree search page
+                while self.timeout < 20:
+                    try:
+                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                        self.browser.execute_script("arguments[0].click();", ped_search)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree search try later ", e)
+                            exit(0)
+                # check you can't go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//a[@href="/pedigree/new_pedigree"]')) > 0:
+                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            exit(0)
+            # try to access new pedigree form via view pedigree
+            elif addition_method == '_pedigree_view':
+                # go to pedigree search page
+                while self.timeout < 20:
+                    try:
+                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                        self.browser.execute_script("arguments[0].click();", ped_search)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree search try later ", e)
+                            exit(0)
+                # go to view pedigree
+                while self.timeout < 20:
+                    try:
+                        ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
+                        self.browser.execute_script("arguments[0].click();", ped_view)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree view try later ", e)
+                            exit(0)
+                # check you can't go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//a[@href="/pedigree/new_pedigree"]')) > 0:
+                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            exit(0)
+            # try to access new pedigree form via pedigree offspring
+            elif addition_method == '_offspring':
+                # go to pedigree search page
+                while self.timeout < 20:
+                    try:
+                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                        self.browser.execute_script("arguments[0].click();", ped_search)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree search try later ", e)
+                            exit(0)
+                # go to view pedigree
+                while self.timeout < 20:
+                    try:
+                        ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
+                        self.browser.execute_script("arguments[0].click();", ped_view)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree view try later ", e)
+                            exit(0)
+                # go to offspring tab
+                while self.timeout < 20:
+                    try:
+                        offspring = self.browser.find_element_by_xpath('//a[@href="#children"]')
+                        self.browser.execute_script("arguments[0].click();", offspring)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening offspring tab try later ", e)
+                            exit(0)
+                # check you can't go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//div[@id="children"]/a[@href="/pedigree/new_pedigree/"]')) > 0:
+                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            exit(0)
+            # try to access new pedigree form via pedigree certificate
+            elif addition_method == '_certificate':
+                # go to pedigree search page
+                while self.timeout < 20:
+                    try:
+                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                        self.browser.execute_script("arguments[0].click();", ped_search)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree search try later ", e)
+                            exit(0)
+                # go to view pedigree
+                while self.timeout < 20:
+                    try:
+                        ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
+                        self.browser.execute_script("arguments[0].click();", ped_view)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree view try later ", e)
+                            exit(0)
+                # go to certificate tab
+                while self.timeout < 20:
+                    try:
+                        certificate = self.browser.find_element_by_xpath('//a[@href="#cert"]')
+                        self.browser.execute_script("arguments[0].click();", certificate)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening certificate tab try later ", e)
+                            exit(0)
+                # check you can't go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//div[@id="certificate"]/table/tbody/tr/td/a[@href="/pedigree/new_pedigree/"]')) > 0:
+                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            exit(0)
+            # try to access new pedigree form via results page
+            elif addition_method == '_results_from_peds':
+                # go to pedigree search page
+                while self.timeout < 20:
+                    try:
+                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                        self.browser.execute_script("arguments[0].click();", ped_search)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue In opening pedigree search try later ", e)
+                            exit(0)
+                # enter text in search field and submit search
+                search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
+                search_field.send_keys('animal_111\n')
+                # check you can't go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//a[@href="/pedigree/new_pedigree"]')) > 0:
+                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            exit(0)
+            # try to access new pedigree form via results page
+            elif addition_method == '_results_from_tool':
+                # enter text in search field and submit search
+                search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control"]')
+                search_field.send_keys('animal_111\n')
+                # check you can't go to add new pedigree
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//a[@href="/pedigree/new_pedigree"]')) > 0:
+                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            exit(0)
 
     def add_breeder_info(self,breeder):
         # Enter breeder information
