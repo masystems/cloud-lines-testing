@@ -443,6 +443,55 @@ class CloudLinesTestV2():
                     if self.timeout == 20:
                         print("Server Issue in adding new pedigree try later", e)
                         exit(0)
+        # accessing new pedigree form via results page
+        elif addition_method == '_results_from_peds':
+            # go to pedigree search page
+            while self.timeout < 20:
+                try:
+                    ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                    self.browser.execute_script("arguments[0].click();", ped_search)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue In opening pedigree search try later ", e)
+                        exit(0)
+            # enter text in search field and submit search
+            search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
+            search_field.send_keys('animal_111\n')
+            # go to add new pedigree
+            while self.timeout < 20:
+                try:
+                    add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                    self.browser.execute_script("arguments[0].click();", add_ped)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue in adding new pedigree try later", e)
+                        exit(0)
+        # accessing new pedigree form via results page
+        elif addition_method == '_results_from_tool':
+            # enter text in search field and submit search
+            search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control"]')
+            search_field.send_keys('animal_111\n')
+            # go to add new pedigree
+            while self.timeout < 20:
+                try:
+                    add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                    self.browser.execute_script("arguments[0].click();", add_ped)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        print("Server Issue in adding new pedigree try later", e)
+                        exit(0)
 
         # Enter pedigree information
         while self.timeout < 20:
@@ -667,9 +716,9 @@ class CloudLinesTestV2():
         sleep(2)
         customisation_link = self.browser.find_element_by_xpath('//a[@href="#customisation"]')
         self.browser.execute_script("arguments[0].click();", customisation_link)
-        mom = self.browser.find_element_by_id('mother')
-        mom.clear()
-        mom.send_keys(mother)
+        mum = self.browser.find_element_by_id('mother')
+        mum.clear()
+        mum.send_keys(mother)
         dad = self.browser.find_element_by_id('father')
         dad.clear()
         dad.send_keys(father)
@@ -700,11 +749,11 @@ class CloudLinesTestV2():
         sleep(2)
         run_mk_btn = self.browser.find_element_by_id('meanKinshipBtn')
         self.browser.execute_script("arguments[0].click();", run_mk_btn)
-    def run_stud_selector(self,val_mom):
+    def run_stud_selector(self,val_mum):
         self.browser.get(self.config['settings']['domain'] + "/metrics")
         sleep(2)
-        mom_sa = self.browser.find_element_by_id('sa_mother')
-        mom_sa.send_keys(val_mom)
+        mum_sa = self.browser.find_element_by_id('sa_mother')
+        mum_sa.send_keys(val_mum)
         run_stud_btn = self.browser.find_element_by_id('saBtn')
         self.browser.execute_script("arguments[0].click();", run_stud_btn)
 
@@ -742,8 +791,8 @@ class CloudLinesTestV2():
         elif type == 'run_mean_kinship':
             self.run_mean_kinship()
         elif type == 'run_stud_selector':
-            mom = input('Enter Mom name ')
-            self.run_stud_selector(mom)
+            mum = input('Enter Mother Name ')
+            self.run_stud_selector(mum)
 
 
 
