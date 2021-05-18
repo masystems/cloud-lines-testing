@@ -645,24 +645,73 @@ class CloudLinesTestV2():
                         self.timeout = 0
                         # stop the current test
                         return 'fail'
-            # check the save worked by trying to access new pedigree form
-            while self.timeout < 20:
-                try:
-                    new_pedigree = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
-                    self.browser.execute_script("arguments[0].click();", new_pedigree)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        # add fail to reports file
-                        with open(self.results_file, 'a+', newline='') as file:
-                            writer = csv.writer(file)
-                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
+            if user_type == '_contrib':
+                # try to click "View approvals", as user is contributor
+                while self.timeout < 20:
+                    try:
+                        new_pedigree = self.browser.find_element_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]')
+                        self.browser.execute_script("arguments[0].click();", new_pedigree)
+                        sleep(2)
                         self.timeout = 0
-                        # stop the current test
-                        return 'fail'
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to approvals page'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
+                # check that pedigree is in the approvals table
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//td[contains(text(), "' + 'ABCD145879' + user_type + addition_method + '")]')) == 0:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Approval was not added to table'])
+                            # stop the current test
+                            return 'fail'
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # test failed
+                            print("Failed to find how many links to new pedigree form there are", e)
+                            exit(0)
+            else:
+                # check the save worked by trying to access new pedigree form
+                while self.timeout < 20:
+                    try:
+                        # check there are no links to approvals page
+                        if len(self.browser.find_elements_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]')) == 0:
+                            new_pedigree = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                            self.browser.execute_script("arguments[0].click();", new_pedigree)
+                            sleep(2)
+                            self.timeout = 0
+                            break
+                        # add error if there is an approval link
+                        else:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Approval link was presented'])
+                            # stop the current test
+                            return 'fail'
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 
         # if user is read-only, test that they cannot add a pedigree
         else:
@@ -1040,6 +1089,39 @@ class CloudLinesTestV2():
                 if self.timeout == 20:
                     print("Server Issue in adding breeder info try later", e,"at breeder prefix",breeder['breeding_prefix'])
                     exit(0)
+
+    def add_each_single_breeder(self, pedigree_file):
+        # add pedigree in all the different ways as each possible user
+        self.add_single_breeder(pedigree_file, '_user', '_breeders')
+        self.add_single_breeder(pedigree_file, '_user', '_breeder_view')
+        self.add_single_breeder(pedigree_file, '_user', '_ped_form_breeder')
+        self.add_single_breeder(pedigree_file, '_user', '_ped_form_owner')
+        self.add_single_breeder(pedigree_file, '_admin', '_breeders')
+        self.add_single_breeder(pedigree_file, '_admin', '_breeder_view')
+        self.add_single_breeder(pedigree_file, '_admin', '_ped_form_breeder')
+        self.add_single_breeder(pedigree_file, '_admin', '_ped_form_owner')
+        self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
+        self.add_single_breeder(pedigree_file, '_contrib', '_breeder_view')
+        self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_breeder')
+        self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_owner')
+        self.add_single_breeder(pedigree_file, '_read', '_breeders')
+        self.add_single_breeder(pedigree_file, '_read', '_breeder_view')
+        self.add_single_breeder(pedigree_file, '_read', '_ped_form_breeder')
+        self.add_single_breeder(pedigree_file, '_read', '_ped_form_owner')
+
+    def add_single_breeder(self, pedigree_file, user_type, addition_method):
+        self.logout()
+        # login as the correct user
+        if user_type == '_user':
+            self.login_user()
+        elif user_type == '_admin':
+            self.login_admin()
+        elif user_type == '_contrib':
+            self.login_contrib()
+        elif user_type == '_read':
+            self.login_read()
+
+        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
     def add_breed_info(self, breed):
         # Enter breed information
