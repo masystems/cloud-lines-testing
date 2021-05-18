@@ -4,6 +4,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import ElementNotInteractableException
 from configparser import ConfigParser
 import csv
+from datetime import datetime
 
 class CloudLinesTestV2():
     def __init__(self):
@@ -26,6 +27,12 @@ class CloudLinesTestV2():
         self.breeder = None
         self.breed = None
         self.user = None
+
+        # create csv results file
+        self.results_file = f'results_{datetime.now()}.csv'
+        with open(self.results_file, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(["Action", "User Type", "Scenario", "Result", "Description"])
 
     def login_user(self):
         username_field = self.browser.find_element_by_name('username')
@@ -508,6 +515,23 @@ class CloudLinesTestV2():
                     if self.timeout == 20:
                         print("Server Issue in entering pedigree information try later", e)
                         exit(0)
+            # check the save worked by trying to access new pedigree form
+            while self.timeout < 20:
+                try:
+                    new_pedigree = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                    self.browser.execute_script("arguments[0].click();", new_pedigree)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
+                        # stop the current test
+                        return 'fail'
+                
         # if user is read-only, test that they cannot add a pedigree
         else:
             # try to access new pedigree form via pedigree search
