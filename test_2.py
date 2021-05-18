@@ -257,8 +257,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree search try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to add new pedigree
                 while self.timeout < 20:
                     try:
@@ -270,8 +275,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in adding new pedigree try later", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open add pedigree form'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
             # access new pedigree form via view pedigree
             elif addition_method == '_pedigree_view':
                 # go to pedigree search page
@@ -285,8 +295,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree search try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to view pedigree
                 while self.timeout < 20:
                     try:
@@ -298,8 +313,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree view try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree view'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to add new pedigree
                 while self.timeout < 20:
                     try:
@@ -311,8 +331,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in adding new pedigree try later", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open new pedigree form'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
             # access new pedigree form via pedigree offspring
             elif addition_method == '_offspring':
                 # go to pedigree search page
@@ -327,7 +352,13 @@ class CloudLinesTestV2():
                         self.timeout += 1
                         if self.timeout == 20:
                             print("Server Issue In opening pedigree search try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to view pedigree
                 while self.timeout < 20:
                     try:
@@ -340,7 +371,13 @@ class CloudLinesTestV2():
                         self.timeout += 1
                         if self.timeout == 20:
                             print("Server Issue In opening pedigree view try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree view'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to offspring tab
                 while self.timeout < 20:
                     try:
@@ -352,8 +389,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening offspring tab try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open offspring tab'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to add new pedigree
                 while self.timeout < 20:
                     try:
@@ -365,8 +407,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in adding new pedigree try later", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open new pedigree form within offspring tab'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
             # access new pedigree form via pedigree certificate
             elif addition_method == '_certificate':
                 # go to pedigree search page
@@ -381,7 +428,13 @@ class CloudLinesTestV2():
                         self.timeout += 1
                         if self.timeout == 20:
                             print("Server Issue In opening pedigree search try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to view pedigree
                 while self.timeout < 20:
                     try:
@@ -394,7 +447,13 @@ class CloudLinesTestV2():
                         self.timeout += 1
                         if self.timeout == 20:
                             print("Server Issue In opening pedigree view try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree view'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to certificate tab
                 while self.timeout < 20:
                     try:
@@ -406,8 +465,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening certificate tab try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to certificate tab'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to add new pedigree
                 while self.timeout < 20:
                     try:
@@ -419,8 +483,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in adding new pedigree try later", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open new pedigree form within certificate tab'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
             # accessing new pedigree form via results page
             elif addition_method == '_results_from_peds':
                 # go to pedigree search page
@@ -434,8 +503,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree search try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # enter text in search field and submit search
                 search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
                 search_field.send_keys('animal_111\n')
@@ -450,8 +524,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in adding new pedigree try later", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open new pedigree form'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
             # accessing new pedigree form via results page
             elif addition_method == '_results_from_tool':
                 # enter text in search field and submit search
@@ -469,7 +548,13 @@ class CloudLinesTestV2():
                         self.timeout += 1
                         if self.timeout == 20:
                             print("Server Issue in adding new pedigree try later", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open new pedigree form'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
 
             # Enter pedigree information
             while self.timeout < 20:
@@ -513,8 +598,13 @@ class CloudLinesTestV2():
                 except Exception as e:
                     self.timeout += 1
                     if self.timeout == 20:
-                        print("Server Issue in entering pedigree information try later", e)
-                        exit(0)
+                        # add fail to reports file
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter pedigree information'])
+                        self.timeout = 0
+                        # stop the current test
+                        return 'fail'
             # check the save worked by trying to access new pedigree form
             while self.timeout < 20:
                 try:
@@ -526,9 +616,11 @@ class CloudLinesTestV2():
                 except Exception as e:
                     self.timeout += 1
                     if self.timeout == 20:
+                        # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
                             writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
+                        self.timeout = 0
                         # stop the current test
                         return 'fail'
                 
@@ -547,20 +639,31 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree search try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # check you can't go to add new pedigree
                 while self.timeout < 20:
                     try:
                         if len(self.browser.find_elements_by_xpath('//a[@href="/pedigree/new_pedigree"]')) > 0:
-                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                            # stop the current test
+                            return 'fail'
                         sleep(2)
                         self.timeout = 0
                         break
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            # test failed
+                            print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
             # try to access new pedigree form via view pedigree
             elif addition_method == '_pedigree_view':
@@ -575,8 +678,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree search try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to view pedigree
                 while self.timeout < 20:
                     try:
@@ -588,20 +696,31 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree view try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree view'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # check you can't go to add new pedigree
                 while self.timeout < 20:
                     try:
                         if len(self.browser.find_elements_by_xpath('//a[@href="/pedigree/new_pedigree"]')) > 0:
-                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                            # stop the current test
+                            return 'fail'
                         sleep(2)
                         self.timeout = 0
                         break
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            # test failed
+                            print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
             # try to access new pedigree form via pedigree offspring
             elif addition_method == '_offspring':
@@ -616,8 +735,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree search try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to view pedigree
                 while self.timeout < 20:
                     try:
@@ -629,8 +753,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree view try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree view'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to offspring tab
                 while self.timeout < 20:
                     try:
@@ -642,20 +771,31 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening offspring tab try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open offspring tab'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # check you can't go to add new pedigree
                 while self.timeout < 20:
                     try:
                         if len(self.browser.find_elements_by_xpath('//div[@id="children"]/a[@href="/pedigree/new_pedigree/"]')) > 0:
-                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                            # stop the current test
+                            return 'fail'
                         sleep(2)
                         self.timeout = 0
                         break
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            # test failed
+                            print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
             # try to access new pedigree form via pedigree certificate
             elif addition_method == '_certificate':
@@ -670,8 +810,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree search try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to view pedigree
                 while self.timeout < 20:
                     try:
@@ -683,8 +828,13 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree view try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree view'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to certificate tab
                 while self.timeout < 20:
                     try:
@@ -696,20 +846,30 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening certificate tab try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open certificate tab'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # check you can't go to add new pedigree
                 while self.timeout < 20:
                     try:
                         if len(self.browser.find_elements_by_xpath('//div[@id="certificate"]/table/tbody/tr/td/a[@href="/pedigree/new_pedigree/"]')) > 0:
-                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                            # stop the current test
+                            return 'fail'
                         sleep(2)
                         self.timeout = 0
                         break
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            print("Failed to find how many links to the new pedigree form were available from the certificate tab", e)
                             exit(0)
             # try to access new pedigree form via results page
             elif addition_method == '_results_from_peds':
@@ -724,42 +884,86 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue In opening pedigree search try later ", e)
-                            exit(0)
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # enter text in search field and submit search
-                search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
-                search_field.send_keys('animal_111\n')
+                while self.timeout < 20:
+                    try:
+                        search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
+                        search_field.send_keys('animal_111\n')
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # check you can't go to add new pedigree
                 while self.timeout < 20:
                     try:
                         if len(self.browser.find_elements_by_xpath('//a[@href="/pedigree/new_pedigree"]')) > 0:
-                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                            # stop the current test
+                            return 'fail'
                         sleep(2)
                         self.timeout = 0
                         break
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            # test failed
+                            print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
             # try to access new pedigree form via results page
             elif addition_method == '_results_from_tool':
                 # enter text in search field and submit search
-                search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control"]')
-                search_field.send_keys('animal_111\n')
+                try:
+                    search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control"]')
+                    search_field.send_keys('animal_111\n')
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        # add fail to reports file
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                        self.timeout = 0
+                        # stop the current test
+                        return 'fail'
                 # check you can't go to add new pedigree
                 while self.timeout < 20:
                     try:
                         if len(self.browser.find_elements_by_xpath('//a[@href="/pedigree/new_pedigree"]')) > 0:
-                            raise Exception('read only user was able to access new pedigree form via pedigree seach')
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                            # stop the current test
+                            return 'fail'
                         sleep(2)
                         self.timeout = 0
                         break
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            print("Server Issue in trying to access new pedigree form via pedigree search - try later", e)
+                            # test failed
+                            print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
+        # test must have passed if we have got to the end of this function
+        with open(self.results_file, 'a+', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'PASS','-'])
 
     def add_breeder_info(self,breeder):
         # Enter breeder information
