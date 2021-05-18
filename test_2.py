@@ -212,18 +212,26 @@ class CloudLinesTestV2():
         self.add_single_pedigree(pedigree_file, '_user', '_pedigree_view')
         self.add_single_pedigree(pedigree_file, '_user', '_offspring')
         self.add_single_pedigree(pedigree_file, '_user', '_certificate')
+        self.add_single_pedigree(pedigree_file, '_user', '_results_from_peds')
+        self.add_single_pedigree(pedigree_file, '_user', '_results_from_tool')
         self.add_single_pedigree(pedigree_file, '_admin', '_pedigree_search')
         self.add_single_pedigree(pedigree_file, '_admin', '_pedigree_view')
         self.add_single_pedigree(pedigree_file, '_admin', '_offspring')
         self.add_single_pedigree(pedigree_file, '_admin', '_certificate')
+        self.add_single_pedigree(pedigree_file, '_admin', '_results_from_peds')
+        self.add_single_pedigree(pedigree_file, '_admin', '_results_from_tool')
         self.add_single_pedigree(pedigree_file, '_contrib', '_pedigree_search')
         self.add_single_pedigree(pedigree_file, '_contrib', '_pedigree_view')
         self.add_single_pedigree(pedigree_file, '_contrib', '_offspring')
         self.add_single_pedigree(pedigree_file, '_contrib', '_certificate')
+        self.add_single_pedigree(pedigree_file, '_contrib', '_results_from_peds')
+        self.add_single_pedigree(pedigree_file, '_contrib', '_results_from_tool')
         self.add_single_pedigree(pedigree_file, '_read', '_pedigree_search')
         self.add_single_pedigree(pedigree_file, '_read', '_pedigree_view')
         self.add_single_pedigree(pedigree_file, '_read', '_offspring')
         self.add_single_pedigree(pedigree_file, '_read', '_certificate')
+        self.add_single_pedigree(pedigree_file, '_read', '_results_from_peds')
+        self.add_single_pedigree(pedigree_file, '_read', '_results_from_tool')
 
     def add_single_pedigree(self, pedigree_file, user_type, addition_method):
         self.logout()
@@ -486,7 +494,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open new pedigree form within certificate tab'])
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open new pedigree form'])
                             self.timeout = 0
                             # stop the current test
                             return 'fail'
@@ -511,8 +519,24 @@ class CloudLinesTestV2():
                             # stop the current test
                             return 'fail'
                 # enter text in search field and submit search
-                search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
-                search_field.send_keys('animal_111\n')
+                try:
+                    search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
+                    search_field.send_keys('animal_111\n')
+                except Exception as e:
+                        # add fail to reports file
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                        # stop the current test
+                        return 'fail'
+                # check we successfully went to results page
+                if self.browser.current_url != f"{self.config['settings']['domain']}/pedigree/results/":
+                    # add fail to reports file
+                    with open(self.results_file, 'a+', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
+                    # stop the current test
+                    return 'fail'
                 # go to add new pedigree
                 while self.timeout < 20:
                     try:
@@ -534,8 +558,24 @@ class CloudLinesTestV2():
             # accessing new pedigree form via results page
             elif addition_method == '_results_from_tool':
                 # enter text in search field and submit search
-                search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control"]')
-                search_field.send_keys('animal_111\n')
+                try:
+                    search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control"]')
+                    search_field.send_keys('animal_111\n')
+                except Exception as e:
+                        # add fail to reports file
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                        # stop the current test
+                        return 'fail'
+                # check we successfully went to results page
+                if self.browser.current_url != f"{self.config['settings']['domain']}/pedigree/results/":
+                    # add fail to reports file
+                    with open(self.results_file, 'a+', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
+                    # stop the current test
+                    return 'fail'
                 # go to add new pedigree
                 while self.timeout < 20:
                     try:
@@ -892,20 +932,24 @@ class CloudLinesTestV2():
                             # stop the current test
                             return 'fail'
                 # enter text in search field and submit search
-                while self.timeout < 20:
-                    try:
-                        search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
-                        search_field.send_keys('animal_111\n')
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                try:
+                    search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
+                    search_field.send_keys('animal_111\n')
+                except Exception as e:
+                        # add fail to reports file
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                        # stop the current test
+                        return 'fail'
+                # check we successfully went to results page
+                if self.browser.current_url != f"{self.config['settings']['domain']}/pedigree/results/":
+                    # add fail to reports file
+                    with open(self.results_file, 'a+', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
+                    # stop the current test
+                    return 'fail'
                 # check you can't go to add new pedigree
                 while self.timeout < 20:
                     try:
@@ -932,15 +976,20 @@ class CloudLinesTestV2():
                     search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control"]')
                     search_field.send_keys('animal_111\n')
                 except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
                         # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
                             writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
-                        self.timeout = 0
                         # stop the current test
                         return 'fail'
+                # check we successfully went to results page
+                if self.browser.current_url != f"{self.config['settings']['domain']}/pedigree/results/":
+                    # add fail to reports file
+                    with open(self.results_file, 'a+', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
+                    # stop the current test
+                    return 'fail'
                 # check you can't go to add new pedigree
                 while self.timeout < 20:
                     try:
