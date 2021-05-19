@@ -28,6 +28,7 @@ class CloudLinesTestV2():
         self.breed = None
         self.user = None
 
+        # the type of user that is currently logged in
         self.current_user_type = None
 
         # create csv results file
@@ -80,6 +81,22 @@ class CloudLinesTestV2():
         self.browser.get(self.config['settings']['domain'] + "/account/logout")
         self.current_user_type = None
         sleep(2)
+
+    def login(self, user_type):
+        # if not logged in as correct user
+        if self.current_user_type != user_type:
+            # logout if we're logged in as wrong user
+            if self.current_user_type:
+                self.logout()
+            # login as correct user
+            if user_type == '_user':
+                self.login_user()
+            elif user_type == '_admin':
+                self.login_admin()
+            elif user_type == '_contrib':
+                self.login_contrib()
+            elif user_type == '_read':
+                self.login_read()
 
     def add_pedigree(self,pedigree_file,breed_file,breeder_file):
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
@@ -242,19 +259,7 @@ class CloudLinesTestV2():
 
     def add_single_pedigree(self, pedigree_file, user_type, addition_method):
         # login as the correct user
-        if self.current_user_type != user_type:
-            # logout if we're logged in as wrong user
-            if self.current_user_type:
-                self.logout()
-            # login as correct user
-            if user_type == '_user':
-                self.login_user()
-            elif user_type == '_admin':
-                self.login_admin()
-            elif user_type == '_contrib':
-                self.login_contrib()
-            elif user_type == '_read':
-                self.login_read()
+        self.login(user_type)
 
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
