@@ -28,6 +28,8 @@ class CloudLinesTestV2():
         self.breed = None
         self.user = None
 
+        self.current_user_type = None
+
         # create csv results file
         self.results_file = f'results/results_{datetime.now()}.csv'
         with open(self.results_file, 'w', newline='') as file:
@@ -41,6 +43,7 @@ class CloudLinesTestV2():
         password_field.send_keys(self.password_user)
         login = self.browser.find_element_by_id('loginBtn')
         self.browser.execute_script("arguments[0].click();", login)
+        self.current_user_type = '_user'
         sleep(2)
 
     def login_admin(self):
@@ -50,6 +53,7 @@ class CloudLinesTestV2():
         password_field.send_keys(self.password_admin)
         login = self.browser.find_element_by_id('loginBtn')
         self.browser.execute_script("arguments[0].click();", login)
+        self.current_user_type = '_admin'
         sleep(2)
 
     def login_contrib(self):
@@ -59,6 +63,7 @@ class CloudLinesTestV2():
         password_field.send_keys(self.password_contrib)
         login = self.browser.find_element_by_id('loginBtn')
         self.browser.execute_script("arguments[0].click();", login)
+        self.current_user_type = '_contrib'
         sleep(2)
 
     def login_read(self):
@@ -68,10 +73,12 @@ class CloudLinesTestV2():
         password_field.send_keys(self.password_read)
         login = self.browser.find_element_by_id('loginBtn')
         self.browser.execute_script("arguments[0].click();", login)
+        self.current_user_type = '_read'
         sleep(2)
 
     def logout(self):
         self.browser.get(self.config['settings']['domain'] + "/account/logout")
+        self.current_user_type = None
         sleep(2)
 
     def add_pedigree(self,pedigree_file,breed_file,breeder_file):
@@ -234,16 +241,20 @@ class CloudLinesTestV2():
         self.add_single_pedigree(pedigree_file, '_read', '_results_from_tool')
 
     def add_single_pedigree(self, pedigree_file, user_type, addition_method):
-        self.logout()
         # login as the correct user
-        if user_type == '_user':
-            self.login_user()
-        elif user_type == '_admin':
-            self.login_admin()
-        elif user_type == '_contrib':
-            self.login_contrib()
-        elif user_type == '_read':
-            self.login_read()
+        if self.current_user_type != user_type:
+            # logout if we're logged in as wrong user
+            if self.current_user_type:
+                self.logout()
+            # login as correct user
+            if user_type == '_user':
+                self.login_user()
+            elif user_type == '_admin':
+                self.login_admin()
+            elif user_type == '_contrib':
+                self.login_contrib()
+            elif user_type == '_read':
+                self.login_read()
 
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
