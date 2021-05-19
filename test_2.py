@@ -258,7 +258,7 @@ class CloudLinesTestV2():
         self.add_single_pedigree(pedigree_file, '_read', '_results_from_tool')
 
     def add_single_pedigree(self, pedigree_file, user_type, addition_method):
-        # login as the correct user
+        # ensure we're logged in as the correct user
         self.login(user_type)
 
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
@@ -1126,16 +1126,8 @@ class CloudLinesTestV2():
         self.add_single_breeder(pedigree_file, '_read', '_ped_form_owner')
 
     def add_single_breeder(self, pedigree_file, user_type, addition_method):
-        self.logout()
-        # login as the correct user
-        if user_type == '_user':
-            self.login_user()
-        elif user_type == '_admin':
-            self.login_admin()
-        elif user_type == '_contrib':
-            self.login_contrib()
-        elif user_type == '_read':
-            self.login_read()
+        # ensure we're logged in as the correct user
+        self.login(user_type)
 
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
