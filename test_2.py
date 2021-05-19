@@ -1108,22 +1108,18 @@ class CloudLinesTestV2():
 
     def add_each_single_breeder(self, pedigree_file):
         # add pedigree in all the different ways as each possible user
-        # self.add_single_breeder(pedigree_file, '_user', '_breeders')
-        # self.add_single_breeder(pedigree_file, '_user', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_user', '_ped_form_breeder')
-        # self.add_single_breeder(pedigree_file, '_user', '_ped_form_owner')
-        # self.add_single_breeder(pedigree_file, '_admin', '_breeders')
-        # self.add_single_breeder(pedigree_file, '_admin', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_admin', '_ped_form_breeder')
-        # self.add_single_breeder(pedigree_file, '_admin', '_ped_form_owner')
-        # self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
-        # self.add_single_breeder(pedigree_file, '_contrib', '_breeder_view')
-        # self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_breeder')
-        # self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_owner')
-        # self.add_single_breeder(pedigree_file, '_read', '_breeders')
-        # self.add_single_breeder(pedigree_file, '_read', '_breeder_view')
-        # self.add_single_breeder(pedigree_file, '_read', '_ped_form_breeder')
-        # self.add_single_breeder(pedigree_file, '_read', '_ped_form_owner')
+        self.add_single_breeder(pedigree_file, '_user', '_breeders')
+        self.add_single_breeder(pedigree_file, '_user', '_breeder_view')
+        self.add_single_breeder(pedigree_file, '_user', '_ped_form')
+        self.add_single_breeder(pedigree_file, '_admin', '_breeders')
+        self.add_single_breeder(pedigree_file, '_admin', '_breeder_view')
+        self.add_single_breeder(pedigree_file, '_admin', '_ped_form')
+        self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
+        self.add_single_breeder(pedigree_file, '_contrib', '_breeder_view')
+        self.add_single_breeder(pedigree_file, '_contrib', '_ped_form')
+        self.add_single_breeder(pedigree_file, '_read', '_breeders')
+        self.add_single_breeder(pedigree_file, '_read', '_breeder_view')
+        self.add_single_breeder(pedigree_file, '_read', '_ped_form')
 
     def add_single_breeder(self, breeder_file, user_type, addition_method):
         # ensure we're logged in as the correct user
@@ -1231,7 +1227,7 @@ class CloudLinesTestV2():
                             # stop the current test
                             return 'fail'
             # access new pedigree form via add breeder button in add pedigree page
-            elif addition_method == '_ped_form_breeder':
+            elif addition_method == '_ped_form':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
