@@ -1116,11 +1116,11 @@ class CloudLinesTestV2():
         # self.add_single_breeder(pedigree_file, '_admin', '_breeder_view')
         # self.add_single_breeder(pedigree_file, '_admin', '_ped_form_breeder')
         # self.add_single_breeder(pedigree_file, '_admin', '_ped_form_owner')
-        # self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
+        self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
         # self.add_single_breeder(pedigree_file, '_contrib', '_breeder_view')
         # self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_breeder')
         # self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_owner')
-        # self.add_single_breeder(pedigree_file, '_read', '_breeders')
+        self.add_single_breeder(pedigree_file, '_read', '_breeders')
         # self.add_single_breeder(pedigree_file, '_read', '_breeder_view')
         # self.add_single_breeder(pedigree_file, '_read', '_ped_form_breeder')
         # self.add_single_breeder(pedigree_file, '_read', '_ped_form_owner')
@@ -1243,6 +1243,48 @@ class CloudLinesTestV2():
                         self.timeout = 0
                         # stop the current test
                         return 'fail'
+        
+        # user is read-only/contributor, so make sure they can't access new breeder form
+        else:
+            # ensure you can't access new pedigree form via breeders page
+            if addition_method == '_breeders':
+                # go to breeders page
+                while self.timeout < 20:
+                    try:
+                        breeders = self.browser.find_element_by_xpath('//a[@href="/breeders/"]')
+                        self.browser.execute_script("arguments[0].click();", breeders)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open breeders page'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
+                # check you can't go to add new breeder form
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//a[@href="/breeders/new_breeder"]')) > 0:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new breeder form is available'])
+                            # stop the current test
+                            return 'fail'
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # test failed
+                            print("Failed to find how many links to new breeder form there are", e)
+                            exit(0)
 
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
