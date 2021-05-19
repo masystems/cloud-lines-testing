@@ -1109,27 +1109,145 @@ class CloudLinesTestV2():
     def add_each_single_breeder(self, pedigree_file):
         # add pedigree in all the different ways as each possible user
         self.add_single_breeder(pedigree_file, '_user', '_breeders')
-        self.add_single_breeder(pedigree_file, '_user', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_user', '_ped_form_breeder')
-        self.add_single_breeder(pedigree_file, '_user', '_ped_form_owner')
+        # self.add_single_breeder(pedigree_file, '_user', '_breeder_view')
+        # self.add_single_breeder(pedigree_file, '_user', '_ped_form_breeder')
+        # self.add_single_breeder(pedigree_file, '_user', '_ped_form_owner')
         self.add_single_breeder(pedigree_file, '_admin', '_breeders')
-        self.add_single_breeder(pedigree_file, '_admin', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_admin', '_ped_form_breeder')
-        self.add_single_breeder(pedigree_file, '_admin', '_ped_form_owner')
-        self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
-        self.add_single_breeder(pedigree_file, '_contrib', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_breeder')
-        self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_owner')
-        self.add_single_breeder(pedigree_file, '_read', '_breeders')
-        self.add_single_breeder(pedigree_file, '_read', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_read', '_ped_form_breeder')
-        self.add_single_breeder(pedigree_file, '_read', '_ped_form_owner')
+        # self.add_single_breeder(pedigree_file, '_admin', '_breeder_view')
+        # self.add_single_breeder(pedigree_file, '_admin', '_ped_form_breeder')
+        # self.add_single_breeder(pedigree_file, '_admin', '_ped_form_owner')
+        # self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
+        # self.add_single_breeder(pedigree_file, '_contrib', '_breeder_view')
+        # self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_breeder')
+        # self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_owner')
+        # self.add_single_breeder(pedigree_file, '_read', '_breeders')
+        # self.add_single_breeder(pedigree_file, '_read', '_breeder_view')
+        # self.add_single_breeder(pedigree_file, '_read', '_ped_form_breeder')
+        # self.add_single_breeder(pedigree_file, '_read', '_ped_form_owner')
 
-    def add_single_breeder(self, pedigree_file, user_type, addition_method):
+    def add_single_breeder(self, breeder_file, user_type, addition_method):
         # ensure we're logged in as the correct user
         self.login(user_type)
 
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
+
+        # if user owner/admin they can add a breeder
+        if user_type == '_user' or user_type == '_admin':
+            breeder_reader = csv.DictReader(open(breeder_file,newline=''))
+            self.breeder = dict(breeder_reader.__next__())
+
+            # access new pedigree form via breeders page
+            if addition_method == '_breeders':
+                # go to breeders page
+                while self.timeout < 20:
+                    try:
+                        breeders = self.browser.find_element_by_xpath('//a[@href="/breeders/"]')
+                        self.browser.execute_script("arguments[0].click();", breeders)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open breeders page'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
+                # go to add new breeder
+                while self.timeout < 20:
+                    try:
+                        add_breeder = self.browser.find_element_by_xpath('//a[@href="/breeders/new_breeder/"]')
+                        self.browser.execute_script("arguments[0].click();", add_breeder)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open add breeder form'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
+
+            # enter breeder information
+            while self.timeout < 20:
+                try:
+                    breeding_prefix = self.browser.find_element_by_name('breeding_prefix')
+                    breeding_prefix.send_keys(f"{self.breeder['breeding_prefix']}{user_type}{addition_method}")
+                    contact_name = self.browser.find_element_by_name('contact_name')
+                    contact_name.send_keys(f"{self.breeder['contact_name']}{user_type}{addition_method}")
+                    address = self.browser.find_element_by_name('address')
+                    address.send_keys(self.breeder['address'])
+                    phone_number1 = self.browser.find_element_by_name('phone_number1')
+                    phone_number1.send_keys(self.breeder['phone_number1'])
+                    phone_number2 = self.browser.find_element_by_name('phone_number2')
+                    phone_number2.send_keys(self.breeder['phone_number2'])
+                    email = self.browser.find_element_by_name('email')
+                    email.send_keys(f"{self.breeder['email']}{user_type}{addition_method}")
+                    active = self.browser.find_element_by_name('active')
+                    self.browser.execute_script("arguments[0].click();", active)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        # add fail to reports file
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter breeder information'])
+                        self.timeout = 0
+                        # stop the current test
+                        return 'fail'
+            
+            # submit new breeder form
+            while self.timeout < 20:
+                try:
+                    submit_breeder = self.browser.find_element_by_xpath('//button[@type="submit" and @class="btn btn-success" and contains(text(), "Submit")]')
+                    self.browser.execute_script("arguments[0].click();", submit_breeder)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        # add fail to reports file
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to submit breeder info'])
+                        self.timeout = 0
+                        # stop the current test
+                        return 'fail'
+
+            # check the save worked by trying to access new breeder form
+            while self.timeout < 20:
+                try:
+                    new_breeder = self.browser.find_element_by_xpath('//a[@href="/breeders/new_breeder/"]')
+                    self.browser.execute_script("arguments[0].click();", new_breeder)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        # add fail to reports file
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to save breeder'])
+                        self.timeout = 0
+                        # stop the current test
+                        return 'fail'
+
+        # test must have passed if we have got to the end of this function
+        with open(self.results_file, 'a+', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'PASS','-'])
 
     def add_breed_info(self, breed):
         # Enter breed information
@@ -1338,6 +1456,8 @@ class CloudLinesTestV2():
             self.add_pedigree('pedigree.csv','breed.csv','breeder.csv')
         elif type == 'add_each_single_pedigree':
             self.add_each_single_pedigree('pedigree.csv')
+        elif type == 'add_each_single_breeder':
+            self.add_each_single_breeder('breeder.csv')
         elif type == 'delete_all_pedigrees':
             self.delete_all_pedigrees()
         elif type == 'delete_all_breeders':
@@ -1372,16 +1492,17 @@ if __name__ == '__main__':
     print("5. Logout")
     print("6. Add Pedigree")
     print("7. Add Single Pedigree")
-    print("8. Delete All Pedigrees")
-    print("9. Delete All Breeders")
-    print("10. Add Users")
-    print("11. Delete Users")
-    print("12. Edit Parent Titles")
-    print("13. Add and Delete All Pedrigrees, Breeders, Breeds")
-    print("14. Edit Pedigree Columns Load")
-    print("15. Run COI")
-    print("16. Run Mean Kinship")
-    print("17. Run Stud Selector")
+    print("8. Add Single Breeder")
+    print("9. Delete All Pedigrees")
+    print("10. Delete All Breeders")
+    print("11. Add Users")
+    print("12. Delete Users")
+    print("13. Edit Parent Titles")
+    print("14. Add and Delete All Pedrigrees, Breeders, Breeds")
+    print("15. Edit Pedigree Columns Load")
+    print("16. Run COI")
+    print("17. Run Mean Kinship")
+    print("18. Run Stud Selector")
     print("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
@@ -1401,27 +1522,29 @@ if __name__ == '__main__':
             elif ch == "7":
                 obj.test('add_each_single_pedigree')
             elif ch == "8":
-                obj.test('delete_all_pedigrees')
+                obj.test('add_each_single_breeder')
             elif ch == "9":
-                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
+                obj.test('delete_all_pedigrees')
             elif ch == "10":
-                obj.test('add_users')
+                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
             elif ch == "11":
-                obj.test('delete_users')
+                obj.test('add_users')
             elif ch == "12":
-                obj.test('update_parent_titles')
+                obj.test('delete_users')
             elif ch == "13":
+                obj.test('update_parent_titles')
+            elif ch == "14":
                 obj.test('add_pedigree')
                 obj.delete_all_breeds()
                 obj.test('delete_all_breeders', input("Enter Breeder Prefix "))
                 obj.test('delete_all_pedigrees')
-            elif ch == "14":
-                obj.test('edit_column_load')
             elif ch == "15":
-                obj.test('run_coi')
+                obj.test('edit_column_load')
             elif ch == "16":
-                obj.test('run_mean_kinship')
+                obj.test('run_coi')
             elif ch == "17":
+                obj.test('run_mean_kinship')
+            elif ch == "18":
                 obj.test('run_stud_selector')
             ch = input("Enter Choice ")
         except:
