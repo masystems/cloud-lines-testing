@@ -29,7 +29,7 @@ class CloudLinesTestV2():
         self.user = None
 
         # create csv results file
-        self.results_file = f'results_{datetime.now()}.csv'
+        self.results_file = f'results/results_{datetime.now()}.csv'
         with open(self.results_file, 'w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(["Action", "User Type", "Scenario", "Result", "Description"])
