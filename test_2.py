@@ -1108,14 +1108,14 @@ class CloudLinesTestV2():
 
     def add_each_single_breeder(self, pedigree_file):
         # add pedigree in all the different ways as each possible user
-        self.add_single_breeder(pedigree_file, '_user', '_breeders')
-        self.add_single_breeder(pedigree_file, '_user', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_user', '_ped_form')
-        self.add_single_breeder(pedigree_file, '_admin', '_breeders')
-        self.add_single_breeder(pedigree_file, '_admin', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_admin', '_ped_form')
-        self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
-        self.add_single_breeder(pedigree_file, '_contrib', '_breeder_view')
+        # self.add_single_breeder(pedigree_file, '_user', '_breeders')
+        # self.add_single_breeder(pedigree_file, '_user', '_breeder_view')
+        # self.add_single_breeder(pedigree_file, '_user', '_ped_form')
+        # self.add_single_breeder(pedigree_file, '_admin', '_breeders')
+        # self.add_single_breeder(pedigree_file, '_admin', '_breeder_view')
+        # self.add_single_breeder(pedigree_file, '_admin', '_ped_form')
+        # self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
+        # self.add_single_breeder(pedigree_file, '_contrib', '_breeder_view')
         self.add_single_breeder(pedigree_file, '_contrib', '_ped_form')
         self.add_single_breeder(pedigree_file, '_read', '_breeders')
         self.add_single_breeder(pedigree_file, '_read', '_breeder_view')
@@ -1471,6 +1471,69 @@ class CloudLinesTestV2():
                             # test failed
                             print("Failed to find how many links to new breeder form there are", e)
                             exit(0)
+            # ensure you can't access new pedigree form via pedigree form
+            elif addition_method == '_ped_form':
+                # contributor, so check the add breeder button is not on the add pedigree form
+                if user_type == '_contrib':
+                    # go to pedigree search page
+                    while self.timeout < 20:
+                        try:
+                            ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
+                            self.browser.execute_script("arguments[0].click();", ped_search)
+                            sleep(2)
+                            self.timeout = 0
+                            break
+                        except Exception as e:
+                            self.timeout += 1
+                            if self.timeout == 20:
+                                # add fail to reports file
+                                with open(self.results_file, 'a+', newline='') as file:
+                                    writer = csv.writer(file)
+                                    writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
+                                self.timeout = 0
+                                # stop the current test
+                                return 'fail'
+                    # go to pedigree form
+                    while self.timeout < 20:
+                        try:
+                            add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                            self.browser.execute_script("arguments[0].click();", add_ped)
+                            sleep(2)
+                            self.timeout = 0
+                            break
+                        except Exception as e:
+                            self.timeout += 1
+                            if self.timeout == 20:
+                                # add fail to reports file
+                                with open(self.results_file, 'a+', newline='') as file:
+                                    writer = csv.writer(file)
+                                    writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open add pedigree form'])
+                                self.timeout = 0
+                                # stop the current test
+                                return 'fail'
+                    # check add breeder button is not there
+                    while self.timeout < 20:
+                        try:
+                            if len(self.browser.find_elements_by_xpath('//button[@id="showNewBreederModal"]')) > 0:
+                                # add fail to reports file
+                                with open(self.results_file, 'a+', newline='') as file:
+                                    writer = csv.writer(file)
+                                    writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Button to display new breeder modal is available'])
+                                # stop the current test
+                                return 'fail'
+                            sleep(2)
+                            self.timeout = 0
+                            break
+                        except Exception as e:
+                            self.timeout += 1
+                            if self.timeout == 20:
+                                # test failed
+                                print("Failed to find how many buttons to display new breeder modal there are", e)
+                                exit(0)
+                # user is read only, so check user can't get to the add pedigree form
+                else:
+                    
+                    pass
 
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
