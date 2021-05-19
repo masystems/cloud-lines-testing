@@ -1108,19 +1108,19 @@ class CloudLinesTestV2():
 
     def add_each_single_breeder(self, pedigree_file):
         # add pedigree in all the different ways as each possible user
-        self.add_single_breeder(pedigree_file, '_user', '_breeders')
-        # self.add_single_breeder(pedigree_file, '_user', '_breeder_view')
+        # self.add_single_breeder(pedigree_file, '_user', '_breeders')
+        self.add_single_breeder(pedigree_file, '_user', '_breeder_view')
         # self.add_single_breeder(pedigree_file, '_user', '_ped_form_breeder')
         # self.add_single_breeder(pedigree_file, '_user', '_ped_form_owner')
-        self.add_single_breeder(pedigree_file, '_admin', '_breeders')
-        # self.add_single_breeder(pedigree_file, '_admin', '_breeder_view')
+        # self.add_single_breeder(pedigree_file, '_admin', '_breeders')
+        self.add_single_breeder(pedigree_file, '_admin', '_breeder_view')
         # self.add_single_breeder(pedigree_file, '_admin', '_ped_form_breeder')
         # self.add_single_breeder(pedigree_file, '_admin', '_ped_form_owner')
-        self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
+        # self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
         # self.add_single_breeder(pedigree_file, '_contrib', '_breeder_view')
         # self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_breeder')
         # self.add_single_breeder(pedigree_file, '_contrib', '_ped_form_owner')
-        self.add_single_breeder(pedigree_file, '_read', '_breeders')
+        # self.add_single_breeder(pedigree_file, '_read', '_breeders')
         # self.add_single_breeder(pedigree_file, '_read', '_breeder_view')
         # self.add_single_breeder(pedigree_file, '_read', '_ped_form_breeder')
         # self.add_single_breeder(pedigree_file, '_read', '_ped_form_owner')
@@ -1153,6 +1153,63 @@ class CloudLinesTestV2():
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
                                 writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open breeders page'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
+                # go to add new breeder
+                while self.timeout < 20:
+                    try:
+                        add_breeder = self.browser.find_element_by_xpath('//a[@href="/breeders/new_breeder/"]')
+                        self.browser.execute_script("arguments[0].click();", add_breeder)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open add breeder form'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
+            # access new pedigree form via breeders page
+            elif addition_method == '_breeder_view':
+                # go to breeders page
+                while self.timeout < 20:
+                    try:
+                        breeders = self.browser.find_element_by_xpath('//a[@href="/breeders/"]')
+                        self.browser.execute_script("arguments[0].click();", breeders)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open breeders page'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
+                #<tr onclick="window.location='/breeders/188/';" style="cursor: pointer;" role="row" class="odd">
+                # go to breeder view
+                while self.timeout < 20:
+                    try:
+                        breeder_view = self.browser.find_element_by_xpath("//tr[@onclick]")
+                        self.browser.execute_script("arguments[0].click();", breeder_view)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open breeder view page'])
                             self.timeout = 0
                             # stop the current test
                             return 'fail'
