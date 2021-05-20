@@ -44,7 +44,7 @@ class CloudLinesTestV2():
         password_field.send_keys(self.password_user)
         login = self.browser.find_element_by_id('loginBtn')
         self.browser.execute_script("arguments[0].click();", login)
-        self.current_user_type = '_user'
+        self.current_user_type = 'user'
         sleep(2)
 
     def login_admin(self):
@@ -54,7 +54,7 @@ class CloudLinesTestV2():
         password_field.send_keys(self.password_admin)
         login = self.browser.find_element_by_id('loginBtn')
         self.browser.execute_script("arguments[0].click();", login)
-        self.current_user_type = '_admin'
+        self.current_user_type = 'admin'
         sleep(2)
 
     def login_contrib(self):
@@ -64,7 +64,7 @@ class CloudLinesTestV2():
         password_field.send_keys(self.password_contrib)
         login = self.browser.find_element_by_id('loginBtn')
         self.browser.execute_script("arguments[0].click();", login)
-        self.current_user_type = '_contrib'
+        self.current_user_type = 'contrib'
         sleep(2)
 
     def login_read(self):
@@ -74,7 +74,7 @@ class CloudLinesTestV2():
         password_field.send_keys(self.password_read)
         login = self.browser.find_element_by_id('loginBtn')
         self.browser.execute_script("arguments[0].click();", login)
-        self.current_user_type = '_read'
+        self.current_user_type = 'read'
         sleep(2)
 
     def logout(self):
@@ -89,13 +89,13 @@ class CloudLinesTestV2():
             if self.current_user_type:
                 self.logout()
             # login as correct user
-            if user_type == '_user':
+            if user_type == 'user':
                 self.login_user()
-            elif user_type == '_admin':
+            elif user_type == 'admin':
                 self.login_admin()
-            elif user_type == '_contrib':
+            elif user_type == 'contrib':
                 self.login_contrib()
-            elif user_type == '_read':
+            elif user_type == 'read':
                 self.login_read()
 
     def add_pedigree(self,pedigree_file,breed_file,breeder_file):
@@ -232,30 +232,30 @@ class CloudLinesTestV2():
  
     def add_each_single_pedigree(self, pedigree_file):
         # add pedigree in all the different ways as each possible user
-        self.add_single_pedigree(pedigree_file, '_user', '_pedigree_search')
-        self.add_single_pedigree(pedigree_file, '_user', '_pedigree_view')
-        self.add_single_pedigree(pedigree_file, '_user', '_offspring')
-        self.add_single_pedigree(pedigree_file, '_user', '_certificate')
-        self.add_single_pedigree(pedigree_file, '_user', '_results_from_peds')
-        self.add_single_pedigree(pedigree_file, '_user', '_results_from_tool')
-        self.add_single_pedigree(pedigree_file, '_admin', '_pedigree_search')
-        self.add_single_pedigree(pedigree_file, '_admin', '_pedigree_view')
-        self.add_single_pedigree(pedigree_file, '_admin', '_offspring')
-        self.add_single_pedigree(pedigree_file, '_admin', '_certificate')
-        self.add_single_pedigree(pedigree_file, '_admin', '_results_from_peds')
-        self.add_single_pedigree(pedigree_file, '_admin', '_results_from_tool')
-        self.add_single_pedigree(pedigree_file, '_contrib', '_pedigree_search')
-        self.add_single_pedigree(pedigree_file, '_contrib', '_pedigree_view')
-        self.add_single_pedigree(pedigree_file, '_contrib', '_offspring')
-        self.add_single_pedigree(pedigree_file, '_contrib', '_certificate')
-        self.add_single_pedigree(pedigree_file, '_contrib', '_results_from_peds')
-        self.add_single_pedigree(pedigree_file, '_contrib', '_results_from_tool')
-        self.add_single_pedigree(pedigree_file, '_read', '_pedigree_search')
-        self.add_single_pedigree(pedigree_file, '_read', '_pedigree_view')
-        self.add_single_pedigree(pedigree_file, '_read', '_offspring')
-        self.add_single_pedigree(pedigree_file, '_read', '_certificate')
-        self.add_single_pedigree(pedigree_file, '_read', '_results_from_peds')
-        self.add_single_pedigree(pedigree_file, '_read', '_results_from_tool')
+        self.add_single_pedigree(pedigree_file, 'user', 'pedigree_search')
+        self.add_single_pedigree(pedigree_file, 'user', 'pedigree_view')
+        self.add_single_pedigree(pedigree_file, 'user', 'offspring')
+        self.add_single_pedigree(pedigree_file, 'user', 'certificate')
+        self.add_single_pedigree(pedigree_file, 'user', 'results_from_peds')
+        self.add_single_pedigree(pedigree_file, 'user', 'results_from_tool')
+        self.add_single_pedigree(pedigree_file, 'admin', 'pedigree_search')
+        self.add_single_pedigree(pedigree_file, 'admin', 'pedigree_view')
+        self.add_single_pedigree(pedigree_file, 'admin', 'offspring')
+        self.add_single_pedigree(pedigree_file, 'admin', 'certificate')
+        self.add_single_pedigree(pedigree_file, 'admin', 'results_from_peds')
+        self.add_single_pedigree(pedigree_file, 'admin', 'results_from_tool')
+        self.add_single_pedigree(pedigree_file, 'contrib', 'pedigree_search')
+        self.add_single_pedigree(pedigree_file, 'contrib', 'pedigree_view')
+        self.add_single_pedigree(pedigree_file, 'contrib', 'offspring')
+        self.add_single_pedigree(pedigree_file, 'contrib', 'certificate')
+        self.add_single_pedigree(pedigree_file, 'contrib', 'results_from_peds')
+        self.add_single_pedigree(pedigree_file, 'contrib', 'results_from_tool')
+        self.add_single_pedigree(pedigree_file, 'read', 'pedigree_search')
+        self.add_single_pedigree(pedigree_file, 'read', 'pedigree_view')
+        self.add_single_pedigree(pedigree_file, 'read', 'offspring')
+        self.add_single_pedigree(pedigree_file, 'read', 'certificate')
+        self.add_single_pedigree(pedigree_file, 'read', 'results_from_peds')
+        self.add_single_pedigree(pedigree_file, 'read', 'results_from_tool')
 
     def add_single_pedigree(self, pedigree_file, user_type, addition_method):
         # ensure we're logged in as the correct user
@@ -264,12 +264,12 @@ class CloudLinesTestV2():
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
         # if user is not read-only, test adding a pedigree
-        if user_type != '_read':
+        if user_type != 'read':
             pedgree_reader = csv.DictReader(open(pedigree_file,newline=''))
             self.pedigree = dict(pedgree_reader.__next__())
 
             # access new pedigree form via pedigree search
-            if addition_method == '_pedigree_search':
+            if addition_method == 'pedigree_search':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
@@ -307,7 +307,7 @@ class CloudLinesTestV2():
                             # stop the current test
                             return 'fail'
             # access new pedigree form via view pedigree
-            elif addition_method == '_pedigree_view':
+            elif addition_method == 'pedigree_view':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
@@ -363,7 +363,7 @@ class CloudLinesTestV2():
                             # stop the current test
                             return 'fail'
             # access new pedigree form via pedigree offspring
-            elif addition_method == '_offspring':
+            elif addition_method == 'offspring':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
@@ -439,7 +439,7 @@ class CloudLinesTestV2():
                             # stop the current test
                             return 'fail'
             # access new pedigree form via pedigree certificate
-            elif addition_method == '_certificate':
+            elif addition_method == 'certificate':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
@@ -515,7 +515,7 @@ class CloudLinesTestV2():
                             # stop the current test
                             return 'fail'
             # accessing new pedigree form via results page
-            elif addition_method == '_results_from_peds':
+            elif addition_method == 'results_from_peds':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
@@ -572,7 +572,7 @@ class CloudLinesTestV2():
                             # stop the current test
                             return 'fail'
             # accessing new pedigree form via results page
-            elif addition_method == '_results_from_tool':
+            elif addition_method == 'results_from_tool':
                 # enter text in search field and submit search
                 try:
                     search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control"]')
@@ -621,11 +621,11 @@ class CloudLinesTestV2():
                     current_owner.send_keys(self.pedigree['breeder'])
                     self.browser.find_element_by_name('reg_no').clear()
                     reg_no = self.browser.find_element_by_name('reg_no')
-                    reg_no.send_keys(f"{self.pedigree['reg_no']}{user_type}{addition_method}")
+                    reg_no.send_keys(f"{self.pedigree['reg_no']}_{user_type}_{addition_method}")
                     tag_no = self.browser.find_element_by_id('id_tag_no')
                     tag_no.send_keys(self.pedigree['tag_no'])
                     name = self.browser.find_element_by_id('id_name')
-                    name.send_keys(f"{self.pedigree['name']}{user_type}{addition_method}")
+                    name.send_keys(f"{self.pedigree['name']}_{user_type}_{addition_method}")
                     dor = self.browser.find_element_by_id('id_date_of_registration')
                     dor.send_keys(self.pedigree['dor'])
                     dob = self.browser.find_element_by_id('id_date_of_birth')
@@ -661,7 +661,7 @@ class CloudLinesTestV2():
                         self.timeout = 0
                         # stop the current test
                         return 'fail'
-            if user_type == '_contrib':
+            if user_type == 'contrib':
                 # try to click "View approvals", as user is contributor
                 while self.timeout < 20:
                     try:
@@ -700,7 +700,7 @@ class CloudLinesTestV2():
                             print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
                 # login as user so check approval can be accepted
-                self.login('_user')
+                self.login('user')
                 self.browser.get(self.config['settings']['domain'] + "/account/welcome")
                 # go to approvals
                 while self.timeout < 20:
@@ -792,7 +792,7 @@ class CloudLinesTestV2():
         # if user is read-only, test that they cannot add a pedigree
         else:
             # try to access new pedigree form via pedigree search
-            if addition_method == '_pedigree_search':
+            if addition_method == 'pedigree_search':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
@@ -831,7 +831,7 @@ class CloudLinesTestV2():
                             print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
             # try to access new pedigree form via view pedigree
-            elif addition_method == '_pedigree_view':
+            elif addition_method == 'pedigree_view':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
@@ -888,7 +888,7 @@ class CloudLinesTestV2():
                             print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
             # try to access new pedigree form via pedigree offspring
-            elif addition_method == '_offspring':
+            elif addition_method == 'offspring':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
@@ -963,7 +963,7 @@ class CloudLinesTestV2():
                             print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
             # try to access new pedigree form via pedigree certificate
-            elif addition_method == '_certificate':
+            elif addition_method == 'certificate':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
@@ -1037,7 +1037,7 @@ class CloudLinesTestV2():
                             print("Failed to find how many links to the new pedigree form were available from the certificate tab", e)
                             exit(0)
             # try to access new pedigree form via results page
-            elif addition_method == '_results_from_peds':
+            elif addition_method == 'results_from_peds':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
@@ -1095,7 +1095,7 @@ class CloudLinesTestV2():
                             print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
             # try to access new pedigree form via results page
-            elif addition_method == '_results_from_tool':
+            elif addition_method == 'results_from_tool':
                 # enter text in search field and submit search
                 try:
                     search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control"]')
@@ -1168,18 +1168,18 @@ class CloudLinesTestV2():
 
     def add_each_single_breeder(self, pedigree_file):
         # add pedigree in all the different ways as each possible user
-        self.add_single_breeder(pedigree_file, '_user', '_breeders')
-        self.add_single_breeder(pedigree_file, '_user', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_user', '_ped_form')
-        self.add_single_breeder(pedigree_file, '_admin', '_breeders')
-        self.add_single_breeder(pedigree_file, '_admin', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_admin', '_ped_form')
-        self.add_single_breeder(pedigree_file, '_contrib', '_breeders')
-        self.add_single_breeder(pedigree_file, '_contrib', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_contrib', '_ped_form')
-        self.add_single_breeder(pedigree_file, '_read', '_breeders')
-        self.add_single_breeder(pedigree_file, '_read', '_breeder_view')
-        self.add_single_breeder(pedigree_file, '_read', '_ped_form')
+        self.add_single_breeder(pedigree_file, 'user', 'breeders')
+        self.add_single_breeder(pedigree_file, 'user', 'breeder_view')
+        self.add_single_breeder(pedigree_file, 'user', 'ped_form')
+        self.add_single_breeder(pedigree_file, 'admin', 'breeders')
+        self.add_single_breeder(pedigree_file, 'admin', 'breeder_view')
+        self.add_single_breeder(pedigree_file, 'admin', 'ped_form')
+        self.add_single_breeder(pedigree_file, 'contrib', 'breeders')
+        self.add_single_breeder(pedigree_file, 'contrib', 'breeder_view')
+        self.add_single_breeder(pedigree_file, 'contrib', 'ped_form')
+        self.add_single_breeder(pedigree_file, 'read', 'breeders')
+        self.add_single_breeder(pedigree_file, 'read', 'breeder_view')
+        self.add_single_breeder(pedigree_file, 'read', 'ped_form')
 
     def add_single_breeder(self, breeder_file, user_type, addition_method):
         # ensure we're logged in as the correct user
@@ -1188,12 +1188,12 @@ class CloudLinesTestV2():
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
         # if user owner/admin they can add a breeder
-        if user_type == '_user' or user_type == '_admin':
+        if user_type == 'user' or user_type == 'admin':
             breeder_reader = csv.DictReader(open(breeder_file,newline=''))
             self.breeder = dict(breeder_reader.__next__())
 
             # access new pedigree form via breeders page
-            if addition_method == '_breeders':
+            if addition_method == 'breeders':
                 # go to breeders page
                 while self.timeout < 20:
                     try:
@@ -1231,7 +1231,7 @@ class CloudLinesTestV2():
                             # stop the current test
                             return 'fail'
             # access new pedigree form via breeders page
-            elif addition_method == '_breeder_view':
+            elif addition_method == 'breeder_view':
                 # go to breeders page
                 while self.timeout < 20:
                     try:
@@ -1287,7 +1287,7 @@ class CloudLinesTestV2():
                             # stop the current test
                             return 'fail'
             # access new pedigree form via add breeder button in add pedigree page
-            elif addition_method == '_ped_form':
+            elif addition_method == 'ped_form':
                 # go to pedigree search page
                 while self.timeout < 20:
                     try:
@@ -1347,9 +1347,9 @@ class CloudLinesTestV2():
             while self.timeout < 20:
                 try:
                     breeding_prefix = self.browser.find_element_by_name('breeding_prefix')
-                    breeding_prefix.send_keys(f"{self.breeder['breeding_prefix']}{user_type}{addition_method}")
+                    breeding_prefix.send_keys(f"{self.breeder['breeding_prefix']}_{user_type}_{addition_method}")
                     contact_name = self.browser.find_element_by_name('contact_name')
-                    contact_name.send_keys(f"{self.breeder['contact_name']}{user_type}{addition_method}")
+                    contact_name.send_keys(f"{self.breeder['contact_name']}_{user_type}_{addition_method}")
                     address = self.browser.find_element_by_name('address')
                     address.send_keys(self.breeder['address'])
                     phone_number1 = self.browser.find_element_by_name('phone_number1')
@@ -1357,7 +1357,7 @@ class CloudLinesTestV2():
                     phone_number2 = self.browser.find_element_by_name('phone_number2')
                     phone_number2.send_keys(self.breeder['phone_number2'])
                     email = self.browser.find_element_by_name('email')
-                    email.send_keys(f"{self.breeder['email']}{user_type}{addition_method}")
+                    email.send_keys(f"{self.breeder['email']}_{user_type}_{addition_method}")
                     active = self.browser.find_element_by_name('active')
                     self.browser.execute_script("arguments[0].click();", active)
                     sleep(2)
@@ -1374,7 +1374,7 @@ class CloudLinesTestV2():
                         # stop the current test
                         return 'fail'
             # submit form in correct way given that we're in normal new breeder form
-            if addition_method in ('_breeders', '_breeder_view'):
+            if addition_method in ('breeders', 'breeder_view'):
                 # submit new breeder form
                 while self.timeout < 20:
                     try:
@@ -1436,7 +1436,7 @@ class CloudLinesTestV2():
         # user is read-only/contributor, so make sure they can't access new breeder form
         else:
             # ensure you can't access new pedigree form via breeders page
-            if addition_method == '_breeders':
+            if addition_method == 'breeders':
                 # go to breeders page
                 while self.timeout < 20:
                     try:
@@ -1493,7 +1493,7 @@ class CloudLinesTestV2():
                             print("Failed to find how many links to new breeder form there are", e)
                             exit(0)
             # ensure you can't access new pedigree form via breeders page
-            elif addition_method == '_breeder_view':
+            elif addition_method == 'breeder_view':
                 # go to breeders page
                 while self.timeout < 20:
                     try:
@@ -1532,9 +1532,9 @@ class CloudLinesTestV2():
                             print("Failed to find how many links to new breeder form there are", e)
                             exit(0)
             # ensure you can't access new pedigree form via pedigree form
-            elif addition_method == '_ped_form':
+            elif addition_method == 'ped_form':
                 # contributor, so check the add breeder button is not on the add pedigree form
-                if user_type == '_contrib':
+                if user_type == 'contrib':
                     # go to pedigree search page
                     while self.timeout < 20:
                         try:
