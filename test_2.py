@@ -699,6 +699,66 @@ class CloudLinesTestV2():
                             # test failed
                             print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
+                # login as user so check approval can be accepted
+                self.login('_user')
+                self.browser.get(self.config['settings']['domain'] + "/account/welcome")
+                # go to approvals
+                while self.timeout < 20:
+                    try:
+                        # check there are no links to approvals page
+                        approvals = self.browser.find_element_by_xpath('//a[@href="/approvals/"]')
+                        self.browser.execute_script("arguments[0].click();", approvals)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to access approvals page'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
+                # approve the approval
+                while self.timeout < 20:
+                    try:
+                        # check there are no links to approvals page
+                        approvals = self.browser.find_element_by_xpath('//button[contains(text(), "Approve")]')
+                        self.browser.execute_script("arguments[0].click();", approvals)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to approve the approval'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
+                # check the approval is gone from the queue
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//td[contains(text(), "Approve")]')) > 0:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','The table still contains an approval'])
+                            # stop the current test
+                            return 'fail'
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # test failed
+                            print("Failed to find how many approvals in the queue there are", e)
+                            exit(0)
             else:
                 # check the save worked by trying to access new pedigree form
                 while self.timeout < 20:
