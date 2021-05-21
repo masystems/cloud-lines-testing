@@ -1097,115 +1097,223 @@ class CloudLinesTestV2():
             writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'PASS','-'])
 
     def edit_each_single_pedigree(self):
-        self.edit_single_pedigree('_user', '_pedigree_view')
-        self.edit_single_pedigree('_user', '_approval')
-        self.edit_single_pedigree('_admin', '_pedigree_view')
-        self.edit_single_pedigree('_admin', '_approval')
-        self.edit_single_pedigree('_contrib', '_pedigree_view')
-        self.edit_single_pedigree('_contrib', '_approval')
-        self.edit_single_pedigree('_read', '_pedigree_view')
-        self.edit_single_pedigree('_read', '_approval')
+        self.edit_single_pedigree('user', 'ped_form')
+        self.edit_single_pedigree('user', 'approval')
+        self.edit_single_pedigree('admin', 'ped_form')
+        self.edit_single_pedigree('admin', 'approval')
+        self.edit_single_pedigree('contrib', 'ped_form')
+        self.edit_single_pedigree('contrib', 'approval')
+        self.edit_single_pedigree('read', 'ped_form')
+        self.edit_single_pedigree('read', 'approval')
 
-    def edit_single_pedigree(self, user_type, addition_method):
+    def edit_single_pedigree(self, user_type, edit_method):
         # ensure we're logged in as the correct user
         self.login(user_type)
 
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
-        # if user is not read-only, test editing a pedigree
-        if user_type != '_read':
-            if addition_method == '_pedigree_view':
-                # go to pedigree search page
-                while self.timeout < 20:
-                    try:
-                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
-                        self.browser.execute_script("arguments[0].click();", ped_search)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
-                # search for animal_14000
-                
-                # go to view pedigree
-                while self.timeout < 20:
-                    try:
-                        ped_view = self.browser.find_element_by_xpath('//button[contains(text(), "View")]')
-                        self.browser.execute_script("arguments[0].click();", ped_view)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree view'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
-                # go to edit pedigree
-                while self.timeout < 20:
-                    try:
-                        edit_ped = self.browser.find_element_by_xpath('//a[@id="editPedigree"]')
-                        self.browser.execute_script("arguments[0].click();", edit_ped)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open edit pedigree form'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+        # test editting via edit pedigree form
+        if edit_method == 'ped_form':
+            # go to pedigree search page
+            if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
+                        'Edit Pedigree', user_type, edit_method, 'FAIL',
+                        'Failed to open pedigree search') == 'fail':
+                    # test failed
+                    return 'fail'
+            # search for animal_14000_edit
+            try:
+                search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
+                search_field.send_keys('animal_14000_edit\n')
+            except Exception as e:
+                    # add fail to reports file
+                    with open(self.results_file, 'a+', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                    # stop the current test
+                    return 'fail'
             
-            # Enter pedigree information
-            while self.timeout < 20:
-                try:
-                    tag_no = self.browser.find_element_by_id('id_tag_no')
-                    tag_no.send_keys(self.pedigree['tag_no'])
-                    dor = self.browser.find_element_by_id('id_date_of_registration')
-                    dor.send_keys(self.pedigree['dor'])
-                    born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
-                    self.browser.execute_script("arguments[0].click();", born_as)
-                    dod = self.browser.find_element_by_id('id_date_of_death')
-                    dod.send_keys(self.pedigree['dod'])
-                    desc = self.browser.find_element_by_id('id_description')
-                    desc.send_keys(self.pedigree['desc'])
-                    desc = self.browser.find_element_by_id('id_breed')
-                    desc.send_keys(self.pedigree['breed'])
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        # add fail to reports file
-                        with open(self.results_file, 'a+', newline='') as file:
-                            writer = csv.writer(file)
-                            writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter pedigree information'])
+            # not read only, so can access the form
+            if user_type != 'read':
+                # go to edit pedigree
+                if self.click_element_by_xpath('//a[@id="editPedigree"]',
+                            'Edit Pedigree', user_type, edit_method, 'FAIL',
+                            'Failed to open edit pedigree form') == 'fail':
+                    # test failed
+                    return 'fail'
+                # enter pedigree info
+                while self.timeout < 20:
+                    try:
+                        # breeder = self.browser.find_element_by_id('id_breeder')
+                        # breeder.send_keys(self.pedigree['breeder'])
+                        # current_owner = self.browser.find_element_by_id('id_current_owner')
+                        # current_owner.send_keys(self.pedigree['breeder'])
+                        # tag_no = self.browser.find_element_by_id('id_tag_no')
+                        # tag_no.send_keys(self.pedigree['tag_no'])
+                        # dor = self.browser.find_element_by_id('id_date_of_registration')
+                        # dor.send_keys(self.pedigree['dor'])
+                        # dob = self.browser.find_element_by_id('id_date_of_birth')
+                        # dob.send_keys(self.pedigree['dob'])
+                        # status = self.browser.find_element_by_id(self.pedigree['status'])
+                        # self.browser.execute_script("arguments[0].click();", status)
+                        # born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
+                        # self.browser.execute_script("arguments[0].click();", born_as)
+                        # dod = self.browser.find_element_by_id('id_date_of_death')
+                        # dod.send_keys(self.pedigree['dod'])
+                        # desc = self.browser.find_element_by_id('id_description')
+                        # desc.send_keys(self.pedigree['desc'])
+                        # desc = self.browser.find_element_by_id('id_breed')
+                        # desc.send_keys(self.pedigree['breed'])
+                        #print(self.browser.find_element_by_id('id_breeder').text)
+                        # Save!
+                        save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit" and @data-target=".confirmForm"]')
+                        self.browser.execute_script("arguments[0].click();", save_pedigree)
+                        confirm_save_pedigree = self.browser.find_element_by_xpath('//button[@type="button" and @class="btn btn-success waves-effect waves-light confirmSaveBtn"]')
+                        self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
+                        sleep(2)
                         self.timeout = 0
-                        # stop the current test
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter pedigree information'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
+                
+                if user_type in ('user', 'admin'):
+                    # check approval wasn't created and that we can go to new pedigree form to check that the save worked
+                    while self.timeout < 20:
+                        try:
+                            # check there are no links to approvals page
+                            if len(self.browser.find_elements_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]')) == 0:
+                                # try to go to new pedigree form
+                                new_pedigree = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                                self.browser.execute_script("arguments[0].click();", new_pedigree)
+                                sleep(2)
+                                self.timeout = 0
+                                break
+                            # add error if there is an approval link
+                            else:
+                                # add fail to reports file
+                                with open(self.results_file, 'a+', newline='') as file:
+                                    writer = csv.writer(file)
+                                    writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Approval link was presented'])
+                                # stop the current test
+                                return 'fail'
+                        except Exception as e:
+                            self.timeout += 1
+                            if self.timeout == 20:
+                                # add fail to reports file
+                                with open(self.results_file, 'a+', newline='') as file:
+                                    writer = csv.writer(file)
+                                    writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
+                                self.timeout = 0
+                                # stop the current test
+                                return 'fail'
+                # user is contributor
+                else:
+                    # try to click "View approval"
+                    if self.click_element_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]',
+                                'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                'Failed to open approvals page') == 'fail':
+                        # test failed
                         return 'fail'
-            # Save pedigree
+            # user is read only
+            else:
+                # check they can't access edit pedigree form
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//a[@id="editPedigree"]')) > 0:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Link to edit pedigree form is available'])
+                            # stop the current test
+                            return 'fail'
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # test did not work
+                            print("Failed to find how many links to edit pedigree form there are", e)
+                            exit(0)
+        # test editting by editting an approval
+        else:
+            pass
+
+
+
+
+
+
+
+        # # test editting using edit pedigree form
+        # if edit_method == 'ped_form':
+        #     # if user is not 
+        #     if user_type != 'read':
+        #         # go to pedigree search page
+        #         if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
+        #                     'Edit Pedigree', user_type, edit_method, 'FAIL',
+        #                     'Failed to open pedigree search') == 'fail':
+        #                 # test failed
+        #                 return 'fail'
+        #         # search for animal_14000_edit
+        #         try:
+        #             search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
+        #             search_field.send_keys('animal_14000_edit\n')
+        #         except Exception as e:
+        #                 # add fail to reports file
+        #                 with open(self.results_file, 'a+', newline='') as file:
+        #                     writer = csv.writer(file)
+        #                     writer.writerow(['Add Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+        #                 # stop the current test
+        #                 return 'fail'
+        #         # go to edit pedigree
+        #         if self.click_element_by_xpath('//a[@id="editPedigree"]',
+        #                     'Edit Pedigree', user_type, edit_method, 'FAIL',
+        #                     'Failed to open edit pedigree form') == 'fail':
+        #             # test failed
+        #             return 'fail'
+        
+        elif edit_method == 'approval':
+            # create approval by editting as contributor
+            self.login('contrib')
+            # go to pedigree search page
+            if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
+                        'Edit Pedigree', user_type, edit_method, 'FAIL',
+                        'Failed to open pedigree search') == 'fail':
+                    # test failed
+                    return 'fail'
+            # search for animal_14000_edit
+            try:
+                search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
+                search_field.send_keys('animal_14000_edit\n')
+            except Exception as e:
+                    # add fail to reports file
+                    with open(self.results_file, 'a+', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                    # stop the current test
+                    return 'fail'
+            # go to edit pedigree
+            if self.click_element_by_xpath('//a[@id="editPedigree"]',
+                            'Edit Pedigree', user_type, edit_method, 'FAIL',
+                            'Failed to open edit pedigree form') == 'fail':
+                    # test failed
+                    return 'fail'
+            # edit description to create approval
             while self.timeout < 20:
                 try:
-                    save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit"]')
+                    desc = self.browser.find_element_by_id('id_description')
+                    desc.send_keys(f'{desc.text}\nedit')
+                    save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit" and @data-target=".confirmForm"]')
                     self.browser.execute_script("arguments[0].click();", save_pedigree)
-                    confirm_save_pedigree = self.browser.find_element_by_id('confirmSaveBtn')
+                    confirm_save_pedigree = self.browser.find_element_by_xpath('//button[@type="button" and @class="btn btn-success waves-effect waves-light confirmSaveBtn"]')
                     self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
                     sleep(2)
                     self.timeout = 0
@@ -1216,30 +1324,66 @@ class CloudLinesTestV2():
                         # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
-                            writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to submit pedigree'])
+                            writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter pedigree description'])
                         self.timeout = 0
                         # stop the current test
                         return 'fail'
-            # check save worked - if user is contributor it should have gone into approvals
-            if user_type == '_contrib':
-                # try to click "View approvals", as user is contributor
-                while self.timeout < 20:
-                    try:
-                        new_pedigree = self.browser.find_element_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]')
-                        self.browser.execute_script("arguments[0].click();", new_pedigree)
-                        sleep(2)
+                # login as test user type
+                self.login(user_type)
+                # test that 
+                if user_type in ('user', 'admin'):
+                
+            # Enter pedigree information
+            while self.timeout < 20:
+                try:
+                    # breeder = self.browser.find_element_by_id('id_breeder')
+                    # breeder.send_keys(self.pedigree['breeder'])
+                    # current_owner = self.browser.find_element_by_id('id_current_owner')
+                    # current_owner.send_keys(self.pedigree['breeder'])
+                    # tag_no = self.browser.find_element_by_id('id_tag_no')
+                    # tag_no.send_keys(self.pedigree['tag_no'])
+                    # dor = self.browser.find_element_by_id('id_date_of_registration')
+                    # dor.send_keys(self.pedigree['dor'])
+                    # dob = self.browser.find_element_by_id('id_date_of_birth')
+                    # dob.send_keys(self.pedigree['dob'])
+                    # status = self.browser.find_element_by_id(self.pedigree['status'])
+                    # self.browser.execute_script("arguments[0].click();", status)
+                    # born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
+                    # self.browser.execute_script("arguments[0].click();", born_as)
+                    # dod = self.browser.find_element_by_id('id_date_of_death')
+                    # dod.send_keys(self.pedigree['dod'])
+                    # desc = self.browser.find_element_by_id('id_description')
+                    # desc.send_keys(self.pedigree['desc'])
+                    # desc = self.browser.find_element_by_id('id_breed')
+                    # desc.send_keys(self.pedigree['breed'])
+                    #print(self.browser.find_element_by_id('id_breeder').text)
+                    # Save!
+                    save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit" and @data-target=".confirmForm"]')
+                    self.browser.execute_script("arguments[0].click();", save_pedigree)
+                    confirm_save_pedigree = self.browser.find_element_by_xpath('//button[@type="button" and @class="btn btn-success waves-effect waves-light confirmSaveBtn"]')
+                    self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        # add fail to reports file
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter pedigree information'])
                         self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to approvals page'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                        # stop the current test
+                        return 'fail'
+            
+            # check save worked - if user is contributor it should have gone into approvals
+            if user_type == 'contrib':
+                # try to click "View approval", as user is contributor
+                if self.click_element_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]',
+                            'Edit Pedigree', user_type, edit_method, 'FAIL',
+                            'Failed to open approvals page') == 'fail':
+                    # test failed
+                    return 'fail'
                 # check that pedigree is in the approvals table
                 while self.timeout < 20:
                     try:
@@ -1260,46 +1404,20 @@ class CloudLinesTestV2():
                             print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
                 # login as user so check approval can be accepted
-                self.login('_user')
+                self.login('user')
                 self.browser.get(self.config['settings']['domain'] + "/account/welcome")
                 # go to approvals
-                while self.timeout < 20:
-                    try:
-                        # check there are no links to approvals page
-                        approvals = self.browser.find_element_by_xpath('//a[@href="/approvals/"]')
-                        self.browser.execute_script("arguments[0].click();", approvals)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to access approvals page'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//a[@href="/approvals/"]',
+                            'Edit Pedigree', user_type, edit_method, 'FAIL',
+                            'Failed to open approvals page') == 'fail':
+                    # test failed
+                    return 'fail'
                 # approve the approval
-                while self.timeout < 20:
-                    try:
-                        # check there are no links to approvals page
-                        approvals = self.browser.find_element_by_xpath('//button[contains(text(), "Approve")]')
-                        self.browser.execute_script("arguments[0].click();", approvals)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to approve the approval'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//button[contains(text(), "Approve")]',
+                            'Edit Pedigree', user_type, edit_method, 'FAIL',
+                            'Failed to approve the approval') == 'fail':
+                    # test failed
+                    return 'fail'
                 # check the approval is gone from the queue
                 while self.timeout < 20:
                     try:
@@ -1307,7 +1425,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','The table still contains an approval'])
+                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','The table still contains an approval'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -1326,6 +1444,7 @@ class CloudLinesTestV2():
                     try:
                         # check there are no links to approvals page
                         if len(self.browser.find_elements_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]')) == 0:
+                            # try to go to new pedigree form
                             new_pedigree = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
                             self.browser.execute_script("arguments[0].click();", new_pedigree)
                             sleep(2)
@@ -1336,7 +1455,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Approval link was presented'])
+                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Approval link was presented'])
                             # stop the current test
                             return 'fail'
                     except Exception as e:
@@ -1345,10 +1464,15 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
+                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
                             self.timeout = 0
                             # stop the current test
                             return 'fail'
+
+        # test must have passed if we have got to the end of this function
+        with open(self.results_file, 'a+', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'PASS','-'])
 
     def add_breed_info(self, breed):
         # Enter breed information
@@ -1559,6 +1683,8 @@ class CloudLinesTestV2():
             self.add_each_single_pedigree('pedigree.csv')
         elif type == 'add_each_single_breeder':
             self.add_each_single_breeder('breeder.csv')
+        elif type == 'edit_each_single_pedigree':
+            self.edit_each_single_pedigree()
         elif type == 'delete_all_pedigrees':
             self.delete_all_pedigrees()
         elif type == 'delete_all_breeders':
@@ -1594,16 +1720,17 @@ if __name__ == '__main__':
     print("6. Add Pedigree")
     print("7. Add Single Pedigree")
     print("8. Add Single Breeder")
-    print("9. Delete All Pedigrees")
-    print("10. Delete All Breeders")
-    print("11. Add Users")
-    print("12. Delete Users")
-    print("13. Edit Parent Titles")
-    print("14. Add and Delete All Pedrigrees, Breeders, Breeds")
-    print("15. Edit Pedigree Columns Load")
-    print("16. Run COI")
-    print("17. Run Mean Kinship")
-    print("18. Run Stud Selector")
+    print("9. Edit Single Pedigree")
+    print("10. Delete All Pedigrees")
+    print("11. Delete All Breeders")
+    print("12. Add Users")
+    print("13. Delete Users")
+    print("14. Edit Parent Titles")
+    print("15. Add and Delete All Pedrigrees, Breeders, Breeds")
+    print("16. Edit Pedigree Columns Load")
+    print("17. Run COI")
+    print("18. Run Mean Kinship")
+    print("19. Run Stud Selector")
     print("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
@@ -1625,27 +1752,29 @@ if __name__ == '__main__':
             elif ch == "8":
                 obj.test('add_each_single_breeder')
             elif ch == "9":
-                obj.test('delete_all_pedigrees')
+                obj.test('edit_each_single_pedigree')
             elif ch == "10":
-                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
+                obj.test('delete_all_pedigrees')
             elif ch == "11":
-                obj.test('add_users')
+                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
             elif ch == "12":
-                obj.test('delete_users')
+                obj.test('add_users')
             elif ch == "13":
-                obj.test('update_parent_titles')
+                obj.test('delete_users')
             elif ch == "14":
+                obj.test('update_parent_titles')
+            elif ch == "15":
                 obj.test('add_pedigree')
                 obj.delete_all_breeds()
                 obj.test('delete_all_breeders', input("Enter Breeder Prefix "))
                 obj.test('delete_all_pedigrees')
-            elif ch == "15":
-                obj.test('edit_column_load')
             elif ch == "16":
-                obj.test('run_coi')
+                obj.test('edit_column_load')
             elif ch == "17":
-                obj.test('run_mean_kinship')
+                obj.test('run_coi')
             elif ch == "18":
+                obj.test('run_mean_kinship')
+            elif ch == "19":
                 obj.test('run_stud_selector')
             ch = input("Enter Choice ")
         except:
