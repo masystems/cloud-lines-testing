@@ -116,7 +116,7 @@ class CloudLinesTestV2():
                         writer.writerow([action, user_type.replace('_', ' '), scenario.replace('_', ' '), result, desc])
                     self.timeout = 0
                     # stop the current test
-                    return False
+                    return 'fail'
 
     def add_pedigree(self,pedigree_file,breed_file,breeder_file):
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
@@ -290,54 +290,18 @@ class CloudLinesTestV2():
 
             # access new pedigree form via pedigree search
             if addition_method == 'pedigree_search':
-                # # go to pedigree search page
-                # while self.timeout < 20:
-                #     try:
-                #         ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
-                #         self.browser.execute_script("arguments[0].click();", ped_search)
-                #         sleep(2)
-                #         self.timeout = 0
-                #         break
-                #     except Exception as e:
-                #         self.timeout += 1
-                #         if self.timeout == 20:
-                #             # add fail to reports file
-                #             with open(self.results_file, 'a+', newline='') as file:
-                #                 writer = csv.writer(file)
-                #                 writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
-                #             self.timeout = 0
-                #             # stop the current test
-                #             return 'fail'
                 # go to pedigree search page
-                if not self.click_element_by_xpath('//a[@href="/pedigree/search"]', 
+                if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
                             'Add Pedigree', user_type, addition_method, 'FAIL',
-                            'Failed to open pedigree search'):
+                            'Failed to open pedigree search') == 'fail':
                     # test failed
-                    return False
-                # # go to add new pedigree
-                # while self.timeout < 20:
-                #     try:
-                #         add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
-                #         self.browser.execute_script("arguments[0].click();", add_ped)
-                #         sleep(2)
-                #         self.timeout = 0
-                #         break
-                #     except Exception as e:
-                #         self.timeout += 1
-                #         if self.timeout == 20:
-                #             # add fail to reports file
-                #             with open(self.results_file, 'a+', newline='') as file:
-                #                 writer = csv.writer(file)
-                #                 writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open add pedigree form'])
-                #             self.timeout = 0
-                #             # stop the current test
-                #             return 'fail'
+                    return 'fail'
                 # go to add new pedigree
-                if not self.click_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]',
+                if self.click_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]',
                             'Add Pedigree', user_type, addition_method, 'FAIL',
-                            'Failed to open add pedigree form'):
+                            'Failed to open add pedigree form') == 'fail':
                     # test failed
-                    return False
+                    return 'fail'
             # access new pedigree form via view pedigree
             elif addition_method == 'pedigree_view':
                 # go to pedigree search page
