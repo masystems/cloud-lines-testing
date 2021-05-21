@@ -860,153 +860,57 @@ class CloudLinesTestV2():
             # access new pedigree form via breeders page
             if addition_method == 'breeders':
                 # go to breeders page
-                while self.timeout < 20:
-                    try:
-                        breeders = self.browser.find_element_by_xpath('//a[@href="/breeders/"]')
-                        self.browser.execute_script("arguments[0].click();", breeders)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open breeders page'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//a[@href="/breeders/"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open breeders page') == 'fail':
+                    # test failed
+                    return 'fail'
                 # go to add new breeder
-                while self.timeout < 20:
-                    try:
-                        add_breeder = self.browser.find_element_by_xpath('//a[@href="/breeders/new_breeder/"]')
-                        self.browser.execute_script("arguments[0].click();", add_breeder)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open add breeder form'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//a[@href="/breeders/new_breeder/"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open new breeder form') == 'fail':
+                    # test failed
+                    return 'fail'
             # access new pedigree form via breeders page
             elif addition_method == 'breeder_view':
                 # go to breeders page
-                while self.timeout < 20:
-                    try:
-                        breeders = self.browser.find_element_by_xpath('//a[@href="/breeders/"]')
-                        self.browser.execute_script("arguments[0].click();", breeders)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open breeders page'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//a[@href="/breeders/"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open breeders page') == 'fail':
+                    # test failed
+                    return 'fail'
                 # go to breeder view
-                while self.timeout < 20:
-                    try:
-                        breeder_view = self.browser.find_element_by_xpath("//tr[@onclick]")
-                        self.browser.execute_script("arguments[0].click();", breeder_view)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open breeder view page'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//tr[@onclick]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open breeder view page') == 'fail':
+                    # test failed
+                    return 'fail'
                 # go to add new breeder
-                while self.timeout < 20:
-                    try:
-                        add_breeder = self.browser.find_element_by_xpath('//a[@href="/breeders/new_breeder/"]')
-                        self.browser.execute_script("arguments[0].click();", add_breeder)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open add breeder form'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//a[@href="/breeders/new_breeder/"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open add breeder form') == 'fail':
+                    # test failed
+                    return 'fail'
             # access new pedigree form via add breeder button in add pedigree page
             elif addition_method == 'ped_form':
                 # go to pedigree search page
-                while self.timeout < 20:
-                    try:
-                        ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
-                        self.browser.execute_script("arguments[0].click();", ped_search)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
-                # go to pedigree form
-                while self.timeout < 20:
-                    try:
-                        add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
-                        self.browser.execute_script("arguments[0].click();", add_ped)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open add pedigree form'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open pedigree search') == 'fail':
+                    # test failed
+                    return 'fail'
+                # go to add pedigree form
+                if self.click_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open add pedigree form') == 'fail':
+                    # test failed
+                    return 'fail'
                 # go to add breeder form modal via add breeder button
-                while self.timeout < 20:
-                    try:
-                        add_breeder = self.browser.find_element_by_xpath('//button[@id="showNewBreederModal"]')
-                        self.browser.execute_script("arguments[0].click();", add_breeder)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open add breeder modal'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//button[@id="showNewBreederModal"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open add breeder modal') == 'fail':
+                    # test failed
+                    return 'fail'
 
             # enter breeder information
             while self.timeout < 20:
@@ -1041,103 +945,43 @@ class CloudLinesTestV2():
             # submit form in correct way given that we're in normal new breeder form
             if addition_method in ('breeders', 'breeder_view'):
                 # submit new breeder form
-                while self.timeout < 20:
-                    try:
-                        submit_breeder = self.browser.find_element_by_xpath('//button[@type="submit" and @class="btn btn-success" and contains(text(), "Submit")]')
-                        self.browser.execute_script("arguments[0].click();", submit_breeder)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to submit breeder info'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//button[@type="submit" and @class="btn btn-success" and contains(text(), "Submit")]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to submit breeder info') == 'fail':
+                    # test failed
+                    return 'fail'
             # submit form in correct way given that we're in new breeder modal
             else:
                 # submit new breeder form
-                while self.timeout < 20:
-                    try:
-                        submit_breeder = self.browser.find_element_by_xpath('//button[@id="saveBreeder" and contains(text(), "Save breeder")]')
-                        self.browser.execute_script("arguments[0].click();", submit_breeder)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to submit breeder info'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//button[@id="saveBreeder" and contains(text(), "Save breeder")]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to submit breeder info') == 'fail':
+                    # test failed
+                    return 'fail'
 
             # check the save worked by trying to access new breeder form
-            while self.timeout < 20:
-                try:
-                    new_breeder = self.browser.find_element_by_xpath('//a[@href="/breeders/new_breeder/"]')
-                    self.browser.execute_script("arguments[0].click();", new_breeder)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        # add fail to reports file
-                        with open(self.results_file, 'a+', newline='') as file:
-                            writer = csv.writer(file)
-                            writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to save breeder'])
-                        self.timeout = 0
-                        # stop the current test
-                        return 'fail'
+            if self.click_element_by_xpath('//a[@href="/breeders/new_breeder/"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to save breeder') == 'fail':
+                    # test failed
+                    return 'fail'
         
         # user is read-only/contributor, so make sure they can't access new breeder form
         else:
             # ensure you can't access new pedigree form via breeders page
             if addition_method == 'breeders':
                 # go to breeders page
-                while self.timeout < 20:
-                    try:
-                        breeders = self.browser.find_element_by_xpath('//a[@href="/breeders/"]')
-                        self.browser.execute_script("arguments[0].click();", breeders)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open breeders page'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//a[@href="/breeders/"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open breeders page') == 'fail':
+                    # test failed
+                    return 'fail'
                 # go to breeder view
-                while self.timeout < 20:
-                    try:
-                        breeder_view = self.browser.find_element_by_xpath("//tr[@onclick]")
-                        self.browser.execute_script("arguments[0].click();", breeder_view)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open breeder view page'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//tr[@onclick]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open breeder view page') == 'fail':
+                    # test failed
+                    return 'fail'
                 # check you can't go to add new breeder form
                 while self.timeout < 20:
                     try:
@@ -1160,23 +1004,11 @@ class CloudLinesTestV2():
             # ensure you can't access new pedigree form via breeders page
             elif addition_method == 'breeder_view':
                 # go to breeders page
-                while self.timeout < 20:
-                    try:
-                        breeders = self.browser.find_element_by_xpath('//a[@href="/breeders/"]')
-                        self.browser.execute_script("arguments[0].click();", breeders)
-                        sleep(2)
-                        self.timeout = 0
-                        break
-                    except Exception as e:
-                        self.timeout += 1
-                        if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open breeders page'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                if self.click_element_by_xpath('//a[@href="/breeders/"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open breeders page') == 'fail':
+                    # test failed
+                    return 'fail'
                 # check you can't go to add new breeder form
                 while self.timeout < 20:
                     try:
@@ -1201,41 +1033,17 @@ class CloudLinesTestV2():
                 # contributor, so check the add breeder button is not on the add pedigree form
                 if user_type == 'contrib':
                     # go to pedigree search page
-                    while self.timeout < 20:
-                        try:
-                            ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
-                            self.browser.execute_script("arguments[0].click();", ped_search)
-                            sleep(2)
-                            self.timeout = 0
-                            break
-                        except Exception as e:
-                            self.timeout += 1
-                            if self.timeout == 20:
-                                # add fail to reports file
-                                with open(self.results_file, 'a+', newline='') as file:
-                                    writer = csv.writer(file)
-                                    writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
-                                self.timeout = 0
-                                # stop the current test
-                                return 'fail'
+                    if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open pedigree search') == 'fail':
+                        # test failed
+                        return 'fail'
                     # go to pedigree form
-                    while self.timeout < 20:
-                        try:
-                            add_ped = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
-                            self.browser.execute_script("arguments[0].click();", add_ped)
-                            sleep(2)
-                            self.timeout = 0
-                            break
-                        except Exception as e:
-                            self.timeout += 1
-                            if self.timeout == 20:
-                                # add fail to reports file
-                                with open(self.results_file, 'a+', newline='') as file:
-                                    writer = csv.writer(file)
-                                    writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open add pedigree form'])
-                                self.timeout = 0
-                                # stop the current test
-                                return 'fail'
+                    if self.click_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open add pedigree form') == 'fail':
+                        # test failed
+                        return 'fail'
                     # check add breeder button is not there
                     while self.timeout < 20:
                         try:
@@ -1258,23 +1066,11 @@ class CloudLinesTestV2():
                 # user is read only, so check user can't get to the add pedigree form
                 else:
                     # go to pedigree search page
-                    while self.timeout < 20:
-                        try:
-                            ped_search = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
-                            self.browser.execute_script("arguments[0].click();", ped_search)
-                            sleep(2)
-                            self.timeout = 0
-                            break
-                        except Exception as e:
-                            self.timeout += 1
-                            if self.timeout == 20:
-                                # add fail to reports file
-                                with open(self.results_file, 'a+', newline='') as file:
-                                    writer = csv.writer(file)
-                                    writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to open pedigree search'])
-                                self.timeout = 0
-                                # stop the current test
-                                return 'fail'
+                    if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
+                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            'Failed to open pedigree search') == 'fail':
+                        # test failed
+                        return 'fail'
                     # check you can't go to add new pedigree
                     while self.timeout < 20:
                         try:
