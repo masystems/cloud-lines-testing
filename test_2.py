@@ -1217,15 +1217,7 @@ class CloudLinesTestV2():
                             yyyy = f'{int_dob}'[:4]
                             dod.clear()
                             dod.send_keys(f'{dd}{mm}{yyyy}')
-                        # dod = self.browser.find_element_by_id('id_date_of_death')
-                        # dod.send_keys(self.pedigree['dod'])
-                        # desc = self.browser.find_element_by_id('id_description')
-                        # desc.send_keys(self.pedigree['desc'])
-                        # desc = self.browser.find_element_by_id('id_breed')
-                        # desc.send_keys(self.pedigree['breed'])
-                        #print(self.browser.find_element_by_id('id_breeder').text)
-                        # Save!
-
+                        # increment description or set to 0
                         desc = self.browser.find_element_by_id('id_description')
                         try:
                             current_desc = int(desc.text)
@@ -1234,7 +1226,7 @@ class CloudLinesTestV2():
                         except ValueError:
                             desc.clear()
                             desc.send_keys(0)
-
+                        # save
                         save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit" and @data-target=".confirmForm"]')
                         self.browser.execute_script("arguments[0].click();", save_pedigree)
                         confirm_save_pedigree = self.browser.find_element_by_xpath('//button[@type="button" and @class="btn btn-success waves-effect waves-light confirmSaveBtn"]')
@@ -1483,6 +1475,7 @@ class CloudLinesTestV2():
                         except ValueError:
                             desc.clear()
                             desc.send_keys(0)
+                        # save!
                         save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit" and @data-target=".confirmForm"]')
                         self.browser.execute_script("arguments[0].click();", save_pedigree)
                         confirm_save_pedigree = self.browser.find_element_by_xpath('//button[@type="button" and @class="btn btn-success waves-effect waves-light confirmSaveBtn"]')
