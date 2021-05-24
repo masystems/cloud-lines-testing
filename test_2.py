@@ -5,7 +5,6 @@ from selenium.common.exceptions import ElementNotInteractableException
 from configparser import ConfigParser
 import csv
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 
 class CloudLinesTestV2():
     def __init__(self):
@@ -1153,19 +1152,38 @@ class CloudLinesTestV2():
                         except ValueError:
                             tag_no.clear()
                             tag_no.send_keys(0)
-                        # dor = self.browser.find_element_by_id('id_date_of_registration')
-                        # try:
-                        #     current_dor = int(dor.text)
-                        #     dor.clear()
-                        #     dor.send_keys(current_dor + relativedelta(days=1))
-                        # except ValueError:
-                        #     dor.clear()
-                        #     dor.send_keys(datetime.now())
-                        # dor.send_keys(self.pedigree['dor'])
-                        # dob = self.browser.find_element_by_id('id_date_of_birth')
-                        # dob.send_keys(self.pedigree['dob'])
-                        # status = self.browser.find_element_by_id(self.pedigree['status'])
-                        # self.browser.execute_script("arguments[0].click();", status)
+                        # get date of birth
+                        dob = self.browser.find_element_by_id('id_dob')
+                        # increment date of registration
+                        dor = self.browser.find_element_by_id('id_dor')
+                        try:
+                            int_dor = int(dor.get_attribute('value').replace('-', ''))
+                            # get dd,mm,yyyy, and rearrange so it can be input into the field
+                            dd = f'{int_dor}'[6:]
+                            mm = f'{int_dor}'[4:6]
+                            yyyy = f'{int_dor}'[:4]
+                            if yyyy == '2021':
+                                yyyy = '2008'
+                            int_dor = int(f'{dd}{mm}{yyyy}')
+                            dor.clear()
+                            dor.send_keys(int_dor + 1)
+                        except ValueError:
+                            int_dob = int(dob.get_attribute('value').replace('-', ''))
+                            dd = f'{int_dob}'[6:]
+                            mm = f'{int_dob}'[4:6]
+                            yyyy = f'{int_dob}'[:4]
+                            dor.clear()
+                            dor.send_keys(f'{dd}{mm}{yyyy}')
+                        # set status to alive if currently dead, unknown if currently alive, and dead if currently unknown
+                        dead_status = self.browser.find_element_by_id('id_status_0')
+                        alive_status = self.browser.find_element_by_id('id_status_1')
+                        unknown_status = self.browser.find_element_by_id('id_status_2')
+                        if dead_status.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", alive_status)
+                        elif alive_status.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", unknown_status)
+                        else:
+                            self.browser.execute_script("arguments[0].click();", dead_status)
                         # born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
                         # self.browser.execute_script("arguments[0].click();", born_as)
                         # dod = self.browser.find_element_by_id('id_date_of_death')
@@ -1359,6 +1377,40 @@ class CloudLinesTestV2():
                         except ValueError:
                             tag_no.clear()
                             tag_no.send_keys(0)
+                        # get date of birth
+                        dob = self.browser.find_element_by_id('id_dob')
+                        # increment date of registration, or default it to date of birth
+                        dor = self.browser.find_element_by_id('id_dor')
+                        try:
+                            int_dor = int(dor.get_attribute('value').replace('-', ''))
+                            # get dd,mm,yyyy, and rearrange so it can be input into the field
+                            dd = f'{int_dor}'[6:]
+                            mm = f'{int_dor}'[4:6]
+                            yyyy = f'{int_dor}'[:4]
+                            if yyyy == '2021':
+                                yyyy = '2008'
+                            int_dor = int(f'{dd}{mm}{yyyy}')
+                            dor.clear()
+                            dor.send_keys(int_dor + 1)
+                        # default it to date of birth
+                        except ValueError:
+                            int_dob = int(dob.get_attribute('value').replace('-', ''))
+                            dd = f'{int_dob}'[6:]
+                            mm = f'{int_dob}'[4:6]
+                            yyyy = f'{int_dob}'[:4]
+                            dor.clear()
+                            dor.send_keys(f'{dd}{mm}{yyyy}')
+                        # set status to alive if currently dead, unknown if currently alive, and dead if currently unknown
+                        dead_status = self.browser.find_element_by_id('id_status_0')
+                        alive_status = self.browser.find_element_by_id('id_status_1')
+                        unknown_status = self.browser.find_element_by_id('id_status_2')
+                        if dead_status.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", alive_status)
+                        elif alive_status.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", unknown_status)
+                        else:
+                            self.browser.execute_script("arguments[0].click();", dead_status)
+                        # increment description or set to 0
                         desc = self.browser.find_element_by_id('id_description')
                         try:
                             current_desc = int(desc.text)
@@ -1694,6 +1746,26 @@ class CloudLinesTestV2():
 if __name__ == '__main__':
     obj = CloudLinesTestV2()
     #obj.login()
+    # obj.login('user')
+    # obj.browser.get(obj.config['settings']['domain'] + "/pedigree/22963/edit_pedigree/")
+    # dor = obj.browser.find_element_by_id('id_date_of_registration')
+    # dob = obj.browser.find_element_by_id('id_date_of_birth')
+    # try:
+    #     int_dor = int(dor.get_attribute('value').replace('-', ''))
+    #     # get dd,mm,yyyy, and rearrange so it can be input into the field
+    #     dd = f'{int_dor}'[6:]
+    #     mm = f'{int_dor}'[4:6]
+    #     yyyy = f'{int_dor}'[:4]
+    #     int_dor = int(f'{dd}{mm}{yyyy}')
+    #     dor.clear()
+    #     dor.send_keys(int_dor + 1)
+    # except ValueError:
+    #     int_dob = int(dob.get_attribute('value').replace('-', ''))
+    #     dd = f'{int_dob}'[6:]
+    #     mm = f'{int_dob}'[4:6]
+    #     yyyy = f'{int_dob}'[:4]
+    #     dor.clear()
+    #     dor.send_keys(f'{dd}{mm}{yyyy}')
     print("1. Login as User/Owner")
     print("2. Login as Admin")
     print("3. Login as Contributor")
