@@ -1154,7 +1154,7 @@ class CloudLinesTestV2():
                             tag_no.send_keys(0)
                         # get date of birth
                         dob = self.browser.find_element_by_id('id_dob')
-                        # increment date of registration
+                        # increment date of registration or set to date of birth
                         dor = self.browser.find_element_by_id('id_dor')
                         try:
                             int_dor = int(dor.get_attribute('value').replace('-', ''))
@@ -1184,8 +1184,39 @@ class CloudLinesTestV2():
                             self.browser.execute_script("arguments[0].click();", unknown_status)
                         else:
                             self.browser.execute_script("arguments[0].click();", dead_status)
-                        # born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
-                        # self.browser.execute_script("arguments[0].click();", born_as)
+                        # if born as single set to twin, etc, and if quad set to single
+                        born_as_single = self.browser.find_element_by_id('id_born_as_0')
+                        born_as_twin = self.browser.find_element_by_id('id_born_as_1')
+                        born_as_triplet = self.browser.find_element_by_id('id_born_as_2')
+                        born_as_quad = self.browser.find_element_by_id('id_born_as_3')
+                        if born_as_single.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", born_as_twin)
+                        elif born_as_twin.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", born_as_triplet)
+                        elif born_as_triplet.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", born_as_quad)
+                        else:
+                            self.browser.execute_script("arguments[0].click();", born_as_single)
+                        # increment date of death or set to date of birth
+                        dod = self.browser.find_element_by_id('id_date_of_death')
+                        try:
+                            int_dod = int(dod.get_attribute('value').replace('-', ''))
+                            # get dd,mm,yyyy, and rearrange so it can be input into the field
+                            dd = f'{int_dod}'[6:]
+                            mm = f'{int_dod}'[4:6]
+                            yyyy = f'{int_dod}'[:4]
+                            if yyyy == '2021':
+                                yyyy = '2008'
+                            int_dod = int(f'{dd}{mm}{yyyy}')
+                            dod.clear()
+                            dod.send_keys(int_dod + 1)
+                        except ValueError:
+                            int_dob = int(dob.get_attribute('value').replace('-', ''))
+                            dd = f'{int_dob}'[6:]
+                            mm = f'{int_dob}'[4:6]
+                            yyyy = f'{int_dob}'[:4]
+                            dod.clear()
+                            dod.send_keys(f'{dd}{mm}{yyyy}')
                         # dod = self.browser.find_element_by_id('id_date_of_death')
                         # dod.send_keys(self.pedigree['dod'])
                         # desc = self.browser.find_element_by_id('id_description')
@@ -1410,6 +1441,39 @@ class CloudLinesTestV2():
                             self.browser.execute_script("arguments[0].click();", unknown_status)
                         else:
                             self.browser.execute_script("arguments[0].click();", dead_status)
+                        # if born as single set to twin, etc, and if quad set to single
+                        born_as_single = self.browser.find_element_by_id('id_born_as_0')
+                        born_as_twin = self.browser.find_element_by_id('id_born_as_1')
+                        born_as_triplet = self.browser.find_element_by_id('id_born_as_2')
+                        born_as_quad = self.browser.find_element_by_id('id_born_as_3')
+                        if born_as_single.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", born_as_twin)
+                        elif born_as_twin.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", born_as_triplet)
+                        elif born_as_triplet.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", born_as_quad)
+                        else:
+                            self.browser.execute_script("arguments[0].click();", born_as_single)
+                        # increment date of death or set to date of birth
+                        dod = self.browser.find_element_by_id('id_date_of_death')
+                        try:
+                            int_dod = int(dod.get_attribute('value').replace('-', ''))
+                            # get dd,mm,yyyy, and rearrange so it can be input into the field
+                            dd = f'{int_dod}'[6:]
+                            mm = f'{int_dod}'[4:6]
+                            yyyy = f'{int_dod}'[:4]
+                            if yyyy == '2021':
+                                yyyy = '2008'
+                            int_dod = int(f'{dd}{mm}{yyyy}')
+                            dod.clear()
+                            dod.send_keys(int_dod + 1)
+                        except ValueError:
+                            int_dob = int(dob.get_attribute('value').replace('-', ''))
+                            dd = f'{int_dob}'[6:]
+                            mm = f'{int_dob}'[4:6]
+                            yyyy = f'{int_dob}'[:4]
+                            dod.clear()
+                            dod.send_keys(f'{dd}{mm}{yyyy}')
                         # increment description or set to 0
                         desc = self.browser.find_element_by_id('id_description')
                         try:
