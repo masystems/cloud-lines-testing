@@ -1167,7 +1167,13 @@ class CloudLinesTestV2():
                         # Save!
 
                         desc = self.browser.find_element_by_id('id_description')
-                        desc.send_keys(f'{desc.text}\nedit')
+                        try:
+                            current_desc = int(desc.text)
+                            desc.clear()
+                            desc.send_keys(current_desc + 1)
+                        except ValueError:
+                            desc.clear()
+                            desc.send_keys(0)
 
                         save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit" and @data-target=".confirmForm"]')
                         self.browser.execute_script("arguments[0].click();", save_pedigree)
@@ -1291,7 +1297,13 @@ class CloudLinesTestV2():
             while self.timeout < 20:
                 try:
                     desc = self.browser.find_element_by_id('id_description')
-                    desc.send_keys(f'{desc.text}\nedit')
+                    try:
+                        current_desc = int(desc.text)
+                        desc.clear()
+                        desc.send_keys(current_desc + 1)
+                    except ValueError:
+                        desc.clear()
+                        desc.send_keys(0)
                     save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit" and @data-target=".confirmForm"]')
                     self.browser.execute_script("arguments[0].click();", save_pedigree)
                     confirm_save_pedigree = self.browser.find_element_by_xpath('//button[@type="button" and @class="btn btn-success waves-effect waves-light confirmSaveBtn"]')
@@ -1329,7 +1341,13 @@ class CloudLinesTestV2():
                 while self.timeout < 20:
                     try:
                         desc = self.browser.find_element_by_id('id_description')
-                        desc.send_keys(f'{desc.text}\nedit')
+                        try:
+                            current_desc = int(desc.text)
+                            desc.clear()
+                            desc.send_keys(current_desc + 1)
+                        except ValueError:
+                            desc.clear()
+                            desc.send_keys(0)
                         save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit" and @data-target=".confirmForm"]')
                         self.browser.execute_script("arguments[0].click();", save_pedigree)
                         confirm_save_pedigree = self.browser.find_element_by_xpath('//button[@type="button" and @class="btn btn-success waves-effect waves-light confirmSaveBtn"]')
