@@ -5,6 +5,7 @@ from selenium.common.exceptions import ElementNotInteractableException
 from configparser import ConfigParser
 import csv
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 class CloudLinesTestV2():
     def __init__(self):
@@ -1143,13 +1144,23 @@ class CloudLinesTestV2():
                 # enter pedigree info
                 while self.timeout < 20:
                     try:
-                        # breeder = self.browser.find_element_by_id('id_breeder')
-                        # breeder.send_keys(self.pedigree['breeder'])
-                        # current_owner = self.browser.find_element_by_id('id_current_owner')
-                        # current_owner.send_keys(self.pedigree['breeder'])
-                        # tag_no = self.browser.find_element_by_id('id_tag_no')
-                        # tag_no.send_keys(self.pedigree['tag_no'])
+                        # increment tag number
+                        tag_no = self.browser.find_element_by_id('id_tag_no')
+                        try:
+                            current_tag = int(tag_no.get_attribute('value'))
+                            tag_no.clear()
+                            tag_no.send_keys(current_tag + 1)
+                        except ValueError:
+                            tag_no.clear()
+                            tag_no.send_keys(0)
                         # dor = self.browser.find_element_by_id('id_date_of_registration')
+                        # try:
+                        #     current_dor = int(dor.text)
+                        #     dor.clear()
+                        #     dor.send_keys(current_dor + relativedelta(days=1))
+                        # except ValueError:
+                        #     dor.clear()
+                        #     dor.send_keys(datetime.now())
                         # dor.send_keys(self.pedigree['dor'])
                         # dob = self.browser.find_element_by_id('id_date_of_birth')
                         # dob.send_keys(self.pedigree['dob'])
@@ -1340,6 +1351,14 @@ class CloudLinesTestV2():
                 # edit approval
                 while self.timeout < 20:
                     try:
+                        tag_no = self.browser.find_element_by_id('id_tag_no')
+                        try:
+                            current_tag = int(tag_no.get_attribute('value'))
+                            tag_no.clear()
+                            tag_no.send_keys(current_tag + 1)
+                        except ValueError:
+                            tag_no.clear()
+                            tag_no.send_keys(0)
                         desc = self.browser.find_element_by_id('id_description')
                         try:
                             current_desc = int(desc.text)
