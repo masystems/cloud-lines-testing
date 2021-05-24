@@ -1165,6 +1165,10 @@ class CloudLinesTestV2():
                         # desc.send_keys(self.pedigree['breed'])
                         #print(self.browser.find_element_by_id('id_breeder').text)
                         # Save!
+
+                        desc = self.browser.find_element_by_id('id_description')
+                        desc.send_keys(f'{desc.text}\nedit')
+
                         save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit" and @data-target=".confirmForm"]')
                         self.browser.execute_script("arguments[0].click();", save_pedigree)
                         confirm_save_pedigree = self.browser.find_element_by_xpath('//button[@type="button" and @class="btn btn-success waves-effect waves-light confirmSaveBtn"]')
@@ -1216,9 +1220,23 @@ class CloudLinesTestV2():
                 # user is contributor
                 else:
                     # try to click "View approval"
-                    if self.click_element_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]',
+                    if self.click_element_by_xpath('//a[@href="/approvals/"]',
                                 'Edit Pedigree', user_type, edit_method, 'FAIL',
                                 'Failed to open approvals page') == 'fail':
+                        # test failed
+                        return 'fail'
+                    # login as owner to approve the edit
+                    self.login('user')
+                    # go to approvals
+                    if self.click_element_by_xpath('//a[@href="/approvals/"]',
+                                    'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                    'Failed to open approvals') == 'fail':
+                        # test failed
+                        return 'fail'
+                    # approve the edit
+                    if self.click_element_by_xpath('//button[@class="btn btn-sm btn-success mr-1" and contains(text(), "Approve")]',
+                                    'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                    'Failed to approve edit') == 'fail':
                         # test failed
                         return 'fail'
             # user is read only
@@ -1243,43 +1261,6 @@ class CloudLinesTestV2():
                             print("Failed to find how many links to edit pedigree form there are", e)
                             exit(0)
         # test editting by editting an approval
-        else:
-            pass
-
-
-
-
-
-
-
-        # # test editting using edit pedigree form
-        # if edit_method == 'ped_form':
-        #     # if user is not 
-        #     if user_type != 'read':
-        #         # go to pedigree search page
-        #         if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-        #                     'Edit Pedigree', user_type, edit_method, 'FAIL',
-        #                     'Failed to open pedigree search') == 'fail':
-        #                 # test failed
-        #                 return 'fail'
-        #         # search for animal_14000_edit
-        #         try:
-        #             search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
-        #             search_field.send_keys('animal_14000_edit\n')
-        #         except Exception as e:
-        #                 # add fail to reports file
-        #                 with open(self.results_file, 'a+', newline='') as file:
-        #                     writer = csv.writer(file)
-        #                     writer.writerow(['Add Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
-        #                 # stop the current test
-        #                 return 'fail'
-        #         # go to edit pedigree
-        #         if self.click_element_by_xpath('//a[@id="editPedigree"]',
-        #                     'Edit Pedigree', user_type, edit_method, 'FAIL',
-        #                     'Failed to open edit pedigree form') == 'fail':
-        #             # test failed
-        #             return 'fail'
-        
         elif edit_method == 'approval':
             # create approval by editting as contributor
             self.login('contrib')
@@ -1287,25 +1268,25 @@ class CloudLinesTestV2():
             if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
                         'Edit Pedigree', user_type, edit_method, 'FAIL',
                         'Failed to open pedigree search') == 'fail':
-                    # test failed
-                    return 'fail'
+                # test failed
+                return 'fail'
             # search for animal_14000_edit
             try:
                 search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
                 search_field.send_keys('animal_14000_edit\n')
             except Exception as e:
-                    # add fail to reports file
-                    with open(self.results_file, 'a+', newline='') as file:
-                        writer = csv.writer(file)
-                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
-                    # stop the current test
-                    return 'fail'
+                # add fail to reports file
+                with open(self.results_file, 'a+', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                # stop the current test
+                return 'fail'
             # go to edit pedigree
             if self.click_element_by_xpath('//a[@id="editPedigree"]',
                             'Edit Pedigree', user_type, edit_method, 'FAIL',
                             'Failed to open edit pedigree form') == 'fail':
-                    # test failed
-                    return 'fail'
+                # test failed
+                return 'fail'
             # edit description to create approval
             while self.timeout < 20:
                 try:
@@ -1328,104 +1309,58 @@ class CloudLinesTestV2():
                         self.timeout = 0
                         # stop the current test
                         return 'fail'
-                # login as test user type
-                self.login(user_type)
-                # test that 
-                if user_type in ('user', 'admin'):
-                
-            # Enter pedigree information
-            while self.timeout < 20:
-                try:
-                    # breeder = self.browser.find_element_by_id('id_breeder')
-                    # breeder.send_keys(self.pedigree['breeder'])
-                    # current_owner = self.browser.find_element_by_id('id_current_owner')
-                    # current_owner.send_keys(self.pedigree['breeder'])
-                    # tag_no = self.browser.find_element_by_id('id_tag_no')
-                    # tag_no.send_keys(self.pedigree['tag_no'])
-                    # dor = self.browser.find_element_by_id('id_date_of_registration')
-                    # dor.send_keys(self.pedigree['dor'])
-                    # dob = self.browser.find_element_by_id('id_date_of_birth')
-                    # dob.send_keys(self.pedigree['dob'])
-                    # status = self.browser.find_element_by_id(self.pedigree['status'])
-                    # self.browser.execute_script("arguments[0].click();", status)
-                    # born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
-                    # self.browser.execute_script("arguments[0].click();", born_as)
-                    # dod = self.browser.find_element_by_id('id_date_of_death')
-                    # dod.send_keys(self.pedigree['dod'])
-                    # desc = self.browser.find_element_by_id('id_description')
-                    # desc.send_keys(self.pedigree['desc'])
-                    # desc = self.browser.find_element_by_id('id_breed')
-                    # desc.send_keys(self.pedigree['breed'])
-                    #print(self.browser.find_element_by_id('id_breeder').text)
-                    # Save!
-                    save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit" and @data-target=".confirmForm"]')
-                    self.browser.execute_script("arguments[0].click();", save_pedigree)
-                    confirm_save_pedigree = self.browser.find_element_by_xpath('//button[@type="button" and @class="btn btn-success waves-effect waves-light confirmSaveBtn"]')
-                    self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
-                    sleep(2)
-                    self.timeout = 0
-                    break
-                except Exception as e:
-                    self.timeout += 1
-                    if self.timeout == 20:
-                        # add fail to reports file
-                        with open(self.results_file, 'a+', newline='') as file:
-                            writer = csv.writer(file)
-                            writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter pedigree information'])
-                        self.timeout = 0
-                        # stop the current test
-                        return 'fail'
-            
-            # check save worked - if user is contributor it should have gone into approvals
-            if user_type == 'contrib':
-                # try to click "View approval", as user is contributor
-                if self.click_element_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]',
+            # login as test user type
+            self.login(user_type)
+            # go to approvals
+            if self.click_element_by_xpath('//a[@href="/approvals/"]',
                             'Edit Pedigree', user_type, edit_method, 'FAIL',
-                            'Failed to open approvals page') == 'fail':
+                            'Failed to open approvals') == 'fail':
+                # test failed
+                return 'fail'
+            # if owner/admin, test that user can edit the approval
+            if user_type in ('user', 'admin'):
+                # go to edit approval
+                if self.click_element_by_xpath('//button[@class="btn btn-sm btn-outline-info mr-1" and contains(text(), "Edit")]',
+                                'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                'Failed to edit approval') == 'fail':
                     # test failed
                     return 'fail'
-                # check that pedigree is in the approvals table
+                # edit approval
                 while self.timeout < 20:
                     try:
-                        if len(self.browser.find_elements_by_xpath('//td[contains(text(), "robert contrib")]')) == 0:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Approval was not added to table'])
-                            # stop the current test
-                            return 'fail'
+                        desc = self.browser.find_element_by_id('id_description')
+                        desc.send_keys(f'{desc.text}\nedit')
+                        save_pedigree = self.browser.find_element_by_xpath('//button[@type="submit" and @data-target=".confirmForm"]')
+                        self.browser.execute_script("arguments[0].click();", save_pedigree)
+                        confirm_save_pedigree = self.browser.find_element_by_xpath('//button[@type="button" and @class="btn btn-success waves-effect waves-light confirmSaveBtn"]')
+                        self.browser.execute_script("arguments[0].click();", confirm_save_pedigree)
                         sleep(2)
                         self.timeout = 0
                         break
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            # test failed
-                            print("Failed to find how many links to new pedigree form there are", e)
-                            exit(0)
-                # login as user so check approval can be accepted
-                self.login('user')
-                self.browser.get(self.config['settings']['domain'] + "/account/welcome")
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter pedigree description'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to approvals
                 if self.click_element_by_xpath('//a[@href="/approvals/"]',
                             'Edit Pedigree', user_type, edit_method, 'FAIL',
-                            'Failed to open approvals page') == 'fail':
+                            'Failed to open approvals after edited') == 'fail':
                     # test failed
                     return 'fail'
-                # approve the approval
-                if self.click_element_by_xpath('//button[contains(text(), "Approve")]',
-                            'Edit Pedigree', user_type, edit_method, 'FAIL',
-                            'Failed to approve the approval') == 'fail':
-                    # test failed
-                    return 'fail'
-                # check the approval is gone from the queue
+                # check the approval is gone from the list
                 while self.timeout < 20:
                     try:
-                        if len(self.browser.find_elements_by_xpath('//td[contains(text(), "Approve")]')) > 0:
+                        if len(self.browser.find_elements_by_xpath('//tr/td[contains(text(), "Pedigree")]')) > 0:
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','The table still contains an approval'])
+                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','There is an approval in the table'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -1434,40 +1369,50 @@ class CloudLinesTestV2():
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            # test failed
-                            print("Failed to find how many approvals in the queue there are", e)
+                            # test did not work
+                            print("Failed to find how many approvals in the table there are", e)
                             exit(0)
-            # if user not contributor or read only it should have not made an approval
-            else:
-                # check the save worked by trying to access new pedigree form
+            # if contributor/read-only, test that user can not edit the approval
+            elif user_type in ('contrib', 'read'):
+                # check user can't edit approval
                 while self.timeout < 20:
                     try:
-                        # check there are no links to approvals page
-                        if len(self.browser.find_elements_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]')) == 0:
-                            # try to go to new pedigree form
-                            new_pedigree = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
-                            self.browser.execute_script("arguments[0].click();", new_pedigree)
-                            sleep(2)
-                            self.timeout = 0
-                            break
-                        # add error if there is an approval link
-                        else:
+                        if len(self.browser.find_elements_by_xpath('//button[@class="btn btn-sm btn-outline-info mr-1" and contains(text(), "Edit")]')) > 0:
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Approval link was presented'])
+                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','User is able to go to edit approval'])
                             # stop the current test
                             return 'fail'
+                        sleep(2)
+                        self.timeout = 0
+                        break
                     except Exception as e:
                         self.timeout += 1
                         if self.timeout == 20:
-                            # add fail to reports file
-                            with open(self.results_file, 'a+', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
-                            self.timeout = 0
-                            # stop the current test
-                            return 'fail'
+                            # test did not work
+                            print("Failed to find how many editable approvals in the table there are", e)
+                            exit(0)
+                # login as owner to decline the edit
+                self.login('user')
+                # go to approvals
+                if self.click_element_by_xpath('//a[@href="/approvals/"]',
+                                'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                'Failed to open approvals') == 'fail':
+                    # test failed
+                    return 'fail'
+                # decline the edit
+                if self.click_element_by_xpath('//button[@class="btn btn-sm btn-danger" and contains(text(), "Decline")]',
+                                'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                'Failed to decline edit') == 'fail':
+                    # test failed
+                    return 'fail'
+                # confirm decline<button id="declineFormSubmit" type="button" class="btn btn-danger waves-effect waves-light">Confirm decline</button>
+                if self.click_element_by_xpath('//button[@class="btn btn-danger waves-effect waves-light" and contains(text(), "Confirm decline") and @id="declineFormSubmit"]',
+                                'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                'Failed to confirm the edit declination') == 'fail':
+                    # test failed
+                    return 'fail'
 
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
