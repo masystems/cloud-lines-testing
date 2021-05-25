@@ -1628,7 +1628,7 @@ class CloudLinesTestV2():
                             'Failed to open edit breeder') == 'fail':
                 # test failed
                 return 'fail'
-            # enter breeder info --  | id_active
+            # enter breeder info
             while self.timeout < 20:
                 try:
                     # increment contact name (go through alphabet)
@@ -1695,6 +1695,9 @@ class CloudLinesTestV2():
                     except ValueError:
                         email.clear()
                         email.send_keys('0@test.com')
+                    # set status
+                    status = self.browser.find_element_by_id('id_active')
+                    self.browser.execute_script("arguments[0].click();", status)
                     sleep(2)
                     self.timeout = 0
                     break
