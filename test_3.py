@@ -1596,7 +1596,7 @@ class CloudLinesTestV2():
             # run coi
             run_coi_btn = self.browser.find_element_by_id('coiBtn')
             self.browser.execute_script("arguments[0].click();", run_coi_btn)
-            sleep(2)
+            sleep(10)
             # check countdown has started
             if 'Run COI again in:' not in coi_timer.text:
                 # add error, as countdown should have started
@@ -1605,6 +1605,11 @@ class CloudLinesTestV2():
                     writer.writerow(['Run COI',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Timer did not start'])
                 # stop the current test
                 return 'fail'
+
+        # test must have passed if we have got to the end of this function
+        with open(self.results_file, 'a+', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Run COI',user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
 
     def run_mean_kinship(self):
         user_type = 'admin'
@@ -1627,7 +1632,7 @@ class CloudLinesTestV2():
             # run coi
             mk_timer_btn = self.browser.find_element_by_id('meanKinshipBtn')
             self.browser.execute_script("arguments[0].click();", mk_timer_btn)
-            sleep(2)
+            sleep(10)
             # check countdown has started
             if 'Run Mean Kinship again in:' not in mk_timer.text:
                 # add error, as countdown should have started
@@ -1636,6 +1641,11 @@ class CloudLinesTestV2():
                     writer.writerow(['Run Mean Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Timer did not start'])
                 # stop the current test
                 return 'fail'
+
+        # test must have passed if we have got to the end of this function
+        with open(self.results_file, 'a+', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Run Mean Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
 
     def test(self,type,option=""):
         if type == 'login_user':
