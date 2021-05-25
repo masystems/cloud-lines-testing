@@ -1606,6 +1606,37 @@ class CloudLinesTestV2():
                 # stop the current test
                 return 'fail'
 
+    def run_mean_kinship(self):
+        user_type = 'admin'
+        scenario = 'metrics_page'
+
+        # ensure we're logged in as the correct user
+        self.login(user_type)
+        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
+
+        # go to metrics page
+        if self.click_element_by_xpath('//a[@href="/metrics/"]',
+                        'Run Mean Kinship', user_type, scenario, 'FAIL',
+                        'Failed to open metrics page') == 'fail':
+            # test failed
+            return 'fail'
+        sleep(2)
+        mk_timer = self.browser.find_element_by_xpath('//p[@id="meanKinshipTimer"]')
+        # check it hasn't recently been run
+        if 'Run Mean Kinship again in:' not in mk_timer.text:
+            # run coi
+            mk_timer_btn = self.browser.find_element_by_id('meanKinshipBtn')
+            self.browser.execute_script("arguments[0].click();", mk_timer_btn)
+            sleep(2)
+            # check countdown has started
+            if 'Run Mean Kinship again in:' not in mk_timer.text:
+                # add error, as countdown should have started
+                with open(self.results_file, 'a+', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(['Run Mean Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Timer did not start'])
+                # stop the current test
+                return 'fail'
+
     def test(self,type,option=""):
         if type == 'login_user':
             self.login_user()
