@@ -1575,6 +1575,37 @@ class CloudLinesTestV2():
             writer = csv.writer(file)
             writer.writerow(['Edit Breeder',user_type.replace('_', ' '),edit_method.replace('_', ' '),'PASS','-'])
 
+    def run_coi(self):
+        user_type = 'admin'
+        scenario = 'metrics_page'
+
+        # ensure we're logged in as the correct user
+        self.login(user_type)
+        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
+
+        # go to metrics page
+        if self.click_element_by_xpath('//a[@href="/metrics/"]',
+                        'Run COI', user_type, scenario, 'FAIL',
+                        'Failed to open metrics page') == 'fail':
+            # test failed
+            return 'fail'
+        sleep(2)
+        coi_timer = self.browser.find_element_by_xpath('//p[@id="coiTimer"]')
+        # check it hasn't recently been run
+        if 'Run COI again in:' not in coi_timer.text:
+            # run coi
+            run_coi_btn = self.browser.find_element_by_id('coiBtn')
+            self.browser.execute_script("arguments[0].click();", run_coi_btn)
+            sleep(2)
+            # check countdown has started
+            if 'Run COI again in:' not in coi_timer.text:
+                # add error, as countdown should have started
+                with open(self.results_file, 'a+', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(['Run COI',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Timer did not start'])
+                # stop the current test
+                return 'fail'
+
     def test(self,type,option=""):
         if type == 'login_user':
             self.login_user()
@@ -1594,7 +1625,8 @@ class CloudLinesTestV2():
             self.edit_each_pedigree()
         elif type == 'edit_each_breeder':
             self.edit_each_breeder()
-
+        elif type == 'run_coi':
+            self.run_coi()
 
 
 if __name__ == '__main__':
@@ -1608,6 +1640,7 @@ if __name__ == '__main__':
     print("7. Add Breeder")
     print("8. Edit Pedigree")
     print("9. Edit Breeder")
+    print("10. Run COI")
     print("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
@@ -1630,6 +1663,8 @@ if __name__ == '__main__':
                 obj.test('edit_each_pedigree')
             elif ch == "9":
                 obj.test('edit_each_breeder')
+            elif ch == "10":
+                obj.test('run_coi')
             ch = input("Enter Choice ")
         except:
             break
