@@ -1143,7 +1143,7 @@ class CloudLinesTestV2():
                 # enter pedigree info
                 while self.timeout < 20:
                     try:
-                        # increment tag number
+                        # increment tag number or set it to 0
                         tag_no = self.browser.find_element_by_id('id_tag_no')
                         try:
                             current_tag = int(tag_no.get_attribute('value'))
@@ -1628,8 +1628,31 @@ class CloudLinesTestV2():
                             'Failed to open edit breeder') == 'fail':
                 # test failed
                 return 'fail'
-            # enter breeder info
-
+            # enter breeder info -- | id_address | id_phone_number1 | id_phone_number2 | id_email | id_active
+            while self.timeout < 20:
+                try:
+                    # increment contact name (go through alphabet) or set it to a if it is z
+                    name = self.browser.find_element_by_id('id_contact_name')
+                    try:
+                        current_name = name.get_attribute('value')
+                        name.clear()
+                        name.send_keys(chr(ord(current_name) + 1))
+                    except TypeError:
+                        name.clear()
+                        name.send_keys('a')
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        # add fail to reports file
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Edit Breeder',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter breeder info'])
+                        self.timeout = 0
+                        # stop the current test
+                        return 'fail'
             # submit breeder
             if self.click_element_by_xpath('//button[@type="submit" and @class="btn btn-success" and contains(text(), "Submit")]',
                             'Edit Breeder', user_type, edit_method, 'FAIL',
