@@ -1582,6 +1582,94 @@ class CloudLinesTestV2():
                     print("Server Issue in adding breed info try later", e," at breed name",breed['breed_name'])
                     exit(0)
 
+    def edit_each_single_breeder(self):
+        self.edit_single_breeder('user')
+        self.edit_single_breeder('admin')
+        self.edit_single_breeder('contrib')
+        self.edit_single_breeder('read')
+
+    def edit_single_breeder(self, user_type):
+        # there's only one edit method for breeder
+        edit_method = 'breeder_form'
+
+        # ensure we're logged in as the correct user
+        self.login(user_type)
+
+        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
+
+        # go to breeders page
+        if self.click_element_by_xpath('//a[@href="/breeders/"]',
+                        'Edit Breeder', user_type, edit_method, 'FAIL',
+                        'Failed to open breeders page') == 'fail':
+            # test failed
+            return 'fail'
+        # filter for breeder ZZZZZ
+        try:
+            search_field = self.browser.find_element_by_xpath('//input[@type="search"][@class="form-control form-control-sm"]')
+            search_field.send_keys('ZZZZZ')
+        except Exception as e:
+                # add fail to reports file
+                with open(self.results_file, 'a+', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow(['Edit Breeder',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in filter field'])
+                # stop the current test
+                return 'fail'
+        # go to breeder view
+        if self.click_element_by_xpath('//td[contains(text(), "ZZZZZ")]',
+                        'Edit Breeder', user_type, edit_method, 'FAIL',
+                        'Failed to open breeder view') == 'fail':
+            # test failed
+            return 'fail'
+        # if owner/admin, check user can edit breeder
+        if user_type in ('user', 'admin'):
+            # go to edit breeder
+            if self.click_element_by_xpath('//a[@id="editBreeder"]',
+                            'Edit Breeder', user_type, edit_method, 'FAIL',
+                            'Failed to open edit breeder') == 'fail':
+                # test failed
+                return 'fail'
+            # enter breeder info
+
+            # submit breeder
+            if self.click_element_by_xpath('//button[@type="submit" and @class="btn btn-success" and contains(text(), "Submit")]',
+                            'Edit Breeder', user_type, edit_method, 'FAIL',
+                            'Failed to submit breeder') == 'fail':
+                # test failed
+                return 'fail'
+            # check breeder saved by checking you can go to add breeder
+            if self.click_element_by_xpath('//a[@href="/breeders/new_breeder/" and @class="btn float-right hidden-sm-down btn-success"]',
+                            'Edit Breeder', user_type, edit_method, 'FAIL',
+                            'Failed to save breeder') == 'fail':
+                # test failed
+                return 'fail'
+        
+        # if contrib/read, check user can not edit breeder
+        else:
+            # check user can't go to edit breeder
+            while self.timeout < 20:
+                try:
+                    if len(self.browser.find_elements_by_xpath('//a[@id="editBreeder"]')) > 0:
+                        # add fail to reports file
+                        with open(self.results_file, 'a+', newline='') as file:
+                            writer = csv.writer(file)
+                            writer.writerow(['Edit Breeder',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Link to edit breeder form is available'])
+                        # stop the current test
+                        return 'fail'
+                    sleep(2)
+                    self.timeout = 0
+                    break
+                except Exception as e:
+                    self.timeout += 1
+                    if self.timeout == 20:
+                        # test failed
+                        print("Failed to find how many links to edit breeder form there are", e)
+                        exit(0)
+
+        # test must have passed if we have got to the end of this function
+        with open(self.results_file, 'a+', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Edit Breeder',user_type.replace('_', ' '),edit_method.replace('_', ' '),'PASS','-'])
+
     def delete_all_pedigrees(self):
         # go to pedigree search page
         pedigree_link = self.browser.find_element_by_xpath('//a[@href="/pedigree/search"]')
@@ -1776,6 +1864,8 @@ class CloudLinesTestV2():
             self.add_each_single_breeder('breeder.csv')
         elif type == 'edit_each_single_pedigree':
             self.edit_each_single_pedigree()
+        elif type == 'edit_each_single_breeder':
+            self.edit_each_single_breeder()
         elif type == 'delete_all_pedigrees':
             self.delete_all_pedigrees()
         elif type == 'delete_all_breeders':
@@ -1832,16 +1922,17 @@ if __name__ == '__main__':
     print("7. Add Single Pedigree")
     print("8. Add Single Breeder")
     print("9. Edit Single Pedigree")
-    print("10. Delete All Pedigrees")
-    print("11. Delete All Breeders")
-    print("12. Add Users")
-    print("13. Delete Users")
-    print("14. Edit Parent Titles")
-    print("15. Add and Delete All Pedrigrees, Breeders, Breeds")
-    print("16. Edit Pedigree Columns Load")
-    print("17. Run COI")
-    print("18. Run Mean Kinship")
-    print("19. Run Stud Selector")
+    print("10. Edit Single Breeder")
+    print("11. Delete All Pedigrees")
+    print("12. Delete All Breeders")
+    print("13. Add Users")
+    print("14. Delete Users")
+    print("15. Edit Parent Titles")
+    print("16. Add and Delete All Pedrigrees, Breeders, Breeds")
+    print("17. Edit Pedigree Columns Load")
+    print("18. Run COI")
+    print("19. Run Mean Kinship")
+    print("20. Run Stud Selector")
     print("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
@@ -1865,27 +1956,29 @@ if __name__ == '__main__':
             elif ch == "9":
                 obj.test('edit_each_single_pedigree')
             elif ch == "10":
-                obj.test('delete_all_pedigrees')
+                obj.test('edit_each_single_breeder')
             elif ch == "11":
-                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
+                obj.test('delete_all_pedigrees')
             elif ch == "12":
-                obj.test('add_users')
+                obj.test('delete_all_breeders',input("Enter Breeder Prefix "))
             elif ch == "13":
-                obj.test('delete_users')
+                obj.test('add_users')
             elif ch == "14":
-                obj.test('update_parent_titles')
+                obj.test('delete_users')
             elif ch == "15":
+                obj.test('update_parent_titles')
+            elif ch == "16":
                 obj.test('add_pedigree')
                 obj.delete_all_breeds()
                 obj.test('delete_all_breeders', input("Enter Breeder Prefix "))
                 obj.test('delete_all_pedigrees')
-            elif ch == "16":
-                obj.test('edit_column_load')
             elif ch == "17":
-                obj.test('run_coi')
+                obj.test('edit_column_load')
             elif ch == "18":
-                obj.test('run_mean_kinship')
+                obj.test('run_coi')
             elif ch == "19":
+                obj.test('run_mean_kinship')
+            elif ch == "20":
                 obj.test('run_stud_selector')
             ch = input("Enter Choice ")
         except:
