@@ -1658,6 +1658,8 @@ class CloudLinesTestV2():
             self.edit_each_breeder()
         elif type == 'run_coi':
             self.run_coi()
+        elif type == 'run_mean_kinship':
+            self.run_mean_kinship()
 
 
 if __name__ == '__main__':
@@ -1672,6 +1674,7 @@ if __name__ == '__main__':
     print("8. Edit Pedigree")
     print("9. Edit Breeder")
     print("10. Run COI")
+    print("11. Run Mean Kiinship")
     print("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
@@ -1696,6 +1699,8 @@ if __name__ == '__main__':
                 obj.test('edit_each_breeder')
             elif ch == "10":
                 obj.test('run_coi')
+            elif ch == "11":
+                obj.test('run_mean_kinship')
             ch = input("Enter Choice ")
         except:
             break
