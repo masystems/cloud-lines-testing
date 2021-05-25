@@ -1649,7 +1649,7 @@ class CloudLinesTestV2():
                     except TypeError:
                         address.clear()
                         address.send_keys('a')
-                    # increment phone number (00000000000 to 99999999999 and back again)
+                    # increment phone number 1 (00000000000 to 99999999999 and back again)
                     phone1 = self.browser.find_element_by_id('id_phone_number1')
                     zeroes = '00000000000'
                     try:
@@ -1667,6 +1667,24 @@ class CloudLinesTestV2():
                     except ValueError:
                         phone1.clear()
                         phone1.send_keys(zeroes)
+                    # increment phone number 2
+                    phone2 = self.browser.find_element_by_id('id_phone_number2')
+                    zeroes = '00000000000'
+                    try:
+                        current_phone2 = int(phone2.get_attribute('value'))
+                        # increment
+                        current_phone2 += 1
+                        if len(f'{current_phone2}') <= 11:
+                            # add zeroes to front of string to make it up to 11
+                            pre_zeroes = zeroes[:11 - len(f'{current_phone2}')]
+                            current_phone2 = f'{pre_zeroes}{current_phone2}'
+                        else:
+                            current_phone2 = zeroes
+                        phone2.clear()
+                        phone2.send_keys(current_phone2)
+                    except ValueError:
+                        phone2.clear()
+                        phone2.send_keys(zeroes)
                     sleep(2)
                     self.timeout = 0
                     break
