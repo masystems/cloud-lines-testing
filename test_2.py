@@ -1628,10 +1628,10 @@ class CloudLinesTestV2():
                             'Failed to open edit breeder') == 'fail':
                 # test failed
                 return 'fail'
-            # enter breeder info -- | id_address | id_phone_number1 | id_phone_number2 | id_email | id_active
+            # enter breeder info --  | id_phone_number1 | id_phone_number2 | id_email | id_active
             while self.timeout < 20:
                 try:
-                    # increment contact name (go through alphabet) or set it to a if it is z
+                    # increment contact name (go through alphabet)
                     name = self.browser.find_element_by_id('id_contact_name')
                     try:
                         current_name = name.get_attribute('value')
@@ -1640,6 +1640,15 @@ class CloudLinesTestV2():
                     except TypeError:
                         name.clear()
                         name.send_keys('a')
+                    # increment address
+                    address = self.browser.find_element_by_id('id_address')
+                    try:
+                        current_address = address.get_attribute('value')
+                        address.clear()
+                        address.send_keys(chr(ord(current_address) + 1))
+                    except TypeError:
+                        address.clear()
+                        address.send_keys('a')
                     sleep(2)
                     self.timeout = 0
                     break
