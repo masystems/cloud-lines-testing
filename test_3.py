@@ -5,6 +5,7 @@ from selenium.common.exceptions import ElementNotInteractableException
 from configparser import ConfigParser
 import csv
 from datetime import datetime
+from tld import get_tld
 
 class CloudLinesTestV2():
     def __init__(self):
@@ -37,45 +38,60 @@ class CloudLinesTestV2():
             writer = csv.writer(file)
             writer.writerow(["Action", "User Type", "Scenario", "Result", "Description"])
 
-    def login_user(self):
-        username_field = self.browser.find_element_by_name('username')
-        username_field.send_keys(self.username_user)
-        password_field = self.browser.find_element_by_name('password')
-        password_field.send_keys(self.password_user)
-        login = self.browser.find_element_by_id('loginBtn')
-        self.browser.execute_script("arguments[0].click();", login)
-        self.current_user_type = 'user'
-        sleep(2)
+    # def login_user(self):
+    #     # get login button based on which login form we're in
+    #     # which depends on whether there is a subdomain
+    #     if 'localhost' not in self.browser.current_url and '127.0.0.1' not in self.browser.current_url:
+    #         if get_tld(self.browser.current_url).subdomain:
+    #             login = self.browser.find_element_by_id('loginBtn')
+    #         else:
+    #             dashboard = self.browser.find_element_by_xpath('//a[@href="/dashboard"]')
+    #             self.browser.execute_script("arguments[0].click();", dashboard)
+    #             sleep(2)
+    #             login = self.browser.find_element_by_id('login-form-submit')
+    #     else:
+    #         dashboard = self.browser.find_element_by_xpath('//a[@href="/dashboard"]')
+    #         self.browser.execute_script("arguments[0].click();", dashboard)
+    #         sleep(2)
+    #         login = self.browser.find_element_by_id('login-form-submit')
 
-    def login_admin(self):
-        username_field = self.browser.find_element_by_name('username')
-        username_field.send_keys(self.username_admin)
-        password_field = self.browser.find_element_by_name('password')
-        password_field.send_keys(self.password_admin)
-        login = self.browser.find_element_by_id('loginBtn')
-        self.browser.execute_script("arguments[0].click();", login)
-        self.current_user_type = 'admin'
-        sleep(2)
+    #     username_field = self.browser.find_element_by_name('username')
+    #     password_field = self.browser.find_element_by_name('password')
+    #     username_field.send_keys(self.username_user)
+    #     password_field.send_keys(self.password_user)
+    #     self.browser.execute_script("arguments[0].click();", login)
+    #     self.current_user_type = 'user'
+    #     sleep(2)
 
-    def login_contrib(self):
-        username_field = self.browser.find_element_by_name('username')
-        username_field.send_keys(self.username_contrib)
-        password_field = self.browser.find_element_by_name('password')
-        password_field.send_keys(self.password_contrib)
-        login = self.browser.find_element_by_id('loginBtn')
-        self.browser.execute_script("arguments[0].click();", login)
-        self.current_user_type = 'contrib'
-        sleep(2)
+    # def login_admin(self):
+    #     username_field = self.browser.find_element_by_name('username')
+    #     username_field.send_keys(self.username_admin)
+    #     password_field = self.browser.find_element_by_name('password')
+    #     password_field.send_keys(self.password_admin)
+    #     login = self.browser.find_element_by_id('loginBtn')
+    #     self.browser.execute_script("arguments[0].click();", login)
+    #     self.current_user_type = 'admin'
+    #     sleep(2)
 
-    def login_read(self):
-        username_field = self.browser.find_element_by_name('username')
-        username_field.send_keys(self.username_read)
-        password_field = self.browser.find_element_by_name('password')
-        password_field.send_keys(self.password_read)
-        login = self.browser.find_element_by_id('loginBtn')
-        self.browser.execute_script("arguments[0].click();", login)
-        self.current_user_type = 'read'
-        sleep(2)
+    # def login_contrib(self):
+    #     username_field = self.browser.find_element_by_name('username')
+    #     username_field.send_keys(self.username_contrib)
+    #     password_field = self.browser.find_element_by_name('password')
+    #     password_field.send_keys(self.password_contrib)
+    #     login = self.browser.find_element_by_id('loginBtn')
+    #     self.browser.execute_script("arguments[0].click();", login)
+    #     self.current_user_type = 'contrib'
+    #     sleep(2)
+
+    # def login_read(self):
+    #     username_field = self.browser.find_element_by_name('username')
+    #     username_field.send_keys(self.username_read)
+    #     password_field = self.browser.find_element_by_name('password')
+    #     password_field.send_keys(self.password_read)
+    #     login = self.browser.find_element_by_id('loginBtn')
+    #     self.browser.execute_script("arguments[0].click();", login)
+    #     self.current_user_type = 'read'
+    #     sleep(2)
 
     def logout(self):
         self.browser.get(self.config['settings']['domain'] + "/account/logout")
@@ -88,15 +104,43 @@ class CloudLinesTestV2():
             # logout if we're logged in as wrong user
             if self.current_user_type:
                 self.logout()
-            # login as correct user
+            # set username and password correctly
             if user_type == 'user':
-                self.login_user()
+                username = self.username_user
+                password = self.password_user
             elif user_type == 'admin':
-                self.login_admin()
+                username = self.username_admin
+                password = self.password_admin
             elif user_type == 'contrib':
-                self.login_contrib()
+                username = self.username_contrib
+                password = self.password_contrib
             elif user_type == 'read':
-                self.login_read()
+                username = self.username_read
+                password = self.password_read
+            
+            # get login button based on which login form we're in
+            # which depends on whether there is a subdomain
+            if 'localhost' not in self.browser.current_url and '127.0.0.1' not in self.browser.current_url:
+                if get_tld(self.browser.current_url, as_object=True).subdomain:
+                    login = self.browser.find_element_by_id('loginBtn')
+                else:
+                    dashboard = self.browser.find_element_by_xpath('//a[@href="/dashboard"]')
+                    self.browser.execute_script("arguments[0].click();", dashboard)
+                    sleep(2)
+                    login = self.browser.find_element_by_id('login-form-submit')
+            else:
+                dashboard = self.browser.find_element_by_xpath('//a[@href="/dashboard"]')
+                self.browser.execute_script("arguments[0].click();", dashboard)
+                sleep(2)
+                login = self.browser.find_element_by_id('login-form-submit')
+            
+            username_field = self.browser.find_element_by_name('username')
+            password_field = self.browser.find_element_by_name('password')
+            username_field.send_keys(username)
+            password_field.send_keys(password)
+            self.browser.execute_script("arguments[0].click();", login)
+            self.current_user_type = user_type
+            sleep(2)
 
     def click_element_by_xpath(self, path, action, user_type, scenario, result, desc):
         while self.timeout < 20:
@@ -1835,13 +1879,13 @@ class CloudLinesTestV2():
 
     def test(self,type,option=""):
         if type == 'login_user':
-            self.login_user()
+            self.login('user')
         if type == 'login_admin':
-            self.login_admin()
+            self.login('admin')
         if type == 'login_contrib':
-            self.login_contrib()
+            self.login('contrib')
         if type == 'login_read':
-            self.login_read()
+            self.login('read')
         if type == 'logout':
             self.logout()
         elif type == 'add_each_pedigree':
