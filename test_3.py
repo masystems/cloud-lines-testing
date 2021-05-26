@@ -1665,7 +1665,7 @@ class CloudLinesTestV2():
 
         # find stud advisor note
         try:
-            results_note = self.browser.find_element_by_xpath('//h5[@id="saMsg"]')
+            results_note = self.browser.find_element_by_id("saMsg")
         except Exception as e:
             # add fail to reports file
             with open(self.results_file, 'a+', newline='') as file:
@@ -1701,7 +1701,7 @@ class CloudLinesTestV2():
             # test failed
             return 'fail'
         sleep(2)
-        # check presence of note informing the user that sa added to results queue <h5 id="saMsg">XSL096 added to results queue below!</h5>
+        # check presence of note informing the user that sa added to results queue
         if len(results_note.text) == 0:
             # add fail to reports
             with open(self.results_file, 'a+', newline='') as file:
@@ -1734,6 +1734,105 @@ class CloudLinesTestV2():
             writer = csv.writer(file)
             writer.writerow(['Stud Advisor',user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
 
+    def kinship(self):
+        user_type = 'admin'
+        scenario = 'metrics_page'
+
+        # ensure we're logged in as the correct user
+        self.login(user_type)
+        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
+
+        # go to metrics page
+        if self.click_element_by_xpath('//a[@href="/metrics/"]',
+                        'Kinship', user_type, scenario, 'FAIL',
+                        'Failed to open metrics page') == 'fail':
+            # test failed
+            return 'fail'
+        sleep(2)
+
+        # find kinship note
+        try:
+            results_note = self.browser.find_element_by_id("ksMsg")
+        except Exception as e:
+            # add fail to reports file
+            with open(self.results_file, 'a+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find kinship note'])
+            # stop the current test
+            return 'fail'
+        # check that note is empty
+        if len(results_note.text) > 0:
+            # add fail to reports
+            with open(self.results_file, 'a+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Kinship', user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Kinship message was displayed prematurely'])
+            self.timeout = 0
+            # stop the current test
+            return 'fail'
+        # enter mother number
+        mother = 'L9999'
+        try:
+            kin_field = self.browser.find_element_by_xpath('//input[@id="id_mother"]')
+            kin_field.send_keys(mother)
+        except Exception as e:
+            # add fail to reports file
+            with open(self.results_file, 'a+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to enter text in mother kinship field'])
+            # stop the current test
+            return 'fail'
+        # enter father number
+        father = 'L9960'
+        try:
+            kin_field = self.browser.find_element_by_xpath('//input[@id="id_father"]')
+            kin_field.send_keys(father)
+        except Exception as e:
+            # add fail to reports file
+            with open(self.results_file, 'a+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to enter text in father kinship field'])
+            # stop the current test
+            return 'fail'
+        # run kinship
+        if self.click_element_by_xpath('//button[@id="ksBtn" and contains(text(), "Calculate Kinship")]',
+                        'Kinship', user_type, scenario, 'FAIL',
+                        'Failed to run kinship') == 'fail':
+            # test failed
+            return 'fail'
+        sleep(2)
+        # check presence of note informing the user that sa added to results queue
+        if len(results_note.text) == 0:
+            # add fail to reports
+            with open(self.results_file, 'a+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Kinship', user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Kinship message was not displayed'])
+            self.timeout = 0
+            # stop the current test
+            return 'fail'
+        # check that button to view results is present and disabled
+        try:
+            self.browser.find_element_by_xpath(f'//td[contains(text(), "Kinship: {mother} + {father}")]/following-sibling::td/button[@class="btn btn-info" and @disabled="" and contains(text(), "View")]')
+        except Exception as e:
+            # add fail to reports file
+            with open(self.results_file, 'a+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find view button'])
+            # stop the current test
+            return 'fail'
+        # after 10 minutes try to click the view button
+        sleep(600)
+        if self.click_element_by_xpath(f'//td[contains(text(), "Kinship: {mother} + {father}")]/following-sibling::td/a/button[@class="btn btn-info" and contains(text(), "View")]',
+                        'Kinship', user_type, scenario, 'FAIL',
+                        'Failed to go to results') == 'fail':
+            # test failed
+            return 'fail'
+        # check we're on results page
+
+        # test must have passed if we have got to the end of this function
+        with open(self.results_file, 'a+', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
+
     def test(self,type,option=""):
         if type == 'login_user':
             self.login_user()
@@ -1759,6 +1858,8 @@ class CloudLinesTestV2():
             self.run_mean_kinship()
         elif type == 'stud_advisor':
             self.stud_advisor()
+        elif type == 'kinship':
+            self.kinship()
 
 
 if __name__ == '__main__':
@@ -1775,6 +1876,7 @@ if __name__ == '__main__':
     print("10. Run COI")
     print("11. Run Mean Kinship")
     print("12. Stud Advisor")
+    print("13. Kinship")
     print("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
@@ -1803,6 +1905,8 @@ if __name__ == '__main__':
                 obj.test('run_mean_kinship')
             elif ch == "12":
                 obj.test('stud_advisor')
+            elif ch == "13":
+                obj.test('kinship')
             ch = input("Enter Choice ")
         except:
             break
