@@ -100,6 +100,11 @@ class CloudLinesTestV2():
                     self.timeout = 0
                     # stop the current test
                     return 'fail'
+        
+        # test must have passed if we have got to the end of this function
+        with open(self.results_file, 'a+', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
 
     def click_element_by_xpath(self, path, action, user_type, scenario, result, desc):
         while self.timeout < 20:
