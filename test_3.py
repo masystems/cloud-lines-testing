@@ -1647,6 +1647,92 @@ class CloudLinesTestV2():
             writer = csv.writer(file)
             writer.writerow(['Run Mean Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
 
+    def stud_advisor(self):
+        user_type = 'admin'
+        scenario = 'metrics_page'
+
+        # ensure we're logged in as the correct user
+        self.login(user_type)
+        self.browser.get(self.config['settings']['domain'] + "/account/welcome")
+
+        # go to metrics page
+        if self.click_element_by_xpath('//a[@href="/metrics/"]',
+                        'Stud Advisor', user_type, scenario, 'FAIL',
+                        'Failed to open metrics page') == 'fail':
+            # test failed
+            return 'fail'
+        sleep(2)
+
+        # find stud advisor note
+        try:
+            results_note = self.browser.find_element_by_xpath('//h5[@id="saMsg"]')
+        except Exception as e:
+            # add fail to reports file
+            with open(self.results_file, 'a+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Stud Advisor',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find stud advisor note'])
+            # stop the current test
+            return 'fail'
+        # check that note is empty
+        if len(results_note.text) > 0:
+            # add fail to reports
+            with open(self.results_file, 'a+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Stud Advisor', user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Stud advisor message was displayed prematurely'])
+            self.timeout = 0
+            # stop the current test
+            return 'fail'
+        # enter reg number
+        try:
+            sa_field = self.browser.find_element_by_xpath('//input[@id="sa_mother"]')
+            sa_field.send_keys('L9999')
+        except Exception as e:
+            # add fail to reports file
+            with open(self.results_file, 'a+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Stud Advisor',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to enter text in stud advisor field'])
+            # stop the current test
+            return 'fail'
+        # run stud advisor
+        if self.click_element_by_xpath('//button[@id="saBtn" and contains(text(), "Run Advisor")]',
+                        'Stud Advisor', user_type, scenario, 'FAIL',
+                        'Failed to run stud advisor') == 'fail':
+            # test failed
+            return 'fail'
+        sleep(2)
+        # check presence of note informing the user that sa added to results queue <h5 id="saMsg">XSL096 added to results queue below!</h5>
+        if len(results_note.text) == 0:
+            # add fail to reports
+            with open(self.results_file, 'a+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Stud Advisor', user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Stud advisor message was not displayed'])
+            self.timeout = 0
+            # stop the current test
+            return 'fail'
+        # check that button to view results is present and disabled
+        try:
+            self.browser.find_element_by_xpath('//td/button[@class="btn btn-info" and @disabled="" and contains(text(), "View")]')
+        except Exception as e:
+            # add fail to reports file
+            with open(self.results_file, 'a+', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(['Stud Advisor',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find view button'])
+            # stop the current test
+            return 'fail'
+        # after 10 minutes try to click the view button
+        sleep(600)
+        if self.click_element_by_xpath('//td/a/button[@class="btn btn-info" and contains(text(), "View")]',
+                        'Stud Advisor', user_type, scenario, 'FAIL',
+                        'Failed to go to results') == 'fail':
+            # test failed
+            return 'fail'
+        # check we're on results page
+
+        # test must have passed if we have got to the end of this function
+        with open(self.results_file, 'a+', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Stud Advisor',user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
+
     def test(self,type,option=""):
         if type == 'login_user':
             self.login_user()
@@ -1670,6 +1756,8 @@ class CloudLinesTestV2():
             self.run_coi()
         elif type == 'run_mean_kinship':
             self.run_mean_kinship()
+        elif type == 'stud_advisor':
+            self.stud_advisor()
 
 
 if __name__ == '__main__':
@@ -1684,7 +1772,8 @@ if __name__ == '__main__':
     print("8. Edit Pedigree")
     print("9. Edit Breeder")
     print("10. Run COI")
-    print("11. Run Mean Kiinship")
+    print("11. Run Mean Kinship")
+    print("12. Stud Advisor")
     print("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
@@ -1711,6 +1800,8 @@ if __name__ == '__main__':
                 obj.test('run_coi')
             elif ch == "11":
                 obj.test('run_mean_kinship')
+            elif ch == "12":
+                obj.test('stud_advisor')
             ch = input("Enter Choice ")
         except:
             break
