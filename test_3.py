@@ -1683,9 +1683,10 @@ class CloudLinesTestV2():
             # stop the current test
             return 'fail'
         # enter reg number
+        female = 'L9999'
         try:
             sa_field = self.browser.find_element_by_xpath('//input[@id="sa_mother"]')
-            sa_field.send_keys('L9999')
+            sa_field.send_keys(female)
         except Exception as e:
             # add fail to reports file
             with open(self.results_file, 'a+', newline='') as file:
@@ -1711,7 +1712,7 @@ class CloudLinesTestV2():
             return 'fail'
         # check that button to view results is present and disabled
         try:
-            self.browser.find_element_by_xpath('//td/button[@class="btn btn-info" and @disabled="" and contains(text(), "View")]')
+            self.browser.find_element_by_xpath(f'//td[contains(text(), "Stud Advisor: {female}")]/following-sibling::td/button[@class="btn btn-info" and @disabled="" and contains(text(), "View")]')
         except Exception as e:
             # add fail to reports file
             with open(self.results_file, 'a+', newline='') as file:
@@ -1721,7 +1722,7 @@ class CloudLinesTestV2():
             return 'fail'
         # after 10 minutes try to click the view button
         sleep(600)
-        if self.click_element_by_xpath('//td/a/button[@class="btn btn-info" and contains(text(), "View")]',
+        if self.click_element_by_xpath(f'//td[contains(text(), "Stud Advisor: {female}")]/following-sibling::td/a/button[@class="btn btn-info" and contains(text(), "View")]',
                         'Stud Advisor', user_type, scenario, 'FAIL',
                         'Failed to go to results') == 'fail':
             # test failed
