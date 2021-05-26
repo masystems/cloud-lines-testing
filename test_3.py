@@ -38,109 +38,68 @@ class CloudLinesTestV2():
             writer = csv.writer(file)
             writer.writerow(["Action", "User Type", "Scenario", "Result", "Description"])
 
-    # def login_user(self):
-    #     # get login button based on which login form we're in
-    #     # which depends on whether there is a subdomain
-    #     if 'localhost' not in self.browser.current_url and '127.0.0.1' not in self.browser.current_url:
-    #         if get_tld(self.browser.current_url).subdomain:
-    #             login = self.browser.find_element_by_id('loginBtn')
-    #         else:
-    #             dashboard = self.browser.find_element_by_xpath('//a[@href="/dashboard"]')
-    #             self.browser.execute_script("arguments[0].click();", dashboard)
-    #             sleep(2)
-    #             login = self.browser.find_element_by_id('login-form-submit')
-    #     else:
-    #         dashboard = self.browser.find_element_by_xpath('//a[@href="/dashboard"]')
-    #         self.browser.execute_script("arguments[0].click();", dashboard)
-    #         sleep(2)
-    #         login = self.browser.find_element_by_id('login-form-submit')
-
-    #     username_field = self.browser.find_element_by_name('username')
-    #     password_field = self.browser.find_element_by_name('password')
-    #     username_field.send_keys(self.username_user)
-    #     password_field.send_keys(self.password_user)
-    #     self.browser.execute_script("arguments[0].click();", login)
-    #     self.current_user_type = 'user'
-    #     sleep(2)
-
-    # def login_admin(self):
-    #     username_field = self.browser.find_element_by_name('username')
-    #     username_field.send_keys(self.username_admin)
-    #     password_field = self.browser.find_element_by_name('password')
-    #     password_field.send_keys(self.password_admin)
-    #     login = self.browser.find_element_by_id('loginBtn')
-    #     self.browser.execute_script("arguments[0].click();", login)
-    #     self.current_user_type = 'admin'
-    #     sleep(2)
-
-    # def login_contrib(self):
-    #     username_field = self.browser.find_element_by_name('username')
-    #     username_field.send_keys(self.username_contrib)
-    #     password_field = self.browser.find_element_by_name('password')
-    #     password_field.send_keys(self.password_contrib)
-    #     login = self.browser.find_element_by_id('loginBtn')
-    #     self.browser.execute_script("arguments[0].click();", login)
-    #     self.current_user_type = 'contrib'
-    #     sleep(2)
-
-    # def login_read(self):
-    #     username_field = self.browser.find_element_by_name('username')
-    #     username_field.send_keys(self.username_read)
-    #     password_field = self.browser.find_element_by_name('password')
-    #     password_field.send_keys(self.password_read)
-    #     login = self.browser.find_element_by_id('loginBtn')
-    #     self.browser.execute_script("arguments[0].click();", login)
-    #     self.current_user_type = 'read'
-    #     sleep(2)
-
     def logout(self):
         self.browser.get(self.config['settings']['domain'] + "/account/logout")
         self.current_user_type = None
         sleep(2)
 
-    def login(self, user_type):
-        # if not logged in as correct user
-        if self.current_user_type != user_type:
-            # logout if we're logged in as wrong user
-            if self.current_user_type:
-                self.logout()
-            # set username and password correctly
-            if user_type == 'user':
-                username = self.username_user
-                password = self.password_user
-            elif user_type == 'admin':
-                username = self.username_admin
-                password = self.password_admin
-            elif user_type == 'contrib':
-                username = self.username_contrib
-                password = self.password_contrib
-            elif user_type == 'read':
-                username = self.username_read
-                password = self.password_read
-            
-            # get login button based on which login form we're in
-            # which depends on whether there is a subdomain
-            if 'localhost' not in self.browser.current_url and '127.0.0.1' not in self.browser.current_url:
-                if get_tld(self.browser.current_url, as_object=True).subdomain:
-                    login = self.browser.find_element_by_id('loginBtn')
-                else:
-                    dashboard = self.browser.find_element_by_xpath('//a[@href="/dashboard"]')
-                    self.browser.execute_script("arguments[0].click();", dashboard)
+    def login(self, action, user_type, scenario):
+        while self.timeout < 20:
+            try:
+                # if not logged in as correct user
+                if self.current_user_type != user_type:
+                    # logout if we're logged in as wrong user
+                    if self.current_user_type:
+                        self.logout()
+                    # set username and password correctly
+                    if user_type == 'user':
+                        username = self.username_user
+                        password = self.password_user
+                    elif user_type == 'admin':
+                        username = self.username_admin
+                        password = self.password_admin
+                    elif user_type == 'contrib':
+                        username = self.username_contrib
+                        password = self.password_contrib
+                    elif user_type == 'read':
+                        username = self.username_read
+                        password = self.password_read
+                    
+                    # get login button based on which login form we're in
+                    # which depends on whether there is a subdomain
+                    if 'localhost' not in self.browser.current_url and '127.0.0.1' not in self.browser.current_url:
+                        if get_tld(self.browser.current_url, as_object=True).subdomain:
+                            login = self.browser.find_element_by_id('loginBtn')
+                        else:
+                            dashboard = self.browser.find_element_by_xpath('//a[@href="/dashboard"]')
+                            self.browser.execute_script("arguments[0].click();", dashboard)
+                            sleep(2)
+                            login = self.browser.find_element_by_id('login-form-submit')
+                    else:
+                        dashboard = self.browser.find_element_by_xpath('//a[@href="/dashboard"]')
+                        self.browser.execute_script("arguments[0].click();", dashboard)
+                        sleep(2)
+                        login = self.browser.find_element_by_id('login-form-submit')
+                    
+                    username_field = self.browser.find_element_by_name('username')
+                    password_field = self.browser.find_element_by_name('password')
+                    username_field.send_keys(username)
+                    password_field.send_keys(password)
+                    self.browser.execute_script("arguments[0].click();", login)
+                    self.current_user_type = user_type
                     sleep(2)
-                    login = self.browser.find_element_by_id('login-form-submit')
-            else:
-                dashboard = self.browser.find_element_by_xpath('//a[@href="/dashboard"]')
-                self.browser.execute_script("arguments[0].click();", dashboard)
-                sleep(2)
-                login = self.browser.find_element_by_id('login-form-submit')
-            
-            username_field = self.browser.find_element_by_name('username')
-            password_field = self.browser.find_element_by_name('password')
-            username_field.send_keys(username)
-            password_field.send_keys(password)
-            self.browser.execute_script("arguments[0].click();", login)
-            self.current_user_type = user_type
-            sleep(2)
+                self.timeout = 0
+                break
+            except Exception as e:
+                self.timeout += 1
+                if self.timeout == 20:
+                    # add fail to reports file
+                    with open(self.results_file, 'a+', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow([action, user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Failed to login'])
+                    self.timeout = 0
+                    # stop the current test
+                    return 'fail'
 
     def click_element_by_xpath(self, path, action, user_type, scenario, result, desc):
         while self.timeout < 20:
