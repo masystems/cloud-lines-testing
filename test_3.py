@@ -1873,6 +1873,20 @@ class CloudLinesTestV2():
             self.stud_advisor()
         elif type == 'kinship':
             self.kinship()
+        elif type == 'complete':
+            self.login('Main Login Test', 'user', 'Main Login Test')
+            self.login('Main Login Test', 'admin', 'Main Login Test')
+            self.login('Main Login Test', 'contrib', 'Main Login Test')
+            self.login('Main Login Test', 'read', 'Main Login Test')
+            self.logout()
+            self.add_each_pedigree('pedigree.csv')
+            self.add_each_breeder('breeder.csv')
+            self.edit_each_pedigree()
+            self.edit_each_breeder()
+            self.run_coi()
+            self.run_mean_kinship()
+            self.stud_advisor()
+            self.kinship()
 
 
 if __name__ == '__main__':
@@ -1890,6 +1904,7 @@ if __name__ == '__main__':
     print("11. Run Mean Kinship")
     print("12. Stud Advisor")
     print("13. Kinship")
+    print("14. Complete Test")
     print("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
@@ -1920,6 +1935,8 @@ if __name__ == '__main__':
                 obj.test('stud_advisor')
             elif ch == "13":
                 obj.test('kinship')
+            elif ch == "14":
+                obj.test('complete')
             ch = input("Enter Choice ")
         except:
             break
