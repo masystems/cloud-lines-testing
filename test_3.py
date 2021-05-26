@@ -149,8 +149,10 @@ class CloudLinesTestV2():
         self.add_pedigree(pedigree_file, 'read', 'results_from_tool')
 
     def add_pedigree(self, pedigree_file, user_type, addition_method):
+        action = 'Add Pedigree'
+        
         # ensure we're logged in as the correct user
-        self.login(user_type)
+        self.login(action, user_type, addition_method)
 
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
@@ -163,13 +165,13 @@ class CloudLinesTestV2():
             if addition_method == 'pedigree_search':
                 # go to pedigree search page
                 if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
                 # go to add new pedigree
                 if self.click_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open add pedigree form') == 'fail':
                     # test failed
                     return 'fail'
@@ -177,19 +179,19 @@ class CloudLinesTestV2():
             elif addition_method == 'pedigree_view':
                 # go to pedigree search page
                 if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
                 # go to view pedigree
                 if self.click_element_by_xpath('//button[contains(text(), "View")]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree view') == 'fail':
                     # test failed
                     return 'fail'
                 # go to add new pedigree
                 if self.click_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open new pedigree form') == 'fail':
                     # test failed
                     return 'fail'
@@ -197,25 +199,25 @@ class CloudLinesTestV2():
             elif addition_method == 'offspring':
                 # go to pedigree search page
                 if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
                 # go to view pedigree
                 if self.click_element_by_xpath('//button[contains(text(), "View")]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree view') == 'fail':
                     # test failed
                     return 'fail'
                 # go to offspring tab
                 if self.click_element_by_xpath('//a[@href="#children"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open offspring tab') == 'fail':
                     # test failed
                     return 'fail'
                 # go to add new pedigree
                 if self.click_element_by_xpath('//div[@id="children"]/a[@href="/pedigree/new_pedigree/"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open new pedigree form') == 'fail':
                     # test failed
                     return 'fail'
@@ -223,25 +225,25 @@ class CloudLinesTestV2():
             elif addition_method == 'certificate':
                 # go to pedigree search page
                 if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
                 # go to view pedigree
                 if self.click_element_by_xpath('//button[contains(text(), "View")]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree view') == 'fail':
                     # test failed
                     return 'fail'
                 # go to certificate tab
                 if self.click_element_by_xpath('//a[@href="#cert"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open certificate tab') == 'fail':
                     # test failed
                     return 'fail'
                 # go to add new pedigree
                 if self.click_element_by_xpath('//div[@id="certificate"]/table/tbody/tr/td/a[@href="/pedigree/new_pedigree/"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open new pedigree form') == 'fail':
                     # test failed
                     return 'fail'
@@ -249,7 +251,7 @@ class CloudLinesTestV2():
             elif addition_method == 'results_from_peds':
                 # go to pedigree search page
                 if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
@@ -261,7 +263,7 @@ class CloudLinesTestV2():
                         # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
-                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                            writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
                         # stop the current test
                         return 'fail'
                 # check we successfully went to results page
@@ -269,12 +271,12 @@ class CloudLinesTestV2():
                     # add fail to reports file
                     with open(self.results_file, 'a+', newline='') as file:
                         writer = csv.writer(file)
-                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
+                        writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
                     # stop the current test
                     return 'fail'
                 # go to add new pedigree
                 if self.click_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open new pedigree form') == 'fail':
                     # test failed
                     return 'fail'
@@ -288,7 +290,7 @@ class CloudLinesTestV2():
                         # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
-                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                            writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
                         # stop the current test
                         return 'fail'
                 # check we successfully went to results page
@@ -296,12 +298,12 @@ class CloudLinesTestV2():
                     # add fail to reports file
                     with open(self.results_file, 'a+', newline='') as file:
                         writer = csv.writer(file)
-                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
+                        writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
                     # stop the current test
                     return 'fail'
                 # go to add new pedigree
                 if self.click_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open new pedigree form') == 'fail':
                     # test failed
                     return 'fail'
@@ -351,14 +353,14 @@ class CloudLinesTestV2():
                         # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
-                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter pedigree information'])
+                            writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter pedigree information'])
                         self.timeout = 0
                         # stop the current test
                         return 'fail'
             if user_type == 'contrib':
                 # try to click "View approvals", as user is contributor
                 if self.click_element_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to go to approvals page') == 'fail':
                     # test failed
                     return 'fail'
@@ -369,7 +371,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Approval was not added to table'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Approval was not added to table'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -382,17 +384,17 @@ class CloudLinesTestV2():
                             print("Failed to find how many links to new pedigree form there are", e)
                             exit(0)
                 # login as user so check approval can be accepted
-                self.login('user')
+                self.login(action, 'user', addition_method)
                 self.browser.get(self.config['settings']['domain'] + "/account/welcome")
                 # go to approvals
                 if self.click_element_by_xpath('//a[@href="/approvals/"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to go to approvals page') == 'fail':
                     # test failed
                     return 'fail'
                 # approve the approval
                 if self.click_element_by_xpath('//button[contains(text(), "Approve")]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to approve the approval') == 'fail':
                     # test failed
                     return 'fail'
@@ -403,7 +405,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','The table still contains an approval'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','The table still contains an approval'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -431,7 +433,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Approval link was presented'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Approval link was presented'])
                             # stop the current test
                             return 'fail'
                     except Exception as e:
@@ -440,7 +442,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
                             self.timeout = 0
                             # stop the current test
                             return 'fail'
@@ -451,7 +453,7 @@ class CloudLinesTestV2():
             if addition_method == 'pedigree_search':
                 # go to pedigree search page
                 if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
@@ -462,7 +464,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -478,13 +480,13 @@ class CloudLinesTestV2():
             elif addition_method == 'pedigree_view':
                 # go to pedigree search page
                 if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
                 # go to view pedigree
                 if self.click_element_by_xpath('//button[contains(text(), "View")]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree view') == 'fail':
                     # test failed
                     return 'fail'
@@ -495,7 +497,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -511,19 +513,19 @@ class CloudLinesTestV2():
             elif addition_method == 'offspring':
                 # go to pedigree search page
                 if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
                 # go to view pedigree
                 if self.click_element_by_xpath('//button[contains(text(), "View")]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree view') == 'fail':
                     # test failed
                     return 'fail'
                 # go to offspring tab
                 if self.click_element_by_xpath('//a[@href="#children"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open offspring tab') == 'fail':
                     # test failed
                     return 'fail'
@@ -534,7 +536,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -550,19 +552,19 @@ class CloudLinesTestV2():
             elif addition_method == 'certificate':
                 # go to pedigree search page
                 if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
                 # go to view pedigree
                 if self.click_element_by_xpath('//button[contains(text(), "View")]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree view') == 'fail':
                     # test failed
                     return 'fail'
                 # go to certificate tab
                 if self.click_element_by_xpath('//a[@href="#cert"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open certificate tab') == 'fail':
                     # test failed
                     return 'fail'
@@ -573,7 +575,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -588,7 +590,7 @@ class CloudLinesTestV2():
             elif addition_method == 'results_from_peds':
                 # go to pedigree search page
                 if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Pedigree', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
@@ -600,7 +602,7 @@ class CloudLinesTestV2():
                         # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
-                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                            writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
                         # stop the current test
                         return 'fail'
                 # check we successfully went to results page
@@ -608,7 +610,7 @@ class CloudLinesTestV2():
                     # add fail to reports file
                     with open(self.results_file, 'a+', newline='') as file:
                         writer = csv.writer(file)
-                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
+                        writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
                     # stop the current test
                     return 'fail'
                 # check you can't go to add new pedigree
@@ -618,7 +620,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -640,7 +642,7 @@ class CloudLinesTestV2():
                         # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
-                            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                            writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
                         # stop the current test
                         return 'fail'
                 # check we successfully went to results page
@@ -648,7 +650,7 @@ class CloudLinesTestV2():
                     # add fail to reports file
                     with open(self.results_file, 'a+', newline='') as file:
                         writer = csv.writer(file)
-                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
+                        writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to go to results page'])
                     # stop the current test
                     return 'fail'
                 # check you can't go to add new pedigree
@@ -658,7 +660,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -673,7 +675,7 @@ class CloudLinesTestV2():
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'PASS','-'])
+            writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'PASS','-'])
 
     def add_each_breeder(self, pedigree_file):
         # add pedigree in all the different ways as each possible user
@@ -691,8 +693,10 @@ class CloudLinesTestV2():
         self.add_breeder(pedigree_file, 'read', 'ped_form')
 
     def add_breeder(self, breeder_file, user_type, addition_method):
+        action = 'Add Breeder'
+        
         # ensure we're logged in as the correct user
-        self.login(user_type)
+        self.login(action, user_type, addition_method)
 
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
@@ -705,13 +709,13 @@ class CloudLinesTestV2():
             if addition_method == 'breeders':
                 # go to breeders page
                 if self.click_element_by_xpath('//a[@href="/breeders/"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open breeders page') == 'fail':
                     # test failed
                     return 'fail'
                 # go to add new breeder
                 if self.click_element_by_xpath('//a[@href="/breeders/new_breeder/"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open new breeder form') == 'fail':
                     # test failed
                     return 'fail'
@@ -719,19 +723,19 @@ class CloudLinesTestV2():
             elif addition_method == 'breeder_view':
                 # go to breeders page
                 if self.click_element_by_xpath('//a[@href="/breeders/"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open breeders page') == 'fail':
                     # test failed
                     return 'fail'
                 # go to breeder view
                 if self.click_element_by_xpath('//tr[@onclick]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open breeder view page') == 'fail':
                     # test failed
                     return 'fail'
                 # go to add new breeder
                 if self.click_element_by_xpath('//a[@href="/breeders/new_breeder/"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open add breeder form') == 'fail':
                     # test failed
                     return 'fail'
@@ -739,19 +743,19 @@ class CloudLinesTestV2():
             elif addition_method == 'ped_form':
                 # go to pedigree search page
                 if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
                 # go to add pedigree form
                 if self.click_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open add pedigree form') == 'fail':
                     # test failed
                     return 'fail'
                 # go to add breeder form modal via add breeder button
                 if self.click_element_by_xpath('//button[@id="showNewBreederModal"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open add breeder modal') == 'fail':
                     # test failed
                     return 'fail'
@@ -782,7 +786,7 @@ class CloudLinesTestV2():
                         # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
-                            writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter breeder information'])
+                            writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter breeder information'])
                         self.timeout = 0
                         # stop the current test
                         return 'fail'
@@ -790,7 +794,7 @@ class CloudLinesTestV2():
             if addition_method in ('breeders', 'breeder_view'):
                 # submit new breeder form
                 if self.click_element_by_xpath('//button[@type="submit" and @class="btn btn-success" and contains(text(), "Submit")]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to submit breeder info') == 'fail':
                     # test failed
                     return 'fail'
@@ -798,14 +802,14 @@ class CloudLinesTestV2():
             else:
                 # submit new breeder form
                 if self.click_element_by_xpath('//button[@id="saveBreeder" and contains(text(), "Save breeder")]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to submit breeder info') == 'fail':
                     # test failed
                     return 'fail'
 
             # check the save worked by trying to access new breeder form
             if self.click_element_by_xpath('//a[@href="/breeders/new_breeder/"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to save breeder') == 'fail':
                     # test failed
                     return 'fail'
@@ -816,13 +820,13 @@ class CloudLinesTestV2():
             if addition_method == 'breeders':
                 # go to breeders page
                 if self.click_element_by_xpath('//a[@href="/breeders/"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open breeders page') == 'fail':
                     # test failed
                     return 'fail'
                 # go to breeder view
                 if self.click_element_by_xpath('//tr[@onclick]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open breeder view page') == 'fail':
                     # test failed
                     return 'fail'
@@ -833,7 +837,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new breeder form is available'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new breeder form is available'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -849,7 +853,7 @@ class CloudLinesTestV2():
             elif addition_method == 'breeder_view':
                 # go to breeders page
                 if self.click_element_by_xpath('//a[@href="/breeders/"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open breeders page') == 'fail':
                     # test failed
                     return 'fail'
@@ -860,7 +864,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new breeder form is available'])
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new breeder form is available'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -878,13 +882,13 @@ class CloudLinesTestV2():
                 if user_type == 'contrib':
                     # go to pedigree search page
                     if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                         # test failed
                         return 'fail'
                     # go to pedigree form
                     if self.click_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open add pedigree form') == 'fail':
                         # test failed
                         return 'fail'
@@ -895,7 +899,7 @@ class CloudLinesTestV2():
                                 # add fail to reports file
                                 with open(self.results_file, 'a+', newline='') as file:
                                     writer = csv.writer(file)
-                                    writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Button to display new breeder modal is available'])
+                                    writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Button to display new breeder modal is available'])
                                 # stop the current test
                                 return 'fail'
                             sleep(2)
@@ -911,7 +915,7 @@ class CloudLinesTestV2():
                 else:
                     # go to pedigree search page
                     if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                            'Add Breeder', user_type, addition_method, 'FAIL',
+                            action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree search') == 'fail':
                         # test failed
                         return 'fail'
@@ -922,7 +926,7 @@ class CloudLinesTestV2():
                                 # add fail to reports file
                                 with open(self.results_file, 'a+', newline='') as file:
                                     writer = csv.writer(file)
-                                    writer.writerow(['Add Pedigree',user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
+                                    writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new pedigree form is available'])
                                 # stop the current test
                                 return 'fail'
                             sleep(2)
@@ -938,7 +942,7 @@ class CloudLinesTestV2():
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Add Breeder',user_type.replace('_', ' '),addition_method.replace('_', ' '),'PASS','-'])
+            writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'PASS','-'])
 
     def edit_each_pedigree(self):
         self.edit_pedigree('user', 'ped_form')
@@ -951,8 +955,10 @@ class CloudLinesTestV2():
         self.edit_pedigree('read', 'approval')
 
     def edit_pedigree(self, user_type, edit_method):
+        action = 'Edit Pedigree'
+        
         # ensure we're logged in as the correct user
-        self.login(user_type)
+        self.login(action, user_type, edit_method)
 
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
@@ -960,7 +966,7 @@ class CloudLinesTestV2():
         if edit_method == 'ped_form':
             # go to pedigree search page
             if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                        'Edit Pedigree', user_type, edit_method, 'FAIL',
+                        action, user_type, edit_method, 'FAIL',
                         'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
@@ -972,7 +978,7 @@ class CloudLinesTestV2():
                     # add fail to reports file
                     with open(self.results_file, 'a+', newline='') as file:
                         writer = csv.writer(file)
-                        writer.writerow(['Add Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                        writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
                     # stop the current test
                     return 'fail'
             
@@ -980,7 +986,7 @@ class CloudLinesTestV2():
             if user_type != 'read':
                 # go to edit pedigree
                 if self.click_element_by_xpath('//a[@id="editPedigree"]',
-                            'Edit Pedigree', user_type, edit_method, 'FAIL',
+                            action, user_type, edit_method, 'FAIL',
                             'Failed to open edit pedigree form') == 'fail':
                     # test failed
                     return 'fail'
@@ -1084,7 +1090,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter pedigree information'])
+                                writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter pedigree information'])
                             self.timeout = 0
                             # stop the current test
                             return 'fail'
@@ -1106,7 +1112,7 @@ class CloudLinesTestV2():
                                 # add fail to reports file
                                 with open(self.results_file, 'a+', newline='') as file:
                                     writer = csv.writer(file)
-                                    writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Approval link was presented'])
+                                    writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Approval link was presented'])
                                 # stop the current test
                                 return 'fail'
                         except Exception as e:
@@ -1115,7 +1121,7 @@ class CloudLinesTestV2():
                                 # add fail to reports file
                                 with open(self.results_file, 'a+', newline='') as file:
                                     writer = csv.writer(file)
-                                    writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
+                                    writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to save pedigree'])
                                 self.timeout = 0
                                 # stop the current test
                                 return 'fail'
@@ -1123,21 +1129,21 @@ class CloudLinesTestV2():
                 else:
                     # try to click "View approval"
                     if self.click_element_by_xpath('//a[@href="/approvals/"]',
-                                'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                action, user_type, edit_method, 'FAIL',
                                 'Failed to open approvals page') == 'fail':
                         # test failed
                         return 'fail'
                     # login as owner to approve the edit
-                    self.login('user')
+                    self.login(action, 'user', edit_method)
                     # go to approvals
                     if self.click_element_by_xpath('//a[@href="/approvals/"]',
-                                    'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                    action, user_type, edit_method, 'FAIL',
                                     'Failed to open approvals') == 'fail':
                         # test failed
                         return 'fail'
                     # approve the edit
                     if self.click_element_by_xpath('//button[@class="btn btn-sm btn-success mr-1" and contains(text(), "Approve")]',
-                                    'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                    action, user_type, edit_method, 'FAIL',
                                     'Failed to approve edit') == 'fail':
                         # test failed
                         return 'fail'
@@ -1150,7 +1156,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Link to edit pedigree form is available'])
+                                writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Link to edit pedigree form is available'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -1165,10 +1171,10 @@ class CloudLinesTestV2():
         # test editting by editting an approval
         elif edit_method == 'approval':
             # create approval by editting as contributor
-            self.login('contrib')
+            self.login(action, 'contrib', edit_method)
             # go to pedigree search page
             if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
-                        'Edit Pedigree', user_type, edit_method, 'FAIL',
+                        action, user_type, edit_method, 'FAIL',
                         'Failed to open pedigree search') == 'fail':
                 # test failed
                 return 'fail'
@@ -1180,12 +1186,12 @@ class CloudLinesTestV2():
                 # add fail to reports file
                 with open(self.results_file, 'a+', newline='') as file:
                     writer = csv.writer(file)
-                    writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
+                    writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in search field'])
                 # stop the current test
                 return 'fail'
             # go to edit pedigree
             if self.click_element_by_xpath('//a[@id="editPedigree"]',
-                            'Edit Pedigree', user_type, edit_method, 'FAIL',
+                            action, user_type, edit_method, 'FAIL',
                             'Failed to open edit pedigree form') == 'fail':
                 # test failed
                 return 'fail'
@@ -1213,15 +1219,15 @@ class CloudLinesTestV2():
                         # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
-                            writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter pedigree description'])
+                            writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter pedigree description'])
                         self.timeout = 0
                         # stop the current test
                         return 'fail'
             # login as test user type
-            self.login(user_type)
+            self.login(action, user_type, edit_method)
             # go to approvals
             if self.click_element_by_xpath('//a[@href="/approvals/"]',
-                            'Edit Pedigree', user_type, edit_method, 'FAIL',
+                            action, user_type, edit_method, 'FAIL',
                             'Failed to open approvals') == 'fail':
                 # test failed
                 return 'fail'
@@ -1229,7 +1235,7 @@ class CloudLinesTestV2():
             if user_type in ('user', 'admin'):
                 # go to edit approval
                 if self.click_element_by_xpath('//button[@class="btn btn-sm btn-outline-info mr-1" and contains(text(), "Edit")]',
-                                'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                action, user_type, edit_method, 'FAIL',
                                 'Failed to edit approval') == 'fail':
                     # test failed
                     return 'fail'
@@ -1333,13 +1339,13 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter pedigree description'])
+                                writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter pedigree description'])
                             self.timeout = 0
                             # stop the current test
                             return 'fail'
                 # go to approvals
                 if self.click_element_by_xpath('//a[@href="/approvals/"]',
-                            'Edit Pedigree', user_type, edit_method, 'FAIL',
+                            action, user_type, edit_method, 'FAIL',
                             'Failed to open approvals after edited') == 'fail':
                     # test failed
                     return 'fail'
@@ -1350,7 +1356,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','There is an approval in the table'])
+                                writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','There is an approval in the table'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -1371,7 +1377,7 @@ class CloudLinesTestV2():
                             # add fail to reports file
                             with open(self.results_file, 'a+', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','User is able to go to edit approval'])
+                                writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','User is able to go to edit approval'])
                             # stop the current test
                             return 'fail'
                         sleep(2)
@@ -1384,22 +1390,22 @@ class CloudLinesTestV2():
                             print("Failed to find how many editable approvals in the table there are", e)
                             exit(0)
                 # login as owner to decline the edit
-                self.login('user')
+                self.login(action, 'user', edit_method)
                 # go to approvals
                 if self.click_element_by_xpath('//a[@href="/approvals/"]',
-                                'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                action, user_type, edit_method, 'FAIL',
                                 'Failed to open approvals') == 'fail':
                     # test failed
                     return 'fail'
                 # decline the edit
                 if self.click_element_by_xpath('//button[@class="btn btn-sm btn-danger" and contains(text(), "Decline")]',
-                                'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                action, user_type, edit_method, 'FAIL',
                                 'Failed to decline edit') == 'fail':
                     # test failed
                     return 'fail'
                 # confirm decline<button id="declineFormSubmit" type="button" class="btn btn-danger waves-effect waves-light">Confirm decline</button>
                 if self.click_element_by_xpath('//button[@class="btn btn-danger waves-effect waves-light" and contains(text(), "Confirm decline") and @id="declineFormSubmit"]',
-                                'Edit Pedigree', user_type, edit_method, 'FAIL',
+                                action, user_type, edit_method, 'FAIL',
                                 'Failed to confirm the edit declination') == 'fail':
                     # test failed
                     return 'fail'
@@ -1407,7 +1413,7 @@ class CloudLinesTestV2():
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Edit Pedigree',user_type.replace('_', ' '),edit_method.replace('_', ' '),'PASS','-'])
+            writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'PASS','-'])
 
     def edit_each_breeder(self):
         self.edit_breeder('user')
@@ -1416,17 +1422,17 @@ class CloudLinesTestV2():
         self.edit_breeder('read')
 
     def edit_breeder(self, user_type):
-        # there's only one edit method for breeder
+        action = 'Edit Breeder'
         edit_method = 'breeder_form'
 
         # ensure we're logged in as the correct user
-        self.login(user_type)
+        self.login(action, user_type, edit_method)
 
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
         # go to breeders page
         if self.click_element_by_xpath('//a[@href="/breeders/"]',
-                        'Edit Breeder', user_type, edit_method, 'FAIL',
+                        action, user_type, edit_method, 'FAIL',
                         'Failed to open breeders page') == 'fail':
             # test failed
             return 'fail'
@@ -1438,12 +1444,12 @@ class CloudLinesTestV2():
                 # add fail to reports file
                 with open(self.results_file, 'a+', newline='') as file:
                     writer = csv.writer(file)
-                    writer.writerow(['Edit Breeder',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in filter field'])
+                    writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter text in filter field'])
                 # stop the current test
                 return 'fail'
         # go to breeder view
         if self.click_element_by_xpath('//td[contains(text(), "ZZZZZ")]',
-                        'Edit Breeder', user_type, edit_method, 'FAIL',
+                        action, user_type, edit_method, 'FAIL',
                         'Failed to open breeder view') == 'fail':
             # test failed
             return 'fail'
@@ -1451,7 +1457,7 @@ class CloudLinesTestV2():
         if user_type in ('user', 'admin'):
             # go to edit breeder
             if self.click_element_by_xpath('//a[@id="editBreeder"]',
-                            'Edit Breeder', user_type, edit_method, 'FAIL',
+                            action, user_type, edit_method, 'FAIL',
                             'Failed to open edit breeder') == 'fail':
                 # test failed
                 return 'fail'
@@ -1534,19 +1540,19 @@ class CloudLinesTestV2():
                         # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
-                            writer.writerow(['Edit Breeder',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter breeder info'])
+                            writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Failed to enter breeder info'])
                         self.timeout = 0
                         # stop the current test
                         return 'fail'
             # submit breeder
             if self.click_element_by_xpath('//button[@type="submit" and @class="btn btn-success" and contains(text(), "Submit")]',
-                            'Edit Breeder', user_type, edit_method, 'FAIL',
+                            action, user_type, edit_method, 'FAIL',
                             'Failed to submit breeder') == 'fail':
                 # test failed
                 return 'fail'
             # check breeder saved by checking you can go to add breeder
             if self.click_element_by_xpath('//a[@href="/breeders/new_breeder/" and @class="btn float-right hidden-sm-down btn-success"]',
-                            'Edit Breeder', user_type, edit_method, 'FAIL',
+                            action, user_type, edit_method, 'FAIL',
                             'Failed to save breeder') == 'fail':
                 # test failed
                 return 'fail'
@@ -1560,7 +1566,7 @@ class CloudLinesTestV2():
                         # add fail to reports file
                         with open(self.results_file, 'a+', newline='') as file:
                             writer = csv.writer(file)
-                            writer.writerow(['Edit Breeder',user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Link to edit breeder form is available'])
+                            writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'FAIL','Link to edit breeder form is available'])
                         # stop the current test
                         return 'fail'
                     sleep(2)
@@ -1576,19 +1582,20 @@ class CloudLinesTestV2():
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Edit Breeder',user_type.replace('_', ' '),edit_method.replace('_', ' '),'PASS','-'])
+            writer.writerow([action,user_type.replace('_', ' '),edit_method.replace('_', ' '),'PASS','-'])
 
     def run_coi(self):
+        action = 'Run COI'
         user_type = 'admin'
         scenario = 'metrics_page'
 
         # ensure we're logged in as the correct user
-        self.login(user_type)
+        self.login(action, user_type, scenario)
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
         # go to metrics page
         if self.click_element_by_xpath('//a[@href="/metrics/"]',
-                        'Run COI', user_type, scenario, 'FAIL',
+                        action, user_type, scenario, 'FAIL',
                         'Failed to open metrics page') == 'fail':
             # test failed
             return 'fail'
@@ -1605,26 +1612,27 @@ class CloudLinesTestV2():
                 # add error, as countdown should have started
                 with open(self.results_file, 'a+', newline='') as file:
                     writer = csv.writer(file)
-                    writer.writerow(['Run COI',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Timer did not start'])
+                    writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Timer did not start'])
                 # stop the current test
                 return 'fail'
 
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Run COI',user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
+            writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
 
     def run_mean_kinship(self):
+        action = 'Run Mean Kinship'
         user_type = 'admin'
         scenario = 'metrics_page'
 
         # ensure we're logged in as the correct user
-        self.login(user_type)
+        self.login(action, user_type, scenario)
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
         # go to metrics page
         if self.click_element_by_xpath('//a[@href="/metrics/"]',
-                        'Run Mean Kinship', user_type, scenario, 'FAIL',
+                        action, user_type, scenario, 'FAIL',
                         'Failed to open metrics page') == 'fail':
             # test failed
             return 'fail'
@@ -1641,26 +1649,27 @@ class CloudLinesTestV2():
                 # add error, as countdown should have started
                 with open(self.results_file, 'a+', newline='') as file:
                     writer = csv.writer(file)
-                    writer.writerow(['Run Mean Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Timer did not start'])
+                    writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Timer did not start'])
                 # stop the current test
                 return 'fail'
 
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Run Mean Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
+            writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
 
     def stud_advisor(self):
+        action = 'Stud Advisor'
         user_type = 'admin'
         scenario = 'metrics_page'
 
         # ensure we're logged in as the correct user
-        self.login(user_type)
+        self.login(action, user_type, scenario)
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
         # go to metrics page
         if self.click_element_by_xpath('//a[@href="/metrics/"]',
-                        'Stud Advisor', user_type, scenario, 'FAIL',
+                        action, user_type, scenario, 'FAIL',
                         'Failed to open metrics page') == 'fail':
             # test failed
             return 'fail'
@@ -1673,7 +1682,7 @@ class CloudLinesTestV2():
             # add fail to reports file
             with open(self.results_file, 'a+', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['Stud Advisor',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find stud advisor note'])
+                writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find stud advisor note'])
             # stop the current test
             return 'fail'
         # check that note is empty
@@ -1681,7 +1690,7 @@ class CloudLinesTestV2():
             # add fail to reports
             with open(self.results_file, 'a+', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['Stud Advisor', user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Stud advisor message was displayed prematurely'])
+                writer.writerow([action, user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Stud advisor message was displayed prematurely'])
             self.timeout = 0
             # stop the current test
             return 'fail'
@@ -1694,12 +1703,12 @@ class CloudLinesTestV2():
             # add fail to reports file
             with open(self.results_file, 'a+', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['Stud Advisor',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to enter text in stud advisor field'])
+                writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to enter text in stud advisor field'])
             # stop the current test
             return 'fail'
         # run stud advisor
         if self.click_element_by_xpath('//button[@id="saBtn" and contains(text(), "Run Advisor")]',
-                        'Stud Advisor', user_type, scenario, 'FAIL',
+                        action, user_type, scenario, 'FAIL',
                         'Failed to run stud advisor') == 'fail':
             # test failed
             return 'fail'
@@ -1709,7 +1718,7 @@ class CloudLinesTestV2():
             # add fail to reports
             with open(self.results_file, 'a+', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['Stud Advisor', user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Stud advisor message was not displayed'])
+                writer.writerow([action, user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Stud advisor message was not displayed'])
             self.timeout = 0
             # stop the current test
             return 'fail'
@@ -1720,13 +1729,13 @@ class CloudLinesTestV2():
             # add fail to reports file
             with open(self.results_file, 'a+', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['Stud Advisor',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find view button'])
+                writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find view button'])
             # stop the current test
             return 'fail'
         # after 10 minutes try to click the view button
         sleep(600)
         if self.click_element_by_xpath(f'//td[contains(text(), "Stud Advisor: {female}")]/following-sibling::td/a/button[@class="btn btn-info" and contains(text(), "View")]',
-                        'Stud Advisor', user_type, scenario, 'FAIL',
+                        action, user_type, scenario, 'FAIL',
                         'Failed to go to results') == 'fail':
             # test failed
             return 'fail'
@@ -1735,19 +1744,20 @@ class CloudLinesTestV2():
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Stud Advisor',user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
+            writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
 
     def kinship(self):
+        action = 'Kinship'
         user_type = 'admin'
         scenario = 'metrics_page'
 
         # ensure we're logged in as the correct user
-        self.login(user_type)
+        self.login(action, user_type, scenario)
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
         # go to metrics page
         if self.click_element_by_xpath('//a[@href="/metrics/"]',
-                        'Kinship', user_type, scenario, 'FAIL',
+                        action, user_type, scenario, 'FAIL',
                         'Failed to open metrics page') == 'fail':
             # test failed
             return 'fail'
@@ -1760,7 +1770,7 @@ class CloudLinesTestV2():
             # add fail to reports file
             with open(self.results_file, 'a+', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find kinship note'])
+                writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find kinship note'])
             # stop the current test
             return 'fail'
         # check that note is empty
@@ -1768,7 +1778,7 @@ class CloudLinesTestV2():
             # add fail to reports
             with open(self.results_file, 'a+', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['Kinship', user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Kinship message was displayed prematurely'])
+                writer.writerow([action, user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Kinship message was displayed prematurely'])
             self.timeout = 0
             # stop the current test
             return 'fail'
@@ -1781,7 +1791,7 @@ class CloudLinesTestV2():
             # add fail to reports file
             with open(self.results_file, 'a+', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to enter text in mother kinship field'])
+                writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to enter text in mother kinship field'])
             # stop the current test
             return 'fail'
         # enter father number
@@ -1793,12 +1803,12 @@ class CloudLinesTestV2():
             # add fail to reports file
             with open(self.results_file, 'a+', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to enter text in father kinship field'])
+                writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to enter text in father kinship field'])
             # stop the current test
             return 'fail'
         # run kinship
         if self.click_element_by_xpath('//button[@id="ksBtn" and contains(text(), "Calculate Kinship")]',
-                        'Kinship', user_type, scenario, 'FAIL',
+                        action, user_type, scenario, 'FAIL',
                         'Failed to run kinship') == 'fail':
             # test failed
             return 'fail'
@@ -1808,7 +1818,7 @@ class CloudLinesTestV2():
             # add fail to reports
             with open(self.results_file, 'a+', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['Kinship', user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Kinship message was not displayed'])
+                writer.writerow([action, user_type.replace('_', ' '), scenario.replace('_', ' '), 'FAIL', 'Kinship message was not displayed'])
             self.timeout = 0
             # stop the current test
             return 'fail'
@@ -1819,13 +1829,13 @@ class CloudLinesTestV2():
             # add fail to reports file
             with open(self.results_file, 'a+', newline='') as file:
                 writer = csv.writer(file)
-                writer.writerow(['Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find view button'])
+                writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Failed to find view button'])
             # stop the current test
             return 'fail'
         # after 10 minutes try to click the view button
         sleep(600)
         if self.click_element_by_xpath(f'//td[contains(text(), "Kinship: {mother} + {father}")]/following-sibling::td/a/button[@class="btn btn-info" and contains(text(), "View")]',
-                        'Kinship', user_type, scenario, 'FAIL',
+                        action, user_type, scenario, 'FAIL',
                         'Failed to go to results') == 'fail':
             # test failed
             return 'fail'
@@ -1834,17 +1844,17 @@ class CloudLinesTestV2():
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(['Kinship',user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
+            writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
 
     def test(self,type,option=""):
         if type == 'login_user':
-            self.login('user')
+            self.login('Main Login Test', 'user', 'Main Login Test')
         if type == 'login_admin':
-            self.login('admin')
+            self.login('Main Login Test', 'admin', 'Main Login Test')
         if type == 'login_contrib':
-            self.login('contrib')
+            self.login('Main Login Test', 'contrib', 'Main Login Test')
         if type == 'login_read':
-            self.login('read')
+            self.login('Main Login Test', 'read', 'Main Login Test')
         if type == 'logout':
             self.logout()
         elif type == 'add_each_pedigree':
