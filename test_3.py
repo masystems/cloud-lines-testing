@@ -235,11 +235,24 @@ class CloudLinesTestV2():
                     # test failed
                     return 'fail'
                 # go to view pedigree
-                if self.click_element_by_xpath('//button[contains(text(), "View")]',
-                            action, user_type, addition_method, 'FAIL',
-                            'Failed to open pedigree view') == 'fail':
-                    # test failed
-                    return 'fail'
+                while self.timeout < 20:
+                    try:
+                        # do click
+                        element = self.browser.find_elements_by_xpath('//button[contains(text(), "View")]')[1]
+                        self.browser.execute_script("arguments[0].click();", element)
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow([action, user_type.replace('_', ' '), addition_method.replace('_', ' '), 'Fail', 'Failed to open pedigree view'])
+                            self.timeout = 0
+                            # stop the current test
+                            return 'fail'
                 # go to certificate tab
                 if self.click_element_by_xpath('//a[@href="#cert"]',
                             action, user_type, addition_method, 'FAIL',
