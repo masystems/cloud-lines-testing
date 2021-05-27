@@ -343,6 +343,10 @@ class CloudLinesTestV2():
                     desc.send_keys(self.pedigree['desc'])
                     desc = self.browser.find_element_by_id('id_breed')
                     desc.send_keys(self.pedigree['breed'])
+                    mother = self.browser.find_element_by_id('id_mother')
+                    mother.send_keys(self.pedigree['mother'])
+                    father = self.browser.find_element_by_id('id_father')
+                    father.send_keys(self.pedigree['father'])
 
                     # Save!
                     save_pedigree = self.browser.find_element_by_id('submitPedigree')
