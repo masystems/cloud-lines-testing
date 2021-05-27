@@ -104,7 +104,7 @@ class CloudLinesTestV2():
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
+            writer.writerow([f'{action} - Login',user_type.replace('_', ' '),scenario.replace('_', ' '),'PASS','-'])
 
     def click_element_by_xpath(self, path, action, user_type, scenario, result, desc):
         while self.timeout < 20:
@@ -828,13 +828,15 @@ class CloudLinesTestV2():
                             'Failed to submit breeder info') == 'fail':
                     # test failed
                     return 'fail'
-
-            # check the save worked by trying to access new breeder form
-            if self.click_element_by_xpath('//a[@href="/breeders/new_breeder/"]',
-                            action, user_type, addition_method, 'FAIL',
-                            'Failed to save breeder') == 'fail':
-                    # test failed
-                    return 'fail'
+            # check the save worked by checking we're on one of the right pages
+            if '/pedigree/new_pedigree' not in self.browser.current_url and '/breeders' not in self.browser.current_url:
+                # add fail to reports file
+                with open(self.results_file, 'a+', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow([action, user_type.replace('_', ' '), addition_method.replace('_', ' '), 'FAIL', 'Failed to save breeder'])
+                self.timeout = 0
+                # stop the current test
+                return 'fail'
         
         # user is read-only/contributor, so make sure they can't access new breeder form
         else:
