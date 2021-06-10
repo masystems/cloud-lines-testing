@@ -1719,7 +1719,7 @@ class CloudLinesTestV2():
             # stop the current test
             return 'fail'
         # enter reg number
-        female = 'L9999'
+        female = 'XL11341'
         try:
             sa_field = self.browser.find_element_by_xpath('//input[@id="sa_mother"]')
             sa_field.send_keys(female)
@@ -1807,7 +1807,7 @@ class CloudLinesTestV2():
             # stop the current test
             return 'fail'
         # enter mother number
-        mother = 'L9999'
+        mother = 'XL11341'
         try:
             kin_field = self.browser.find_element_by_xpath('//input[@id="id_mother"]')
             kin_field.send_keys(mother)
@@ -1819,7 +1819,7 @@ class CloudLinesTestV2():
             # stop the current test
             return 'fail'
         # enter father number
-        father = 'L9960'
+        father = 'L17983'
         try:
             kin_field = self.browser.find_element_by_xpath('//input[@id="id_father"]')
             kin_field.send_keys(father)
