@@ -1757,7 +1757,7 @@ class CloudLinesTestV2():
             # stop the current test
             return 'fail'
         # after 10 minutes try to click the view button
-        sleep(600)
+        sleep(1200)
         if self.click_element_by_xpath(f'//td[contains(text(), "Stud Advisor: {female}")]/following-sibling::td/a/button[@class="btn btn-info" and contains(text(), "View")]',
                         action, user_type, scenario, 'FAIL',
                         'Failed to go to results') == 'fail':
