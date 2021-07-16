@@ -348,8 +348,10 @@ class CloudLinesTestV2():
                     self.browser.execute_script("arguments[0].click();", status)
                     sex = self.browser.find_element_by_id(self.pedigree['sex'])
                     self.browser.execute_script("arguments[0].click();", sex)
-                    born_as = self.browser.find_element_by_id(self.pedigree['born_as'])
-                    self.browser.execute_script("arguments[0].click();", born_as)
+                    litter_size = self.browser.find_element_by_id('litter_size')
+                    self.browser.execute_script("arguments[0].click();", litter_size)
+                    litter_size_10 = self.browser.find_element_by_xpath('//option[@value="10"]')
+                    self.browser.execute_script("arguments[0].click();", litter_size_10)
                     dod = self.browser.find_element_by_id('id_date_of_death')
                     dod.send_keys(self.pedigree['dod'])
                     desc = self.browser.find_element_by_id('id_description')
@@ -1058,19 +1060,21 @@ class CloudLinesTestV2():
                             self.browser.execute_script("arguments[0].click();", unknown_status)
                         else:
                             self.browser.execute_script("arguments[0].click();", dead_status)
-                        # if born as single set to twin, etc, and if quad set to single
-                        born_as_single = self.browser.find_element_by_id('id_born_as_0')
-                        born_as_twin = self.browser.find_element_by_id('id_born_as_1')
-                        born_as_triplet = self.browser.find_element_by_id('id_born_as_2')
-                        born_as_quad = self.browser.find_element_by_id('id_born_as_3')
-                        if born_as_single.get_attribute('checked') != None:
-                            self.browser.execute_script("arguments[0].click();", born_as_twin)
-                        elif born_as_twin.get_attribute('checked') != None:
-                            self.browser.execute_script("arguments[0].click();", born_as_triplet)
-                        elif born_as_triplet.get_attribute('checked') != None:
-                            self.browser.execute_script("arguments[0].click();", born_as_quad)
+                        # if litter size 10 set to 20, etc, and if 40 set to 10
+                        litter_size = self.browser.find_element_by_id('litter_size')
+                        self.browser.execute_script("arguments[0].click();", litter_size)
+                        litter_size_10 = self.browser.find_element_by_xpath('//option[@value="10"]')
+                        litter_size_20 = self.browser.find_element_by_xpath('//option[@value="20"]')
+                        litter_size_30 = self.browser.find_element_by_xpath('//option[@value="30"]')
+                        litter_size_40 = self.browser.find_element_by_xpath('//option[@value="40"]')
+                        if litter_size_10.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", litter_size_20)
+                        elif litter_size_20.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", litter_size_30)
+                        elif litter_size_30.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", litter_size_40)
                         else:
-                            self.browser.execute_script("arguments[0].click();", born_as_single)
+                            self.browser.execute_script("arguments[0].click();", litter_size_10)
                         # increment date of death or set to date of birth
                         dod = self.browser.find_element_by_id('id_date_of_death')
                         try:
@@ -1307,19 +1311,21 @@ class CloudLinesTestV2():
                             self.browser.execute_script("arguments[0].click();", unknown_status)
                         else:
                             self.browser.execute_script("arguments[0].click();", dead_status)
-                        # if born as single set to twin, etc, and if quad set to single
-                        born_as_single = self.browser.find_element_by_id('id_born_as_0')
-                        born_as_twin = self.browser.find_element_by_id('id_born_as_1')
-                        born_as_triplet = self.browser.find_element_by_id('id_born_as_2')
-                        born_as_quad = self.browser.find_element_by_id('id_born_as_3')
-                        if born_as_single.get_attribute('checked') != None:
-                            self.browser.execute_script("arguments[0].click();", born_as_twin)
-                        elif born_as_twin.get_attribute('checked') != None:
-                            self.browser.execute_script("arguments[0].click();", born_as_triplet)
-                        elif born_as_triplet.get_attribute('checked') != None:
-                            self.browser.execute_script("arguments[0].click();", born_as_quad)
+                        # if litter size 10 set to 20, etc, and if 40 set to 10
+                        litter_size = self.browser.find_element_by_id('litter_size')
+                        self.browser.execute_script("arguments[0].click();", litter_size)
+                        litter_size_10 = self.browser.find_element_by_xpath('//option[@value="10"]')
+                        litter_size_20 = self.browser.find_element_by_xpath('//option[@value="20"]')
+                        litter_size_30 = self.browser.find_element_by_xpath('//option[@value="30"]')
+                        litter_size_40 = self.browser.find_element_by_xpath('//option[@value="40"]')
+                        if litter_size_10.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", litter_size_20)
+                        elif litter_size_20.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", litter_size_30)
+                        elif litter_size_30.get_attribute('checked') != None:
+                            self.browser.execute_script("arguments[0].click();", litter_size_40)
                         else:
-                            self.browser.execute_script("arguments[0].click();", born_as_single)
+                            self.browser.execute_script("arguments[0].click();", litter_size_10)
                         # increment date of death or set to date of birth
                         dod = self.browser.find_element_by_id('id_date_of_death')
                         try:
