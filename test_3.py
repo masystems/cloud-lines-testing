@@ -791,8 +791,10 @@ class CloudLinesTestV2():
                     breeding_prefix.send_keys(f"{self.breeder['breeding_prefix']}_{user_type}_{addition_method}")
                     contact_name = self.browser.find_element_by_name('contact_name')
                     contact_name.send_keys(f"{self.breeder['contact_name']}_{user_type}_{addition_method}")
-                    address = self.browser.find_element_by_name('address')
-                    address.send_keys(self.breeder['address'])
+                    address_1 = self.browser.find_element_by_name('address_line_1')
+                    address_1.send_keys('1 Address Lane')
+                    address_2 = self.browser.find_element_by_name('address_line_2')
+                    address_2.send_keys('2 Address Lane')
                     phone_number1 = self.browser.find_element_by_name('phone_number1')
                     phone_number1.send_keys(self.breeder['phone_number1'])
                     phone_number2 = self.browser.find_element_by_name('phone_number2')
@@ -994,8 +996,8 @@ class CloudLinesTestV2():
             if self.click_element_by_xpath('//a[@href="/pedigree/search"]',
                         action, user_type, edit_method, 'FAIL',
                         'Failed to open pedigree search') == 'fail':
-                    # test failed
-                    return 'fail'
+                # test failed
+                return 'fail'
             # search for animal_14000_edit
             try:
                 search_field = self.browser.find_element_by_xpath('//input[@id="search"][@class="form-control form-control-success"]')
@@ -1503,15 +1505,24 @@ class CloudLinesTestV2():
                     except TypeError:
                         name.clear()
                         name.send_keys('a')
-                    # increment address
-                    address = self.browser.find_element_by_id('id_address')
+                    # increment address line 1
+                    address1 = self.browser.find_element_by_name('address_line_1')
                     try:
-                        current_address = address.get_attribute('value')
-                        address.clear()
-                        address.send_keys(chr(ord(current_address) + 1))
+                        current_address1 = address1.get_attribute('value')
+                        address1.clear()
+                        address1.send_keys(chr(ord(current_address1) + 1))
                     except TypeError:
-                        address.clear()
-                        address.send_keys('a')
+                        address1.clear()
+                        address1.send_keys('a')
+                    # increment address line 2
+                    address2 = self.browser.find_element_by_name('address_line_2')
+                    try:
+                        current_address2 = address2.get_attribute('value')
+                        address2.clear()
+                        address2.send_keys(chr(ord(current_address2) + 1))
+                    except TypeError:
+                        address2.clear()
+                        address2.send_keys('a')
                     # increment phone number 1 (00000000000 to 99999999999 and back again)
                     phone1 = self.browser.find_element_by_id('id_phone_number1')
                     zeroes = '00000000000'
