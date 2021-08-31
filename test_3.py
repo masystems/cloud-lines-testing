@@ -1667,13 +1667,13 @@ class CloudLinesTestV2():
             # test failed
             return 'fail'
         sleep(2)
-        # # run coi
+        # run coi
         if self.click_element_by_xpath('//button[@id="coiBtn"]',
                         action, user_type, scenario, 'FAIL',
                         'Failed to click run coi button') == 'fail':
             # test failed
             return 'fail'
-        # could be due to multiple breeds, so try click a breed
+        # try click a breed
         if self.click_element_by_xpath('//div[@class="dropdown-menu show"]/button[contains(text(), "Old English Goat")]',
                         action, user_type, scenario, 'FAIL',
                         'Failed to click run coi button for a OEGs') == 'fail':
@@ -1701,21 +1701,19 @@ class CloudLinesTestV2():
             # test failed
             return 'fail'
         sleep(2)
-        mk_timer = self.browser.find_element_by_xpath('//p[@id="meanKinshipTimer"]')
-        # check it hasn't recently been run
-        if 'Run Mean Kinship again in:' not in mk_timer.text:
-            # run mk
-            mk_timer_btn = self.browser.find_element_by_id('meanKinshipBtn')
-            self.browser.execute_script("arguments[0].click();", mk_timer_btn)
-            sleep(10)
-            # check countdown has started
-            if 'Run Mean Kinship again in:' not in mk_timer.text:
-                # add error, as countdown should have started
-                with open(self.results_file, 'a+', newline='') as file:
-                    writer = csv.writer(file)
-                    writer.writerow([action,user_type.replace('_', ' '),scenario.replace('_', ' '),'FAIL','Timer did not start'])
-                # stop the current test
-                return 'fail'
+
+        # run mk
+        if self.click_element_by_xpath('//button[@id="meanKinshipBtn"]',
+                        action, user_type, scenario, 'FAIL',
+                        'Failed to click run mk button') == 'fail':
+            # test failed
+            return 'fail'
+        # try click a breed
+        if self.click_element_by_xpath('//div[@class="dropdown-menu show"]/button[contains(text(), "Old English Goat")]',
+                        action, user_type, scenario, 'FAIL',
+                        'Failed to click run mk button for a OEGs') == 'fail':
+            # test failed
+            return 'fail'
 
         # test must have passed if we have got to the end of this function
         with open(self.results_file, 'a+', newline='') as file:
