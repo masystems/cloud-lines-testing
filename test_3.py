@@ -541,18 +541,31 @@ class CloudLinesTestV2():
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
-                # go to view pedigree
+                # try to go to view pedigree
                 if self.click_element_by_xpath('//button[contains(text(), "View")]',
                             action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree view') == 'fail':
                     # test failed
                     return 'fail'
-                # go to offspring tab
-                if self.click_element_by_xpath('//a[@href="#children"]',
-                            action, user_type, addition_method, 'FAIL',
-                            'Failed to open offspring tab') == 'fail':
-                    # test failed
-                    return 'fail'
+                # check you can't go to offspring tab
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//a[@href="#children"]')) > 0:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new offspring tab is available'])
+                            # stop the current test
+                            return 'fail'
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # test failed
+                            print("Failed to find how many links to offspring tab there are", e)
+                            exit(0)
                 # check you can't go to add new pedigree
                 while self.timeout < 20:
                     try:
@@ -580,18 +593,31 @@ class CloudLinesTestV2():
                             'Failed to open pedigree search') == 'fail':
                     # test failed
                     return 'fail'
-                # go to view pedigree
+                # try to go to view pedigree
                 if self.click_element_by_xpath('//button[contains(text(), "View")]',
                             action, user_type, addition_method, 'FAIL',
                             'Failed to open pedigree view') == 'fail':
                     # test failed
                     return 'fail'
-                # go to certificate tab
-                if self.click_element_by_xpath('//a[@href="#cert"]',
-                            action, user_type, addition_method, 'FAIL',
-                            'Failed to open certificate tab') == 'fail':
-                    # test failed
-                    return 'fail'
+                # check you can't go to certificate tab
+                while self.timeout < 20:
+                    try:
+                        if len(self.browser.find_elements_by_xpath('//a[@href="#cert"]')) > 0:
+                            # add fail to reports file
+                            with open(self.results_file, 'a+', newline='') as file:
+                                writer = csv.writer(file)
+                                writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Link to new certificate tab is available'])
+                            # stop the current test
+                            return 'fail'
+                        sleep(2)
+                        self.timeout = 0
+                        break
+                    except Exception as e:
+                        self.timeout += 1
+                        if self.timeout == 20:
+                            # test failed
+                            print("Failed to find how many links to certificate tab there are", e)
+                            exit(0)
                 # check you can't go to add new pedigree
                 while self.timeout < 20:
                     try:
