@@ -1493,6 +1493,7 @@ class CloudLinesTestV2():
     def edit_each_breeder(self):
         self.edit_breeder('user')
         self.edit_breeder('admin')
+        self.edit_breeder('breed')
         self.edit_breeder('contrib')
         self.edit_breeder('read')
 
@@ -1529,7 +1530,7 @@ class CloudLinesTestV2():
             # test failed
             return 'fail'
         # if owner/admin, check user can edit breeder
-        if user_type in ('user', 'admin'):
+        if user_type in ('user', 'admin', 'breed'):
             # go to edit breeder
             if self.click_element_by_xpath('//a[@id="editBreeder"]',
                             action, user_type, edit_method, 'FAIL',
