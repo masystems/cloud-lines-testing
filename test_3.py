@@ -747,6 +747,9 @@ class CloudLinesTestV2():
         self.add_breeder(pedigree_file, 'admin', 'breeders')
         self.add_breeder(pedigree_file, 'admin', 'breeder_view')
         self.add_breeder(pedigree_file, 'admin', 'ped_form')
+        self.add_breeder(pedigree_file, 'breed', 'breeders')
+        self.add_breeder(pedigree_file, 'breed', 'breeder_view')
+        self.add_breeder(pedigree_file, 'breed', 'ped_form')
         self.add_breeder(pedigree_file, 'contrib', 'breeders')
         self.add_breeder(pedigree_file, 'contrib', 'breeder_view')
         self.add_breeder(pedigree_file, 'contrib', 'ped_form')
@@ -763,7 +766,7 @@ class CloudLinesTestV2():
         self.browser.get(self.config['settings']['domain'] + "/account/welcome")
 
         # if user owner/admin they can add a breeder
-        if user_type == 'user' or user_type == 'admin':
+        if user_type in ('user', 'admin', 'breed'):
             breeder_reader = csv.DictReader(open(breeder_file,newline=''))
             self.breeder = dict(breeder_reader.__next__())
 
