@@ -16,6 +16,8 @@ class CloudLinesTestV2():
         self.password_user = self.config['settings']['password_user']
         self.username_admin = self.config['settings']['username_admin']
         self.password_admin = self.config['settings']['password_admin']
+        self.username_breed = self.config['settings']['username_breed']
+        self.password_breed = self.config['settings']['password_breed']
         self.username_contrib = self.config['settings']['username_contrib']
         self.password_contrib = self.config['settings']['password_contrib']
         self.username_read = self.config['settings']['username_read']
@@ -58,6 +60,9 @@ class CloudLinesTestV2():
                     elif user_type == 'admin':
                         username = self.username_admin
                         password = self.password_admin
+                    elif user_type == 'breed':
+                        username = self.username_breed
+                        password = self.password_breed
                     elif user_type == 'contrib':
                         username = self.username_contrib
                         password = self.password_contrib
@@ -140,6 +145,12 @@ class CloudLinesTestV2():
         self.add_pedigree(pedigree_file, 'admin', 'certificate')
         self.add_pedigree(pedigree_file, 'admin', 'results_from_peds')
         self.add_pedigree(pedigree_file, 'admin', 'results_from_tool')
+        self.add_pedigree(pedigree_file, 'breed', 'pedigree_search')
+        self.add_pedigree(pedigree_file, 'breed', 'pedigree_view')
+        self.add_pedigree(pedigree_file, 'breed', 'offspring')
+        self.add_pedigree(pedigree_file, 'breed', 'certificate')
+        self.add_pedigree(pedigree_file, 'breed', 'results_from_peds')
+        self.add_pedigree(pedigree_file, 'breed', 'results_from_tool')
         self.add_pedigree(pedigree_file, 'contrib', 'pedigree_search')
         self.add_pedigree(pedigree_file, 'contrib', 'pedigree_view')
         self.add_pedigree(pedigree_file, 'contrib', 'offspring')
@@ -448,6 +459,7 @@ class CloudLinesTestV2():
                         # check there are no links to approvals page
                         if len(self.browser.find_elements_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]')) == 0:
                             new_pedigree = self.browser.find_element_by_xpath('//a[@href="/pedigree/new_pedigree/"]')
+                            sleep(2)
                             self.browser.execute_script("arguments[0].click();", new_pedigree)
                             sleep(2)
                             self.timeout = 0
