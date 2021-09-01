@@ -1015,6 +1015,8 @@ class CloudLinesTestV2():
         self.edit_pedigree('user', 'approval')
         self.edit_pedigree('admin', 'ped_form')
         self.edit_pedigree('admin', 'approval')
+        self.edit_pedigree('breed', 'ped_form')
+        self.edit_pedigree('breed', 'approval')
         self.edit_pedigree('contrib', 'ped_form')
         self.edit_pedigree('contrib', 'approval')
         self.edit_pedigree('read', 'ped_form')
@@ -1163,7 +1165,7 @@ class CloudLinesTestV2():
                             # stop the current test
                             return 'fail'
                 
-                if user_type in ('user', 'admin'):
+                if user_type in ('user', 'admin', 'breed'):
                     # check approval wasn't created and that we can go to new pedigree form to check that the save worked
                     while self.timeout < 20:
                         try:
@@ -1299,8 +1301,8 @@ class CloudLinesTestV2():
                             'Failed to open approvals') == 'fail':
                 # test failed
                 return 'fail'
-            # if owner/admin, test that user can edit the approval
-            if user_type in ('user', 'admin'):
+            # if owner/admin/breed admin, test that user can edit the approval
+            if user_type in ('user', 'admin', 'breed'):
                 # go to edit approval
                 if self.click_element_by_xpath('//button[@class="btn btn-sm btn-outline-info mr-1" and contains(text(), "Edit")]',
                                 action, user_type, edit_method, 'FAIL',
