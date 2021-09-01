@@ -1931,6 +1931,8 @@ class CloudLinesTestV2():
             self.login('Main Login Test', 'user', 'Main Login Test')
         if type == 'login_admin':
             self.login('Main Login Test', 'admin', 'Main Login Test')
+        if type == 'login_breed':
+            self.login('Main Login Test', 'breed', 'Main Login Test')
         if type == 'login_contrib':
             self.login('Main Login Test', 'contrib', 'Main Login Test')
         if type == 'login_read':
@@ -1956,6 +1958,7 @@ class CloudLinesTestV2():
         elif type == 'complete':
             self.login('Main Login Test', 'user', 'Main Login Test')
             self.login('Main Login Test', 'admin', 'Main Login Test')
+            self.login('Main Login Test', 'breed', 'Main Login Test')
             self.login('Main Login Test', 'contrib', 'Main Login Test')
             self.login('Main Login Test', 'read', 'Main Login Test')
             self.logout()
@@ -1973,18 +1976,19 @@ if __name__ == '__main__':
     obj = CloudLinesTestV2()
     print("1. Login as User/Owner")
     print("2. Login as Admin")
-    print("3. Login as Contributor")
-    print("4. Login as Read-Only")
-    print("5. Logout")
-    print("6. Add Pedigree")
-    print("7. Add Breeder")
-    print("8. Edit Pedigree")
-    print("9. Edit Breeder")
-    print("10. Run COI")
-    print("11. Run Mean Kinship")
-    print("12. Stud Advisor")
-    print("13. Kinship")
-    print("14. Complete Test")
+    print("3. Login as Breed")
+    print("4. Login as Contributor")
+    print("5. Login as Read-Only")
+    print("6. Logout")
+    print("7. Add Pedigree")
+    print("8. Add Breeder")
+    print("9. Edit Pedigree")
+    print("10. Edit Breeder")
+    print("11. Run COI")
+    print("12. Run Mean Kinship")
+    print("13. Stud Advisor")
+    print("14. Kinship")
+    print("15. Complete Test")
     print("_. Exit")
     ch = input("Enter Choice ")
     while ch != '_':
@@ -1994,28 +1998,30 @@ if __name__ == '__main__':
             if ch == "2":
                 obj.test('login_admin')
             if ch == "3":
-                obj.test('login_contrib')
+                obj.test('login_breed')
             if ch == "4":
-                obj.test('login_read')
+                obj.test('login_contrib')
             if ch == "5":
+                obj.test('login_read')
+            if ch == "6":
                 obj.test('logout')
-            elif ch == "6":
+            elif ch =="7":
                 obj.test('add_each_pedigree')
-            elif ch == "7":
-                obj.test('add_each_breeder')
             elif ch == "8":
-                obj.test('edit_each_pedigree')
+                obj.test('add_each_breeder')
             elif ch == "9":
-                obj.test('edit_each_breeder')
+                obj.test('edit_each_pedigree')
             elif ch == "10":
-                obj.test('run_coi')
+                obj.test('edit_each_breeder')
             elif ch == "11":
-                obj.test('run_mean_kinship')
+                obj.test('run_coi')
             elif ch == "12":
-                obj.test('stud_advisor')
+                obj.test('run_mean_kinship')
             elif ch == "13":
-                obj.test('kinship')
+                obj.test('stud_advisor')
             elif ch == "14":
+                obj.test('kinship')
+            elif ch == "15":
                 obj.test('complete')
             ch = input("Enter Choice ")
         except:
