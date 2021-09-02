@@ -394,7 +394,7 @@ class CloudLinesTestV2():
                         return 'fail'
             if user_type == 'contrib':
                 # try to click "View approvals", as user is contributor
-                if self.click_element_by_xpath('//a[@href="/approvals/" and contains(text(), "View approval")]',
+                if self.click_element_by_xpath('//a[@href="/approvals/" and contains(text(), "View approvals")]',
                             action, user_type, addition_method, 'FAIL',
                             'Failed to go to approvals page') == 'fail':
                     # test failed
