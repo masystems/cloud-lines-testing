@@ -1541,7 +1541,7 @@ class CloudLinesTestV2():
             # test failed
             return 'fail'
         # if owner/admin, check user can edit breeder
-        if user_type in ('user', 'admin', 'breed'):
+        if user_type in ('user', 'admin', 'breed', 'contrib'):
             # go to edit breeder
             if self.click_element_by_xpath('//a[@id="editBreeder"]',
                             action, user_type, edit_method, 'FAIL',
@@ -1647,13 +1647,13 @@ class CloudLinesTestV2():
                 # test failed
                 return 'fail'
             # check breeder saved by checking you can go to add breeder
-            if self.click_element_by_xpath('//a[@href="/breeders/new_breeder/" and @class="btn float-right hidden-sm-down btn-success"]',
+            if self.click_element_by_xpath('//a[@id="editBreeder" and @class="btn float-right hidden-sm-down btn-info ml-1"]',
                             action, user_type, edit_method, 'FAIL',
                             'Failed to save breeder') == 'fail':
                 # test failed
                 return 'fail'
         
-        # if contrib/read, check user can not edit breeder
+        # if read, check user can not edit breeder
         else:
             # check user can't go to edit breeder
             while self.timeout < 20:
