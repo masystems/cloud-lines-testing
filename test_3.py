@@ -894,14 +894,17 @@ class CloudLinesTestV2():
                     # test failed
                     return 'fail'
                 # filter for breeder ZZZZZx
+                prefix = 'ZZZZZx'
+                if user_type == 'contrib':
+                    prefix = 'ZZZZZ'
                 try:
                     search_field = self.browser.find_element_by_xpath('//input[@type="search"][@class="form-control form-control-sm"]')
-                    search_field.send_keys('ZZZZZx')
+                    search_field.send_keys(prefix)
                 except Exception as e:
                     # add fail to reports file
                     with open(self.results_file, 'a+', newline='') as file:
                         writer = csv.writer(file)
-                        writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in filter field to search for ZZZZZx'])
+                        writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL',f'Failed to enter text in filter field to search for {prefix}'])
                     # stop the current test
                     return 'fail'
                 # go to breeder view
