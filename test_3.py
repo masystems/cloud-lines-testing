@@ -885,13 +885,24 @@ class CloudLinesTestV2():
         
         # user is read-only/contributor, so make sure they can't access new breeder form
         else:
-            # ensure you can't access new pedigree form via breeders page
-            if addition_method == 'breeders':
+            # ensure you can't access new breeder form via breeder view page
+            if addition_method == 'breeder_view':
                 # go to breeders page
                 if self.click_element_by_xpath('//a[@href="/breeders/"]',
                             action, user_type, addition_method, 'FAIL',
                             'Failed to open breeders page') == 'fail':
                     # test failed
+                    return 'fail'
+                # filter for breeder ZZZZZx
+                try:
+                    search_field = self.browser.find_element_by_xpath('//input[@type="search"][@class="form-control form-control-sm"]')
+                    search_field.send_keys('ZZZZZx')
+                except Exception as e:
+                    # add fail to reports file
+                    with open(self.results_file, 'a+', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow([action,user_type.replace('_', ' '),addition_method.replace('_', ' '),'FAIL','Failed to enter text in filter field to search for ZZZZZx'])
+                    # stop the current test
                     return 'fail'
                 # go to breeder view
                 if self.click_element_by_xpath('//tr[@onclick]',
@@ -918,8 +929,8 @@ class CloudLinesTestV2():
                             # test failed
                             print("Failed to find how many links to new breeder form there are", e)
                             exit(0)
-            # ensure you can't access new pedigree form via breeders page
-            elif addition_method == 'breeder_view':
+            # ensure you can't access new breeder form via breeders page
+            elif addition_method == 'breeders':
                 # go to breeders page
                 if self.click_element_by_xpath('//a[@href="/breeders/"]',
                             action, user_type, addition_method, 'FAIL',
